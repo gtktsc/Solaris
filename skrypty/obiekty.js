@@ -26,7 +26,7 @@ var fizyka = {
             obiekt.y=window.innerHeight-10;};
     },
     dwaCiala: function(obiekt1,obiekt2){
-        if (!ekran.pauza) {
+        if (!ekran.pauza && obiekt1!==null && obiekt2!==null) {
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
