@@ -7,3 +7,4 @@ var S = new Gwiazda(window.innerWidth/2,window.innerHeight/2,30,0.05);
 var przeciwnicy = new Array();
 var pociski = new Array();
 var planety = new Array();
+var atakujPlaneteNumer = 1;
