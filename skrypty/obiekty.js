@@ -32,7 +32,7 @@ var fizyka = {
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
             if (odleglosc<(obiekt1.r+obiekt2.r+5)) {
                 return true;
-			} else {
+            } else {
                 return false;
             };
         } else {
