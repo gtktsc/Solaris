@@ -52,6 +52,11 @@ function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObieg
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
         c.stroke();
     };
+    this.rysujOrbite = function(polozenieCentrumX,polozenieCentrumY) {
+        c.beginPath();
+        c.arc(polozenieCentrumX,polozenieCentrumY,this.R,0,Math.PI*2,true);
+        c.stroke();
+    };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
             this.dx=this.x-obiekt.x;

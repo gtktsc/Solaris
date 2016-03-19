@@ -21,6 +21,10 @@ function draw() {
                 if(!atakujPlaneteNumer==0){atakujPlaneteNumer=atakujPlaneteNumer-1;
                     planety.splice(i,1);};
             };
+			if(ekran.pauza && mysz.planeta && fizyka.klikniecie(myszKlik, planety[i])){
+				planety[i].rysujOrbite(S.x, S.y);
+			};
+			
         };
         for (i in pociski) {
             if(pociski[i].widocznosc){
@@ -62,11 +66,13 @@ function draw() {
             };
         };
         for (i in przeciwnicy){
-            if(przeciwnicy[i].kolor=='#FF0000'){
-                if(!atakujPlaneteNumer==0){
+            if(przeciwnicy[i].kolor==='#FF0000'){
+                if(atakujPlaneteNumer!==0){
                     fizyka.kierunekDoObiektu1(planety[atakujPlaneteNumer],przeciwnicy[i]);
                 } else {
-                    setTimeout(function(){ekran.numer=0}, 1000);
+					ekran.pauza=true;
+                    //fizyka.kierunekDoObiektu1(S,przeciwnicy[i])
+                    setTimeout(function(){ekran.numer=0;ekran.pauza=false;}, 1000);
                 };
             } else {
                 fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
@@ -80,7 +86,7 @@ function draw() {
                 przeciwnicy.splice(i,1);
             };
             if(przeciwnicy.length==1){
-                setTimeout(function(){ekran.numer=0}, 1000);
+                setTimeout(function(){ekran.numer=0;ekran.pauza=false;}, 1000);
             };
         };
         if(!ekran.pauza){
@@ -99,7 +105,7 @@ function draw() {
                 statekGracza.vy=0;
                 myszKlik.rusz=false;
             };
-        };
+		};
         statekGracza.rysuj();
         fizyka.brzegOkna(statekGracza);
         //S.oddzialywanie(statekGracza);

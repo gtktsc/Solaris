@@ -14,6 +14,8 @@ window.addEventListener('click', function(){
     };
     for (i in planety) {
         if(fizyka.klikniecie(mysz,planety[i])){
+            myszKlik.x=mysz.x;
+            myszKlik.y=mysz.y;
             console.log("planetaniecie planety",i);
             fizyka.szybkoscAnimacji('stop');
             if(!mysz.planeta){
