@@ -1,12 +1,14 @@
 var fizyka = {
     kierunekDoObiektu1: function(obiekt1,obiekt2) {
-        var dx=obiekt1.x-obiekt2.x;
-        var dy=obiekt1.y-obiekt2.y;
-        var odleglosc=Math.sqrt(dx * dx + dy * dy);
-        if (obiekt2.x<obiekt1.x) {
-            obiekt2.phi=-Math.acos((obiekt2.y-obiekt1.y)/odleglosc);
-        } else {
-            obiekt2.phi=Math.acos((obiekt2.y-obiekt1.y)/odleglosc);
+        if (obiekt1!==null && obiekt2!==null){
+            var dx=obiekt1.x-obiekt2.x;
+            var dy=obiekt1.y-obiekt2.y;
+            var odleglosc=Math.sqrt(dx * dx + dy * dy);
+            if (obiekt2.x<obiekt1.x) {
+                obiekt2.phi=-Math.acos((obiekt2.y-obiekt1.y)/odleglosc);
+            } else {
+                obiekt2.phi=Math.acos((obiekt2.y-obiekt1.y)/odleglosc);
+            };
         };
     },
     brzegOkna : function(obiekt) {
@@ -40,14 +42,19 @@ var fizyka = {
         };
     },
     klikniecie: function(obiekt1,obiekt2){
-        var dx=obiekt1.x-obiekt2.x;
-        var dy=obiekt1.y-obiekt2.y;
-        var odleglosc=Math.sqrt(dx * dx + dy * dy);
-        if (odleglosc<(obiekt1.r+obiekt2.r)) {
-            return true;
+        if (obiekt1!==null && obiekt2!==null){
+            var dx=obiekt1.x-obiekt2.x;
+            var dy=obiekt1.y-obiekt2.y;
+            var odleglosc=Math.sqrt(dx * dx + dy * dy);
+            if (odleglosc<(obiekt1.r+obiekt2.r)) {
+                return true;
+            } else {
+                return false;
+            };
         } else {
             return false;
         };
+        
     },
     szybkoscAnimacji : function(stan){
         switch(stan){
