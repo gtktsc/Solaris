@@ -9,16 +9,16 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
     this.kolor=kolor;
     this.widocznosc = false;
     if (this.kolor==='red') {
-        this.kolor='#FF0000'
+        this.kolor='#FF0000';
     } else if (this.kolor==='green') {
-        this.kolor='#00FF00'
+        this.kolor='#00FF00';
     } else {
-		this.kolor='#0000FF'
+        this.kolor='#0000FF';
     };
     this.rysuj = function() {
         if (this.widocznosc) {
-            this.x = this.x+ this.vx
-            this.y = this.y +this.vy
+            this.x = this.x+ this.vx;
+            this.y = this.y +this.vy;
             c.beginPath();
             c.fillStyle = this.kolor;
             c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
