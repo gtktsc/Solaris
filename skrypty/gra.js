@@ -1,10 +1,20 @@
+
+for(var i =1;i<7;i++){
+planety[i]= new _KlasaPlaneta(0,0,4+Math.random()*10,i*45,0,Math.random()*30,Math.random()/5,0.01);
+}var atakujPlaneteNumer=planety.length-1;
+
+for(var i =1;i<12;i=i+4){
+	przeciwnicy[i] = new _KlasaPrzeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45	);
+	przeciwnicy[i+1] = new _KlasaPrzeciwnik (Math.random()*30,Math.random()*30,2,2,2,'red',45	);
+	przeciwnicy[i+2] = new _KlasaPrzeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'red',45	);
+	przeciwnicy[i+3] = new _KlasaPrzeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45	);
+};
+
+
 function draw() {
 	if(ekran.numer==1){
 	c.clearRect(0,0,window.innerWidth,window.innerHeight);
 
-
-	 
-		  
 S.rysuj();
 for (i in planety) {
 	planety[i].rysuj(S.x,S.y);
