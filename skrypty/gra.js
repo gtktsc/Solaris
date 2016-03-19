@@ -1,5 +1,6 @@
         for(var i =1;i<7;i++){
             planety[i]= new Planeta(0,0,4+Math.random()*10,i*45,0,Math.random()*30,Math.random()/5,0.01);
+            orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
         };
         for(var i =1;i<13;i=i+4){
             przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
@@ -18,15 +19,16 @@
 
 function draw() {
     if(ekran.numer==1){
-        c.clearRect(0,0,window.innerWidth,window.innerHeight);
         for (i in planety) {
             if(planety[i].zycie>0){
                 if(fizyka.dwaCiala(statekGracza,planety[i])){
                     console.log("statek planeta")
                 };
                 if(ekran.pauza && mysz.planeta && fizyka.klikniecie(myszKlik, planety[i])){
-				    planety[i].rysujOrbite();
-			    };
+					orbity[i].widocznosc=true;
+			    } else {
+					orbity[i].widocznosc=false;
+				}
             } else {
                 planety.splice(i,1);
                 fizyka.sprawdzWarunkiKonca();
@@ -64,7 +66,7 @@ function draw() {
                 } else {
                     statekGracza.maxLiczbaPociskow3=statekGracza.maxLiczbaPociskow3+1;
                 };
-					pociski.splice(i,1);
+				pociski.splice(i,1);
             };
         };
         for (i in przeciwnicy){
@@ -100,9 +102,11 @@ function draw() {
                 myszKlik.rusz=false;
             };
 		};
+		c.clearRect(0,0,window.innerWidth,window.innerHeight);
 		fizyka.brzegOkna(statekGracza);
         fizyka.rysuj(S);
         fizyka.rysuj(statekGracza);
+        fizyka.rysuj(orbity);
         fizyka.rysuj(planety);
         fizyka.rysuj(pociski);
         fizyka.rysuj(przeciwnicy);
@@ -116,15 +120,12 @@ function draw() {
             przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'red',45);
             przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
         };
-        atakujPlaneteNumer=planety.length-1;
         for(var i =13;i<22;i=i+4){
             przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
             przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'green',45);
             przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'green',45);
             przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
         };
-       atakujPlaneteNumer=planety.length-1;
-
         setTimeout(function(){ekran.numer=1}, 1000);
     };
 };

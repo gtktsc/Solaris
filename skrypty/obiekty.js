@@ -1,5 +1,5 @@
 var fizyka = {
-    rysujPunkt(x,y){
+    pokazPunkt(x,y){
         c.beginPath();
         c.moveTo(x,0);
         c.lineTo(x,window.innerHeight);

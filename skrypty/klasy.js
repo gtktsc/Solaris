@@ -52,11 +52,6 @@ function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObieg
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
         c.stroke();
     };
-    this.rysujOrbite = function() {
-        c.beginPath();
-        c.arc(window.innerWidth/2,window.innerHeight/2,this.R,0,Math.PI*2,true);
-        c.stroke();
-    };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
             this.dx=this.x-obiekt.x;
@@ -64,6 +59,23 @@ function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObieg
             this.odleglosc=Math.sqrt(this.dx * this.dx + this.dy * this.dy);
             obiekt.vx=obiekt.vx+this.g*(this.dx/this.odleglosc);
             obiekt.vy=obiekt.vy+this.g*(this.dy/this.odleglosc);
+        };
+    };
+};
+function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu) {
+    this.r = promien;
+    this.x = wspolrzednaX+this.r;
+    this.y = wspolrzednaY+this.r;
+    this.R = odlegloscR;
+    this.v=predkoscObiegu;
+    this.phi = katObrotu;
+    this.teta = katObiegu;
+    this.widocznosc=false;
+    this.rysuj = function() {
+        if (this.widocznosc) {
+            c.beginPath();
+            c.arc(window.innerWidth/2,window.innerHeight/2,this.R,0,Math.PI*2,true);
+            c.stroke();
         };
     };
 };
