@@ -37,7 +37,7 @@ window.addEventListener('keydown', function(event) {
   switch (event.keyCode) {
 	case 49 : // 1
 	if(statekGracza.maxLiczbaPociskow1>0){
-	pociski[statekGracza.numerPocisku] = new _KlasaPocisk(10,10,2,2,2,'red')  
+	pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'red')  
 	pociski[statekGracza.numerPocisku].widocznosc=true;
 	statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
 	statekGracza.numerPocisku=statekGracza.numerPocisku+1;
@@ -47,7 +47,7 @@ window.addEventListener('keydown', function(event) {
 	
 		case 50 : // 2
 	if(statekGracza.maxLiczbaPociskow2>0){
-	pociski[statekGracza.numerPocisku] = new _KlasaPocisk(10,10,2,2,2,'green')  
+	pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'green')  
 	pociski[statekGracza.numerPocisku].widocznosc=true;
 	statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
 	statekGracza.numerPocisku=statekGracza.numerPocisku+1;
@@ -57,7 +57,7 @@ window.addEventListener('keydown', function(event) {
 	
 		case 51 : // 3
 	if(statekGracza.maxLiczbaPociskow3>0){
-	pociski[statekGracza.numerPocisku] = new _KlasaPocisk(10,10,2,2,2,'blue')  
+	pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'blue')  
 	pociski[statekGracza.numerPocisku].widocznosc=true;
 	statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
 	statekGracza.numerPocisku=statekGracza.numerPocisku+1;

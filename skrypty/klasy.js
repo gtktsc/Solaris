@@ -1,12 +1,12 @@
-function _KlasaPocisk(_wspolrzednaX,_wspolrzednaY,_promien,_predkoscX,_predkoscY,_kolor) {
-    this.r = _promien;
-	this.x = _wspolrzednaX-this.r;
-	this.y = _wspolrzednaY-this.r;	
-	this.vx=_predkoscX;
-	this.vy=_predkoscY;	
-	this.vxOld=_predkoscX;
-	this.vyOld=_predkoscY;
-	this.kolor=_kolor;
+function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
+    this.r = promien;
+	this.x = wspolrzednaX-this.r;
+	this.y = wspolrzednaY-this.r;	
+	this.vx=predkoscX;
+	this.vy=predkoscY;	
+	this.vxOld=predkoscX;
+	this.vyOld=predkoscY;
+	this.kolor=kolor;
 	this.widocznosc = false;
 	
 	if(this.kolor==='red'){
@@ -37,18 +37,18 @@ function _KlasaPocisk(_wspolrzednaX,_wspolrzednaY,_promien,_predkoscX,_predkoscY
 	
 }
 
-function _KlasaPlaneta(_wspolrzednaX,_wspolrzednaY,_promien,_odlegloscR,_katObrotu,_katObiegu,_predkoscObiegu,_stalaGrawitacyjna) {
-    this.r = _promien;
-    this.height = _promien*2;
-    this.width = _promien*2;
-	this.x = _wspolrzednaX+this.r;
-	this.y = _wspolrzednaY+	this.r;	
-	this.R = _odlegloscR;
-	this.phi = _katObrotu;
-	this.teta = _katObiegu;
-	this.v=_predkoscObiegu;
-	this.vOld=_predkoscObiegu;
-	this.g=_stalaGrawitacyjna;
+function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGrawitacyjna) {
+    this.r = promien;
+    this.height = promien*2;
+    this.width = promien*2;
+	this.x = wspolrzednaX+this.r;
+	this.y = wspolrzednaY+	this.r;	
+	this.R = odlegloscR;
+	this.phi = katObrotu;
+	this.teta = katObiegu;
+	this.v=predkoscObiegu;
+	this.vOld=predkoscObiegu;
+	this.g=stalaGrawitacyjna;
 	this.zycie=100;
 	this.widocznosc=true;
 	
@@ -74,13 +74,13 @@ function _KlasaPlaneta(_wspolrzednaX,_wspolrzednaY,_promien,_odlegloscR,_katObro
 	
 }
 
-function _KlasaGwiazda(_wspolrzednaX,_wspolrzednaY,_promien,_stalaGrawitacyjna) {
-    this.r = _promien;
-    this.height = _promien*2;
-    this.width = _promien*2;
-	this.x = _wspolrzednaX-this.r;
-	this.y = _wspolrzednaY-this.r;
-	this.g = _stalaGrawitacyjna;	
+function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
+    this.r = promien;
+    this.height = promien*2;
+    this.width = promien*2;
+	this.x = wspolrzednaX-this.r;
+	this.y = wspolrzednaY-this.r;
+	this.g = stalaGrawitacyjna;	
 	
     this.rysuj = function() {
 		c.beginPath();
@@ -98,18 +98,18 @@ function _KlasaGwiazda(_wspolrzednaX,_wspolrzednaY,_promien,_stalaGrawitacyjna) 
 	
 }
 
-function _KlasaPrzeciwnik(_wspolrzednaX,_wspolrzednaY,_promien,_predkoscX,_predkoscY,_kolor,_katPhi) {
-    this.r = _promien;
-	this.x = _wspolrzednaX-this.r;
-	this.y = _wspolrzednaY-this.r;	
-	this.vx=_predkoscX;
-	this.vy=_predkoscY;
-	this.vxOld=_predkoscX;
-	this.vyOld=_predkoscY;
-	this.kolor=_kolor;
+function Przeciwnik(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor,katPhi) {
+    this.r = promien;
+	this.x = wspolrzednaX-this.r;
+	this.y = wspolrzednaY-this.r;	
+	this.vx=predkoscX;
+	this.vy=predkoscY;
+	this.vxOld=predkoscX;
+	this.vyOld=predkoscY;
+	this.kolor=kolor;
 	this.zycie = 100;
 	this.widocznosc = true;
-	this.phi= _katPhi*Math.PI/180;
+	this.phi= katPhi*Math.PI/180;
 	
 	if(this.kolor==='red'){
 		this.kolor='#FF0000'
