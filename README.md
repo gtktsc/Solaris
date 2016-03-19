@@ -18,3 +18,11 @@ D - obroc statek w prawo.
 1 - czerwone - nie wplywa na nie grawitacja ukladu,
 2 - zielone - wplywa na nie grawitacja slonca,
 3 - niebieskie - wplywa na nie grawitacja slonca + planet.
+
+Jest to mój pierwszy wiekszy projekt w JavaScript, nie oczekuj wiele. Jest to moj pierwszy projekt w Git Hubie - nie oczekuj wiele. Jest to moj pierwszy DUZY projekt programistyczny - nie oczekuj wiele.
+
+ONLINE :
+
+http://gtktsc.esy.es/
+
+Dzieki!
