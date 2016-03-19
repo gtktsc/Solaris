@@ -1,6 +1,32 @@
 var fizyka = {
+    rysujPunkt(x,y){
+        c.beginPath();
+        c.moveTo(x,0);
+        c.lineTo(x,window.innerHeight);
+        c.moveTo(0,y);
+        c.lineTo(window.innerWidth,y);
+        c.stroke();
+    },
+    rysuj: function(obiekt){
+			if(Array.isArray(obiekt)){
+            for(var i = 1;i<obiekt.length;i++){
+				if(typeof(obiekt[i])==='object'){
+                    obiekt[i].rysuj();
+				}
+            };
+        }else{
+            obiekt.rysuj();
+        };
+	},
+    sprawdzWarunkiKonca: function(){
+        if(przeciwnicy.length===1 || planety.length===1 || statekGracza.zycie<0){
+			ekran.pauza=true;
+			ekran.numer=0;
+            //setTimeout(function(){ekran.numer=0;ekran.pauza=false;}, 1000);
+        };
+	},
     kierunekDoObiektu1: function(obiekt1,obiekt2) {
-        if (obiekt1!==null && obiekt2!==null){
+        if (obiekt1!==null && obiekt2!==null && typeof(obiekt1)==='object'&& typeof(obiekt2)==='object'){
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
@@ -188,6 +214,6 @@ var myszKlik ={
     rusz: false,
 };
 var ekran ={
-    numer:0,
+    numer:1,
     pauza: false,
 };

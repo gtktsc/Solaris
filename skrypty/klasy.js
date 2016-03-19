@@ -44,17 +44,17 @@ function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObieg
     this.g=stalaGrawitacyjna;
     this.zycie=100;
     this.widocznosc=true;
-    this.rysuj = function(polozenieCentrumX,polozenieCentrumY) {
+    this.rysuj = function() {
         this.teta=this.teta+this.v*(Math.PI/180);
-        this.x=polozenieCentrumX+this.R*Math.cos(this.teta);
-        this.y=polozenieCentrumY+this.R*Math.sin(this.teta);
+        this.x=window.innerWidth/2+this.R*Math.cos(this.teta);
+        this.y=window.innerHeight/2+this.R*Math.sin(this.teta);
         c.beginPath();
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
         c.stroke();
     };
-    this.rysujOrbite = function(polozenieCentrumX,polozenieCentrumY) {
+    this.rysujOrbite = function() {
         c.beginPath();
-        c.arc(polozenieCentrumX,polozenieCentrumY,this.R,0,Math.PI*2,true);
+        c.arc(window.innerWidth/2,window.innerHeight/2,this.R,0,Math.PI*2,true);
         c.stroke();
     };
     this.oddzialywanie = function(obiekt) {
@@ -76,7 +76,7 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.g = stalaGrawitacyjna;
     this.rysuj = function() {
         c.beginPath();
-        c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+        c.arc(window.innerWidth/2,window.innerHeight/2,this.r,0,Math.PI*2,true);
         c.stroke();
     };
     this.oddzialywanie = function(obiekt) {
