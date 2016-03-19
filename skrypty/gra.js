@@ -3,10 +3,10 @@ for(var i =1;i<7;i++){
 }
 atakujPlaneteNumer=planety.length-1;
 for(var i =1;i<12;i=i+4){
-    przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45	);
+    przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
     przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'red',45	);
     przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'red',45	);
-    przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45	);
+    przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
 };
 function draw() {
     if(ekran.numer==1){
