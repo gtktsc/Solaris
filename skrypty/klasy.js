@@ -31,18 +31,16 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
         };
     };
 };
-function Planeta(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGrawitacyjna) {
-    this.r = promien;
-    this.height = promien*2;
-    this.width = promien*2;
-    this.x = wspolrzednaX+this.r;
-    this.y = wspolrzednaY+  this.r;
+function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGrawitacyjna) {
+    this.r = promien+Math.random()*10;
     this.R = odlegloscR;
-    this.phi = katObrotu;
-    this.teta = katObiegu;
-    this.v=predkoscObiegu;
-    this.vOld=predkoscObiegu;
-    this.g=stalaGrawitacyjna;
+    this.phi = katObrotu*Math.random();
+    this.teta = katObiegu*Math.random();
+    this.v=predkoscObiegu*Math.random();
+    this.vOld=predkoscObiegu+Math.random()/100;
+    this.g=stalaGrawitacyjna+Math.random()/100;
+    this.x = window.innerWidth/2+this.R*Math.cos(this.teta);
+    this.y = window.innerHeight/2+this.R*Math.sin(this.teta);
     this.zycie=100;
     this.widocznosc=true;
     this.rysuj = function() {
@@ -102,19 +100,20 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
         };
     };
 };
-function Przeciwnik(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor,katPhi) {
-    this.r = promien;
-    this.x = wspolrzednaX-this.r;
-    this.y = wspolrzednaY-this.r;
-    this.vx=predkoscX;
-    this.vy=predkoscY;
-    this.vxOld=predkoscX;
-    this.vyOld=predkoscY;
+function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
+    this.r = 2;
+    this.x =wspolrzednaX+Math.random()*100-5;
+    this.y =wspolrzednaY+Math.random()*100-5;
+    this.vx=0;
+    this.vy=0;
+    this.v=2 + (Math.random()/10);
+    this.vxOld=this.vx;
+    this.vyOld=this.vy;
     this.kolor=kolor;
     this.zycie = 100;
-    this.obrazenia = 0.01;
+    this.obrazenia = obrazenia*Math.random();
     this.widocznosc = true;
-    this.phi= katPhi*Math.PI/180;
+    this.phi=0;
     if (this.kolor==='red') {
         this.kolor='#FF0000';
     }else if (this.kolor==='green') {
@@ -125,8 +124,8 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor,
     this.rysuj = function() {
         if (this.widocznosc) {
             if(!ekran.pauza) {
-                this.vx=-Math.sin(this.phi);
-                this.vy=-Math.cos(this.phi);
+                this.vx=-Math.sin(this.phi)*this.v;
+                this.vy=-Math.cos(this.phi)*this.v;
                 this.x = this.x + this.vx;
                 this.y = this.y + this.vy;
             };
@@ -144,7 +143,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor,
         c.fill();
         c.stroke();
         c.restore();
-            if(this.x<-5||this.y<-5||this.x>window.innerWidth||this.y>window.innerHeight){
+            if(this.x<-200||this.y<-200||this.x>window.innerWidth+200||this.y>window.innerHeight+200){
                 this.widocznosc = false;
             };
         };
