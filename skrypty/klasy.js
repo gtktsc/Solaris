@@ -7,6 +7,7 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
     this.vxOld=predkoscX;
     this.vyOld=predkoscY;
     this.kolor=kolor;
+    this.obrazenia=10;
     this.widocznosc = false;
     if (this.kolor==='red') {
         this.kolor='#FF0000';
@@ -111,6 +112,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor,
     this.vyOld=predkoscY;
     this.kolor=kolor;
     this.zycie = 100;
+    this.obrazenia = 0.01;
     this.widocznosc = true;
     this.phi= katPhi*Math.PI/180;
     if (this.kolor==='red') {
