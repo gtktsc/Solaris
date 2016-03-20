@@ -1,4 +1,4 @@
-function draw() {
+function gra() {
     if(ekran.numer==1){
 		if(!ekran.pauza){
             if(mysz.rusz){
@@ -39,4 +39,4 @@ function draw() {
         ekran.numer=1
     };
 };
-var animacja = setInterval(draw, 33);
+var animacja = setInterval(gra, 33);
