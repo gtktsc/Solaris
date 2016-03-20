@@ -1,50 +1,86 @@
 var fizyka = {
-	generujPlansze (liczbaPlanet,liczbaPrzeciwnikowRed,redObrazenia,liczbaPrzeciwnikowGreen,greenObrazenia) {
+	najblizszyCel(Cele,Atakujacy){
+		if(Array.isArray(Cele) && typeof(Atakujacy)==='object'){
+			Atakujacy.odlegloscDoCelu=window.innerWidth;
+			for(x in Cele){
+				if (fizyka.odleglosc(Cele[x].x,Cele[x].y,Atakujacy.x,Atakujacy.y)<Atakujacy.odlegloscDoCelu){
+						Atakujacy.odlegloscDoCelu=fizyka.odleglosc(Cele[x].x,Cele[x].y,Atakujacy.x,Atakujacy.y);
+						Atakujacy.cel=x;
+				};
+			};
+		};
+	},
+	generujPlansze (liczbaPlanet,liczbaR,obrazeniaR,liczbaG,obrazeniaG,liczbaB,obrazeniaB) {
 		przeciwnicy = [];
 		planety = [];
 		pociski = [];
+		statekGracza.x=window.innerWidth/2 - 50;
+		statekGracza.y=0;
+		statekGracza.vy=1;
+		statekGracza.vx=0;
 		for(var i =1;i<liczbaPlanet+1;i++){
             planety[i]= new Planeta(4,i*45,30,30,0.1,0.01);
             orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
         };
         var x=1;
-        for(var i =1;i<=liczbaPrzeciwnikowRed;i++){
+        for(var i =1;i<=liczbaR;i++){
 			switch(x){
 				case 1:
-				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',redObrazenia);
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',obrazeniaR);
 				x=2;
 				break;
 				case 2:
-				przeciwnicy[i] = new Przeciwnik (-100,-100,'red',redObrazenia);
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'red',obrazeniaR);
 				x=3
 				break;
 				case 3:
-				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'red',redObrazenia);
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'red',obrazeniaR);
 				x=4;
 				break;
 				case 4:
-				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'red',redObrazenia);
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'red',obrazeniaR);
 				x=1;
 				break;
 			}
         };
 			x=1;
-		for(var i =liczbaPrzeciwnikowRed+1;i<(liczbaPrzeciwnikowRed+liczbaPrzeciwnikowGreen+2);i++){
+		for(var i =liczbaR+1;i<(liczbaR+liczbaG+2);i++){
 			switch(x){
 				case 1:
-				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',greenObrazenia);
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',obrazeniaG);
 				x=2;
 				break;
 				case 2:
-				przeciwnicy[i] = new Przeciwnik (-100,-100,'green',greenObrazenia);
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'green',obrazeniaG);
 				x=3
 				break;
 				case 3:
-				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'green',greenObrazenia);
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'green',obrazeniaG);
 				x=4;
 				break;
 				case 4:
-				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'green',greenObrazenia);
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'green',obrazeniaG);
+				x=1;
+				break;
+			}
+        };
+        x=1;
+		for(var i =(liczbaR+liczbaG+2);i<(liczbaR+liczbaG+liczbaB+2);i++){
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'blue',obrazeniaB);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'blue',obrazeniaB);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'blue',obrazeniaB);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'blue',obrazeniaB);
 				x=1;
 				break;
 			}
@@ -56,14 +92,24 @@ var fizyka = {
             if(przeciwnicy[i].zycie>0){
                 if(przeciwnicy[i].kolor==='#FF0000'){
                     fizyka.kierunekDoObiektu1(planety[planety.length-1],przeciwnicy[i]);
+					przeciwnicy[i].cel=planety.length-1;
             } else if(przeciwnicy[i].kolor==='#00FF00') {
                 fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
+            } else if(przeciwnicy[i].kolor==='#0000FF'){
+				if(fizyka.odleglosc(S.x,S.y,przeciwnicy[i].x,przeciwnicy[i].y)>100 && przeciwnicy[i].punktZbiorczy === false){
+				    fizyka.kierunekDoObiektu1(S,przeciwnicy[i]);
+				} else {
+					przeciwnicy[i].punktZbiorczy=true;
+					fizyka.najblizszyCel(planety,przeciwnicy[i]);
+					fizyka.kierunekDoObiektu1(planety[przeciwnicy[i].cel],przeciwnicy[i]);
+				}
+
+			};
+            if(fizyka.dwaCiala(przeciwnicy[i],planety[przeciwnicy[i].cel])){
+                planety[przeciwnicy[i].cel].zycie=planety[przeciwnicy[i].cel].zycie-przeciwnicy[i].obrazenia;
+                planety[przeciwnicy[i].cel].r = planety[przeciwnicy[i].cel].r*(0.9998);    //trzeba okreslic elegancki sposob na to
             };
-            if(fizyka.dwaCiala(przeciwnicy[i],planety[planety.length-1])){
-                planety[planety.length-1].zycie=planety[planety.length-1].zycie-przeciwnicy[i].obrazenia;
-                planety[planety.length-1].r = planety[planety.length-1].r*(0.9998);    //trzeba okreslic elegancki sposob na to
-            };
-			if(i>1 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
+			if(i>3 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
 				przeciwnicy[i].x=przeciwnicy[i].x+(Math.random()/2);
 				przeciwnicy[i].y=przeciwnicy[i].y+(Math.random()/2);
 			};
@@ -194,6 +240,12 @@ var fizyka = {
         } else if (obiekt.y<-10){
             obiekt.y=window.innerHeight-10;};
     },
+	odleglosc: function (x1,y1,x2,y2){
+            var dx=x1-x2;
+            var dy=y1-y2;
+            var odlegloscObiektow=Math.sqrt(dx * dx + dy * dy);
+			return odlegloscObiektow;
+	},
     dwaCiala: function(obiekt1,obiekt2){
         if (!ekran.pauza && obiekt1!==null && obiekt2!==null) {
             var dx=obiekt1.x-obiekt2.x;
@@ -279,6 +331,8 @@ var statekGracza = {
     vy: 1,
     vxOld: 0,
     vyOld: 1,
+    odlegloscDoCelu: 300,
+    cel: 1,
 	szybkoscLeczenia: 0.01,
     phi: 180*Math.PI/180,
     rysuj : function(){
@@ -286,28 +340,28 @@ var statekGracza = {
         this.y=this.y+this.vy;
         if(mysz.statek){
             c.save();
-            c.translate((this.x+5),(this.y+10/3));
+            c.translate((this.x),(this.y));
             c.rotate(-this.phi);
-            c.translate(-(this.x+5),-(this.y+10/3));
+            c.translate(-(this.x),-(this.y));
             c.beginPath();
             c.fillStyle = '#000000';
-            c.moveTo(this.x+5,this.y+0);
-            c.lineTo(this.x+10,this.y+10);
-            c.lineTo(this.x+0,this.y+10);
-            c.lineTo(this.x+5,this.y+0);
+            c.moveTo(this.x+0,this.y-5);
+            c.lineTo(this.x+5,this.y+5);
+            c.lineTo(this.x-5,this.y+5);
+            c.lineTo(this.x,this.y-5);
             c.fill();
             c.stroke();
             c.restore();
         };
         c.save();
-        c.translate((this.x+5),(this.y+10/3));
+        c.translate((this.x),(this.y));
         c.rotate(-this.phi);
-        c.translate(-(this.x+5),-(this.y+10/3));
+        c.translate(-(this.x),-(this.y));
         c.beginPath();
-        c.moveTo(this.x+5,this.y+0);
-        c.lineTo(this.x+10,this.y+10);
-        c.lineTo(this.x+0,this.y+10);
-        c.lineTo(this.x+5,this.y+0);
+        c.moveTo(this.x+0,this.y-5);
+        c.lineTo(this.x+5,this.y+5);
+        c.lineTo(this.x-5,this.y+5);
+        c.lineTo(this.x,this.y-5);
         c.stroke();
         c.restore();
     },
@@ -330,8 +384,8 @@ var statekGracza = {
         };
     },
     wystrzel : function(pocisk){
-        pocisk.x=this.x+5;
-        pocisk.y=this.y+2;
+        pocisk.x=this.x;
+        pocisk.y=this.y;
         pocisk.vx=this.vx-Math.sin(this.phi)*3;
         pocisk.vy=this.vy-Math.cos(this.phi)*3;
     }
@@ -342,7 +396,9 @@ var mysz ={
     r:10,
     planeta: false,
     statek: false,
-    rusz: false,
+    rusz: false,    
+	cel: 1,
+    odlegloscDoCelu: 300,
 };
 var myszKlik ={
     x:0,
@@ -351,9 +407,12 @@ var myszKlik ={
     planeta: false,
     statek: false,
     rusz: false,
+    cel: 1,
+    odlegloscDoCelu: 300,
 };
 var ekran ={
     numer:0,
     pauza: false,
 	poziom: 1,
+	
 };
