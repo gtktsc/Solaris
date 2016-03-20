@@ -4,13 +4,17 @@ var fizyka = {
             if(przeciwnicy[i].zycie>0){
                 if(przeciwnicy[i].kolor==='#FF0000'){
                     fizyka.kierunekDoObiektu1(planety[planety.length-1],przeciwnicy[i]);
-            } else {
+            } else if(przeciwnicy[i].kolor==='#00FF00') {
                 fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
             };
             if(fizyka.dwaCiala(przeciwnicy[i],planety[planety.length-1])){
                 planety[planety.length-1].zycie=planety[planety.length-1].zycie-przeciwnicy[i].obrazenia;
                 planety[planety.length-1].r = planety[planety.length-1].r*(0.9998);    //trzeba okreslic elegancki sposob na to
             };
+			if(i>1 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
+				przeciwnicy[i].x=przeciwnicy[i].x+(Math.random()/2);
+				przeciwnicy[i].y=przeciwnicy[i].y+(Math.random()/2);
+			};
             } else {
                 przeciwnicy.splice(i,1);
                 fizyka.sprawdzWarunkiKonca();
@@ -73,6 +77,9 @@ var fizyka = {
         };
 	},
     odswiezEkranGry(){
+        fizyka.planety();
+        fizyka.pociski();
+        fizyka.przeciwnicy();
         c.clearRect(0,0,window.innerWidth,window.innerHeight);
         fizyka.brzegOkna(statekGracza);
         fizyka.rysuj(S);

@@ -1,27 +1,24 @@
         for(var i =1;i<7;i++){
-            planety[i]= new Planeta(0,0,4+Math.random()*10,i*45,0,Math.random()*30,Math.random()/5,0.01);
+            planety[i]= new Planeta(4,i*45,30,30,0.1,0.01);
             orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
         };
         for(var i =1;i<13;i=i+4){
-            przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
-            przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'red',45);
-            przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'red',45);
-            przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
-        };
-        for(var i =13;i<22;i=i+4){
-            przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
-            przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'green',45);
-            przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'green',45);
-            przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
+            przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',1);
+			przeciwnicy[i+1] = new Przeciwnik (-100,-100,'red',1);
+			przeciwnicy[i+2] = new Przeciwnik (window.innerWidth,-100,'red',1);
+			przeciwnicy[i+3] = new Przeciwnik (-100,window.innerHeight,'red',1);
+        };        
+		for(var i =13;i<22;i=i+4){
+            przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',1);
+			przeciwnicy[i+1] = new Przeciwnik (-100,-100,'green',1);
+			przeciwnicy[i+2] = new Przeciwnik (window.innerWidth,-100,'green',1);
+			przeciwnicy[i+3] = new Przeciwnik (-100,window.innerHeight,'green',1);
         };
 
 
 
 function draw() {
     if(ekran.numer==1){
-    fizyka.planety();
-    fizyka.pociski();
-    fizyka.przeciwnicy();
 
 		if(!ekran.pauza){
             if(mysz.rusz){
@@ -43,19 +40,20 @@ function draw() {
 		fizyka.odswiezEkranGry();
     } else if (ekran.numer==0){
         for(var i =1;i<7;i++){
-            planety[i]= new Planeta(0,0,4+Math.random()*10,i*45,0,Math.random()*30,Math.random()/5,0.01);
+            planety[i]= new Planeta(4,i*45,30,30,0.1,0.01);
+            orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
         };
         for(var i =1;i<13;i=i+4){
-            przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
-            przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'red',45);
-            przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'red',45);
-            przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'red',45);
-        };
-        for(var i =13;i<22;i=i+4){
-            przeciwnicy[i] = new Przeciwnik (window.innerWidth-Math.random()*50,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
-            przeciwnicy[i+1] = new Przeciwnik (Math.random()*30,Math.random()*30,2,2,2,'green',45);
-            przeciwnicy[i+2] = new Przeciwnik (window.innerWidth-Math.random()*50,30,2,-2,-2,'green',45);
-            przeciwnicy[i+3] = new Przeciwnik (Math.random()*30,window.innerHeight-Math.random()*50,2,-2,-2,'green',45);
+            przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',1);
+			przeciwnicy[i+1] = new Przeciwnik (0,0,'red',1);
+			przeciwnicy[i+2] = new Przeciwnik (window.innerWidth,0,'red',1);
+			przeciwnicy[i+3] = new Przeciwnik (0,window.innerHeight,'red',1);
+        };        
+		for(var i =13;i<22;i=i+4){
+            przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',1);
+			przeciwnicy[i+1] = new Przeciwnik (0,0,'green',1);
+			przeciwnicy[i+2] = new Przeciwnik (window.innerWidth,0,'green',1);
+			przeciwnicy[i+3] = new Przeciwnik (0,window.innerHeight,'green',1);
         };
         setTimeout(function(){ekran.numer=1}, 1000);
     };
