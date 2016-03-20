@@ -1,4 +1,56 @@
 var fizyka = {
+	generujPlansze (liczbaPlanet,liczbaPrzeciwnikowRed,redObrazenia,liczbaPrzeciwnikowGreen,greenObrazenia) {
+		przeciwnicy = [];
+		planety = [];
+		pociski = [];
+		for(var i =1;i<liczbaPlanet+1;i++){
+            planety[i]= new Planeta(4,i*45,30,30,0.1,0.01);
+            orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
+        };
+        var x=1;
+        for(var i =1;i<=liczbaPrzeciwnikowRed;i++){
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',redObrazenia);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'red',redObrazenia);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'red',redObrazenia);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'red',redObrazenia);
+				x=1;
+				break;
+			}
+        };
+			x=1;
+		for(var i =liczbaPrzeciwnikowRed+1;i<(liczbaPrzeciwnikowRed+liczbaPrzeciwnikowGreen+2);i++){
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',greenObrazenia);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'green',greenObrazenia);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'green',greenObrazenia);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'green',greenObrazenia);
+				x=1;
+				break;
+			}
+        };
+		ekran.pauza=false;
+	},
 	przeciwnicy () {
 		for (i in przeciwnicy){
             if(przeciwnicy[i].zycie>0){
@@ -301,6 +353,7 @@ var myszKlik ={
     rusz: false,
 };
 var ekran ={
-    numer:1,
+    numer:0,
     pauza: false,
+	poziom: 1,
 };
