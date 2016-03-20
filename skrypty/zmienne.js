@@ -6,3 +6,4 @@ var przeciwnicy = [];
 var pociski = [];
 var planety = [];
 var orbity = [];
+var satelity = [];

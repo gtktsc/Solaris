@@ -3,6 +3,10 @@ window.addEventListener('mousemove',function(event) {
         mysz.y=event.clientY;
 },false);
 window.addEventListener('click', function(){
+	satelity[1] = new Satelita(mysz.x,mysz.y,1);
+	satelity[2] = new Satelita(mysz.x,mysz.y,1);
+	console.log(satelity[1].teta,fizyka.podajKat(S,satelity[1]))
+
     if(!ekran.pauza){
         if(mysz.statek){
             mysz.rusz=true;

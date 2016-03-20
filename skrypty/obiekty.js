@@ -186,6 +186,7 @@ var fizyka = {
         fizyka.rysuj(planety);
         fizyka.rysuj(pociski);
         fizyka.rysuj(przeciwnicy);
+		fizyka.rysuj(satelity);
     },
     pokazPunkt(x,y){
         c.beginPath();
@@ -212,7 +213,22 @@ var fizyka = {
 			ekran.numer=0;
         };
 	},
-    kierunekDoObiektu1: function(obiekt1,obiekt2) {
+    podajKat: function (obiekt1,obiekt2){
+		if (obiekt1!==null && obiekt2!==null && typeof(obiekt1)==='object'&& typeof(obiekt2)==='object'){
+			var dx=obiekt1.x-obiekt2.x;
+            var dy=obiekt1.y-obiekt2.y;
+            var odleglosc=Math.sqrt(dx * dx + dy * dy);
+			var kat = 0;
+            if (obiekt2.x<obiekt1.x) {
+                kat=Math.PI-Math.asin((obiekt2.y-obiekt1.y)/odleglosc);
+
+            } else {
+                kat=Math.asin((obiekt2.y-obiekt1.y)/odleglosc);
+            };
+			return kat;
+		}
+	},
+	kierunekDoObiektu1: function(obiekt1,obiekt2) {
         if (obiekt1!==null && obiekt2!==null && typeof(obiekt1)==='object'&& typeof(obiekt2)==='object'){
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
@@ -289,6 +305,10 @@ var fizyka = {
                         planety[i].vOld=planety[i].v;
                         planety[i].v=0;
                     };
+                    for(i in satelity){
+                        satelity[i].vOld=satelity[i].v;
+                        satelity[i].v=0;
+                    };
                     for(i in przeciwnicy){
                         przeciwnicy[i].vxOld=przeciwnicy[i].vx;
                         przeciwnicy[i].vyOld=przeciwnicy[i].vy;
@@ -310,6 +330,9 @@ var fizyka = {
                 };
                 for(i in planety){
                     planety[i].v=planety[i].vOld;
+                };
+                for(i in satelity){
+                    satelity[i].v=satelity[i].vOld;
                 };
                 for(i in przeciwnicy){
                     przeciwnicy[i].vx=przeciwnicy[i].vxOld;

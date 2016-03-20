@@ -61,6 +61,38 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
         };
     };
 };
+function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
+    this.r = 3;
+	this.x = wspolrzednaX;
+    this.y = wspolrzednaY;
+    this.R = fizyka.odleglosc(this.x,this.y,S.x,S.y);
+    this.phi = 0;
+	this.teta=fizyka.podajKat(S,this);
+    this.v=predkoscObiegu*Math.random();
+    this.vOld=this.v;
+    this.widocznosc=true;
+    this.rysuj = function() {
+        this.teta=this.teta+this.v*(Math.PI/180);
+        this.x=S.x+this.R*Math.cos(this.teta);
+        this.y=S.y+this.R*Math.sin(this.teta);
+        c.beginPath();
+        c.moveTo(this.x-3,this.y-3);
+        c.lineTo(this.x+3,this.y-3);
+        c.lineTo(this.x-3,this.y+3);
+        c.lineTo(this.x+3,this.y+3);
+        c.lineTo(this.x-3,this.y-3);
+        c.stroke();
+    };
+    this.oddzialywanie = function(obiekt) {
+        if (!ekran.pauza) {
+            this.dx=this.x-obiekt.x;
+            this.dy=this.y-obiekt.y;
+            this.odleglosc=Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+            obiekt.vx=obiekt.vx+this.g*(this.dx/this.odleglosc);
+            obiekt.vy=obiekt.vy+this.g*(this.dy/this.odleglosc);
+        };
+    };
+};
 function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu) {
     this.r = promien;
     this.x = wspolrzednaX+this.r;
