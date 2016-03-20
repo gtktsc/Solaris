@@ -1,6 +1,114 @@
 var fizyka = {
+	przeciwnicy () {
+		for (i in przeciwnicy){
+            if(przeciwnicy[i].zycie>0){
+                if(przeciwnicy[i].kolor==='#FF0000'){
+                    fizyka.kierunekDoObiektu1(planety[planety.length-1],przeciwnicy[i]);
+            } else {
+                fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
+            };
+            if(fizyka.dwaCiala(przeciwnicy[i],planety[planety.length-1])){
+                planety[planety.length-1].zycie=planety[planety.length-1].zycie-przeciwnicy[i].obrazenia;
+                planety[planety.length-1].r = planety[planety.length-1].r*(0.9998);    //trzeba okreslic elegancki sposob na to
+            };
+            } else {
+                przeciwnicy.splice(i,1);
+                fizyka.sprawdzWarunkiKonca();
+			}
+        };
+	},
+    planety () {
+        for (i in planety) {
+            if(planety[i].zycie>0){
+                if(fizyka.dwaCiala(statekGracza,planety[i])){
+                    statekGracza.zycie=statekGracza.zycie+statekGracza.szybkoscLeczenia;
+                    console.log("statek planeta")
+                };
+                if(ekran.pauza && mysz.planeta && fizyka.klikniecie(myszKlik, planety[i])){
+					orbity[i].widocznosc=true;
+			    } else {
+					orbity[i].widocznosc=false;
+				}
+            } else {
+                planety.splice(i,1);
+                fizyka.sprawdzWarunkiKonca();
+			};
+        };
+    },
+	pociski () {
+		        for (i in pociski) {
+            if(pociski[i].widocznosc){
+                if(fizyka.dwaCiala(pociski[i],S)){
+                    pociski[i].widocznosc=false; //wpadanie na slonce
+                    console.log("pocisk slonce")
+                };
+                for(z in przeciwnicy){
+                    if(fizyka.dwaCiala(pociski[i],przeciwnicy[z])){
+                        przeciwnicy[z].zycie=przeciwnicy[z].zycie-pociski[i].obrazenia;
+                        pociski[i].widocznosc=false;                //wpadanie na przeciwnika
+                    };
+                };
+                for(x in planety){
+                    if(fizyka.dwaCiala(pociski[i],planety[x])){
+                        pociski[i].widocznosc=false;                //wpadanie na planety
+                        console.log("pocisk planeta")
+                    };
+					if (pociski[i].kolor==='#0000FF'){
+						planety[x].oddzialywanie(pociski[i]); //jezeli niebieskie to graw ma wplyw
+					}
+                };
+                if(pociski[i].kolor==='#00FF00' || pociski[i].kolor==='#0000FF'){
+                    S.oddzialywanie(pociski[i]);                //na ruch zielonych pociskow ma wplyw tylko slonce
+                };
+            } else {
+                if(pociski[i].kolor==='#FF0000'){
+                    statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]+1;
+                } else if(pociski[i].kolor==='#00FF00'){
+                    statekGracza.maxLiczbaPociskow[1]=statekGracza.maxLiczbaPociskow[1]+1;
+                } else {
+                    statekGracza.maxLiczbaPociskow[2]=statekGracza.maxLiczbaPociskow[2]+1;
+                };
+				pociski.splice(i,1);
+            };
+        };
+	},
+    odswiezEkranGry(){
+        c.clearRect(0,0,window.innerWidth,window.innerHeight);
+        fizyka.brzegOkna(statekGracza);
+        fizyka.rysuj(S);
+        fizyka.rysuj(statekGracza);
+        fizyka.rysuj(orbity);
+        fizyka.rysuj(planety);
+        fizyka.rysuj(pociski);
+        fizyka.rysuj(przeciwnicy);
+    },
+    pokazPunkt(x,y){
+        c.beginPath();
+        c.moveTo(x,0);
+        c.lineTo(x,window.innerHeight);
+        c.moveTo(0,y);
+        c.lineTo(window.innerWidth,y);
+        c.stroke();
+    },
+    rysuj: function(obiekt){
+			if(Array.isArray(obiekt)){
+            for(var i = 1;i<obiekt.length;i++){
+				if(typeof(obiekt[i])==='object'){
+                    obiekt[i].rysuj();
+				}
+            };
+        }else{
+            obiekt.rysuj();
+        };
+	},
+    sprawdzWarunkiKonca: function(){
+        if(przeciwnicy.length===1 || planety.length===1 || statekGracza.zycie<0){
+			fizyka.szybkoscAnimacji('stop');
+			ekran.numer=0;
+        };
+	},
     kierunekDoObiektu1: function(obiekt1,obiekt2) {
-        if (obiekt1!==null && obiekt2!==null){
+        if (obiekt1!==null && obiekt2!==null && typeof(obiekt1)==='object'&& typeof(obiekt2)==='object'){
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
@@ -107,14 +215,12 @@ var statekGracza = {
     y: -5,
     r: 2,
     zycie: 100,
-    numerPocisku: 0,
-    maxLiczbaPociskow1: 10,
-    maxLiczbaPociskow2: 20,
-    maxLiczbaPociskow3: 30,
+    maxLiczbaPociskow: [30,30,30],
     vx: 0,
     vy: 1,
     vxOld: 0,
     vyOld: 1,
+	szybkoscLeczenia: 0.01,
     phi: 180*Math.PI/180,
     rysuj : function(){
         this.x=this.x+this.vx;
@@ -188,6 +294,6 @@ var myszKlik ={
     rusz: false,
 };
 var ekran ={
-    numer:0,
+    numer:1,
     pauza: false,
 };

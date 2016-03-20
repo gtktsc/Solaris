@@ -31,30 +31,39 @@ window.addEventListener('keydown', function(event) {
     if(!ekran.pauza){
         switch (event.keyCode) {
             case 49 : // 1
-                if(statekGracza.maxLiczbaPociskow1>0){
-                    pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'red');
-                    pociski[statekGracza.numerPocisku].widocznosc=true;
-                    statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
-                    statekGracza.numerPocisku=statekGracza.numerPocisku+1;
-                    statekGracza.maxLiczbaPociskow1=statekGracza.maxLiczbaPociskow1-1;
+                if(statekGracza.maxLiczbaPociskow[0]>0){
+                    if(pociski.length>1){
+                        pociski[pociski.length] = new Pocisk(10,10,2,2,2,'red');
+                    } else {
+                        pociski[1] = new Pocisk(10,10,2,2,2,'red');
+                    };
+                    pociski[pociski.length-1].widocznosc=true;
+                    statekGracza.wystrzel(pociski[pociski.length-1]);
+                    statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]-1;
                 };
             break;
             case 50 : // 2
-                if(statekGracza.maxLiczbaPociskow2>0){
-                    pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'green');
-                    pociski[statekGracza.numerPocisku].widocznosc=true;
-                    statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
-                    statekGracza.numerPocisku=statekGracza.numerPocisku+1;
-                    statekGracza.maxLiczbaPociskow2=statekGracza.maxLiczbaPociskow2-1;
+			if(statekGracza.maxLiczbaPociskow[1]>0){
+                    if(pociski.length>1){
+                        pociski[pociski.length] = new Pocisk(10,10,2,2,2,'green');
+                    } else {
+                        pociski[1] = new Pocisk(10,10,2,2,2,'green');
+                    };
+                    pociski[pociski.length-1].widocznosc=true;
+                    statekGracza.wystrzel(pociski[pociski.length-1]);
+                    statekGracza.maxLiczbaPociskow[1]=statekGracza.maxLiczbaPociskow[1]-1;
                 };
             break;
             case 51 : // 3
-                if(statekGracza.maxLiczbaPociskow3>0){
-                    pociski[statekGracza.numerPocisku] = new Pocisk(10,10,2,2,2,'blue');
-                    pociski[statekGracza.numerPocisku].widocznosc=true;
-                    statekGracza.wystrzel(pociski[statekGracza.numerPocisku]);
-                    statekGracza.numerPocisku=statekGracza.numerPocisku+1;
-                    statekGracza.maxLiczbaPociskow3=statekGracza.maxLiczbaPociskow3-1;
+			    if(statekGracza.maxLiczbaPociskow[2]>0){
+                    if(pociski.length>1){
+                        pociski[pociski.length] = new Pocisk(10,10,2,2,2,'blue');
+                    } else {
+                        pociski[1] = new Pocisk(10,10,2,2,2,'blue');
+                    };
+                    pociski[pociski.length-1].widocznosc=true;
+                    statekGracza.wystrzel(pociski[pociski.length-1]);
+                    statekGracza.maxLiczbaPociskow[2]=statekGracza.maxLiczbaPociskow[2]-1;
                 };
             break;
             case 52 : // 4
