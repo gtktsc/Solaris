@@ -82,8 +82,8 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.r = promien;
     this.height = promien*2;
     this.width = promien*2;
-    this.x = wspolrzednaX-this.r;
-    this.y = wspolrzednaY-this.r;
+    this.x = wspolrzednaX;
+    this.y = wspolrzednaY;
     this.g = stalaGrawitacyjna;
     this.rysuj = function() {
         c.beginPath();
@@ -114,6 +114,9 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.obrazenia = obrazenia*Math.random();
     this.widocznosc = true;
     this.phi=0;
+	this.punktZbiorczy = false;
+    this.cel=1;
+    this.odlegloscDoCelu=300;
     if (this.kolor==='red') {
         this.kolor='#FF0000';
     }else if (this.kolor==='green') {
@@ -132,14 +135,14 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
         c.beginPath();
         c.fillStyle = this.kolor;
         c.save();
-        c.translate((this.x+12/3),(this.y+16/3));
+		c.translate((this.x),(this.y));
         c.rotate(-this.phi);
-        c.translate(-(this.x+12/3),-(this.y+16/3));
+        c.translate(-(this.x),-(this.y));
         c.beginPath();
-        c.moveTo(this.x+4,this.y+0);
-        c.lineTo(this.x+8,this.y+8);
-        c.lineTo(this.x+0,this.y+8);
-        c.lineTo(this.x+4,this.y+0);
+        c.moveTo(this.x+0,this.y-5);
+        c.lineTo(this.x+5,this.y+5);
+        c.lineTo(this.x-5,this.y+5);
+        c.lineTo(this.x,this.y-5);
         c.fill();
         c.stroke();
         c.restore();

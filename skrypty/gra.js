@@ -21,19 +21,19 @@ function gra() {
     } else if (ekran.numer==0){
 		switch(ekran.poziom){
 			case 1:
-			fizyka.generujPlansze(7,4,1,4,1);
+			fizyka.generujPlansze(7,4,1,4,1,4,1);
 			break;
 			case 2:
-			fizyka.generujPlansze(7,8,1,8,1);
+			fizyka.generujPlansze(7,8,1,8,4,1);
 			break;
 			case 3:
-			fizyka.generujPlansze(6,12,1,12,1);
+			fizyka.generujPlansze(6,12,1,12,1,4,1);
 			break;
 			case 4:
-			fizyka.generujPlansze(6,16,1,16,1);
+			fizyka.generujPlansze(6,16,1,16,1,4,1);
 			break;
 			case 5:
-			fizyka.generujPlansze(5,20,1,20,1);
+			fizyka.generujPlansze(5,20,1,20,1,4,1);
 			break;
 		};
         ekran.numer=1
