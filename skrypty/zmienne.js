@@ -7,3 +7,7 @@ var pociski = [];
 var planety = [];
 var orbity = [];
 var satelity = [];
+var naziemni = [];
+var spowalniacze = [];
+var poziomy = [];
+var wahadlowce = [];
