@@ -41,9 +41,6 @@ var fizyka = {
 						przeciwnicy[x].zycie=przeciwnicy[x].zycie-naziemni[i].obrazenia/100;
 					}
 				}
-				if(naziemni[i].R !== planety[naziemni[i].rodzicNumer].R){
-					  naziemni.splice(i,1);
-				}
 			}
 		}
 	},
@@ -211,6 +208,11 @@ var fizyka = {
 					orbity[i].widocznosc=false;
 				}
             } else {
+				for(z in naziemni){
+					if(fizyka.klikniecie(planety[i],naziemni[z])){
+					  naziemni.splice(z,1);
+					}
+				}
                 planety.splice(i,1);
                 fizyka.sprawdzWarunkiKonca();
 			};
