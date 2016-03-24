@@ -1,42 +1,47 @@
 function gra() {
-    if(ekran.numer==1){
-		if(!ekran.pauza){
-            if(mysz.rusz){
-                fizyka.kierunekDoObiektu1(mysz,statekGracza);
-                myszKlik.x=mysz.x;
-                myszKlik.y=mysz.y;
-                statekGracza.vx=-Math.sin(statekGracza.phi)*5;
-                statekGracza.vy=-Math.cos(statekGracza.phi)*5;
-                myszKlik.rusz=true;
-                mysz.rusz=false;
-                mysz.statek=false;
-            };
-            if(myszKlik.rusz===true && fizyka.klikniecie(myszKlik,statekGracza)){
-                statekGracza.vx=0;
-                statekGracza.vy=0;
-                myszKlik.rusz=false;
-            };
+	if(ekran.gra){
+		if(ekran.numer==1){
+			if(!ekran.pauza){
+				if(mysz.rusz){
+					fizyka.kierunekDoObiektu1(mysz,statekGracza);
+					myszKlik.x=mysz.x;
+					myszKlik.y=mysz.y;
+					statekGracza.vx=-Math.sin(statekGracza.phi)*5;
+					statekGracza.vy=-Math.cos(statekGracza.phi)*5;
+					myszKlik.rusz=true;
+					mysz.rusz=false;
+					mysz.statek=false;
+				};
+				if(myszKlik.rusz===true && fizyka.klikniecie(myszKlik,statekGracza)){
+					statekGracza.vx=0;
+					statekGracza.vy=0;
+					myszKlik.rusz=false;
+				};
+			};
+			fizyka.odswiezEkranGry();
+			if(fizyka.klikniecie(mysz,S) && (ekran.mysz=="tlo" ||ekran.mysz=="budowanie"  )){
+				ekran.mysz="budowanie";
+				c.fillStyle = "black";
+				c.font = "30px Arial";
+				c.font = "30px Arial";
+				c.fillText("Budowanie",S.x-70,S.y-35);
+				console.log("aasdasd",i);
+			} else {
+			ekran.mysz="tlo";
+		}
+		} else if (ekran.numer==0){
+			ekran.numer=1
 		};
-		fizyka.odswiezEkranGry();
-    } else if (ekran.numer==0){
-		switch(ekran.poziom){
-			case 1:
-			fizyka.generujPlansze(7,4,1,4,1,4,1);
-			break;
-			case 2:
-			fizyka.generujPlansze(7,8,1,8,4,1);
-			break;
-			case 3:
-			fizyka.generujPlansze(6,12,1,12,1,4,1);
-			break;
-			case 4:
-			fizyka.generujPlansze(6,16,1,16,1,4,1);
-			break;
-			case 5:
-			fizyka.generujPlansze(5,20,1,20,1,4,1);
-			break;
-		};
-        ekran.numer=1
-    };
+		if(ekran.budowanie){
+			for(i in planety){
+				if(fizyka.klikniecie(mysz,planety[i])){
+					
+					//rysuj menu planety
+				}
+			}
+			
+		}
+	};
+	
 };
-var animacja = setInterval(gra, 33);
+var animacjaGra = setInterval(gra, 33);
