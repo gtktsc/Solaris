@@ -146,7 +146,7 @@ function Spowalniacz(obrazenia) {
     this.rusz=false;
     this.rysuj = function() {
 		if(this.widocznosc){
-			if(menuBudowaniaSpowalniacz.rusz && this.rusz){
+			if(menuBudowaniaSpowalniacz.rusz && this.rusz && ekran.budowanie){
 				this.x = mysz.x;
 				this.y = mysz.y;
 			}

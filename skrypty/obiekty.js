@@ -41,7 +41,7 @@ var fizyka = {
 						przeciwnicy[x].zycie=przeciwnicy[x].zycie-naziemni[i].obrazenia/100;
 					}
 				}
-				if(naziemni[i].R !== planety[naziemni[i].rodzicNumer].R || typeof(planety[naziemni[i].rodzicNumer])!=='object' ){
+				if(naziemni[i].R !== planety[naziemni[i].rodzicNumer].R){
 					  naziemni.splice(i,1);
 				}
 			}
