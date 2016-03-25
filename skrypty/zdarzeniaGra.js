@@ -128,6 +128,7 @@ window.addEventListener('keydown', function(event) {
 						};
 						pociski[pociski.length-1].widocznosc=true;
 						statekGracza.wystrzel(pociski[pociski.length-1]);
+						pociski[pociski.length-1].rodzic="statekGracza";
 						statekGracza.maxLiczbaPociskow[1]=statekGracza.maxLiczbaPociskow[1]-1;
 				};
 				break;
@@ -140,6 +141,7 @@ window.addEventListener('keydown', function(event) {
 						};
 						pociski[pociski.length-1].widocznosc=true;
 						statekGracza.wystrzel(pociski[pociski.length-1]);
+						pociski[pociski.length-1].rodzic="statekGracza";
 						statekGracza.maxLiczbaPociskow[2]=statekGracza.maxLiczbaPociskow[2]-1;
 					};
 				break;

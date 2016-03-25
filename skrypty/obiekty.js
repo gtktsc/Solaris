@@ -89,11 +89,12 @@ var fizyka = {
 		statekGracza.y=0;
 		statekGracza.vy=1;
 		statekGracza.vx=0;
+		statekGracza.maxLiczbaPociskow=[30,30,30];
 		mysz.rusz=false;
 		mysz.statek=false;
 		statekGracza.phi=180*Math.PI/180;
 		for(var i =1;i<liczbaPlanet+1;i++){
-            planety[i]= new Planeta(4,i*45,30,30,0.1,0.01);
+            planety[i]= new Planeta(4,i*((window.innerHeight/2)/liczbaPlanet)-5,30,30,0.1,0.01);
             orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
         };
         var x=1;
@@ -120,7 +121,6 @@ var fizyka = {
         };
 			x=1;
 		for(var i =liczbaR+1;i<=(liczbaR+liczbaG);i++){
-						console.log(i)
 			switch(x){
 				case 1:
 				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',obrazeniaG);
@@ -162,6 +162,73 @@ var fizyka = {
 			}
         };
 		ekran.pauza=false;
+	},
+	generujFale(liczbaR,obrazeniaR,liczbaG,obrazeniaG,liczbaB,obrazeniaB){
+		przeciwnicy = [];
+        var x=1;
+        for(var i =1;i<=liczbaR;i++){
+
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'red',obrazeniaR);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'red',obrazeniaR);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'red',obrazeniaR);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'red',obrazeniaR);
+				x=1;
+				break;
+			}
+        };
+			x=1;
+		for(var i =liczbaR+1;i<=(liczbaR+liczbaG);i++){
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'green',obrazeniaG);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'green',obrazeniaG);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'green',obrazeniaG);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'green',obrazeniaG);
+				x=1;
+				break;
+			}
+        };
+        x=1;
+		for(var i =(liczbaR+liczbaG+1);i<=(liczbaR+liczbaG+liczbaB);i++){
+			switch(x){
+				case 1:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,window.innerHeight,'blue',obrazeniaB);
+				x=2;
+				break;
+				case 2:
+				przeciwnicy[i] = new Przeciwnik (-100,-100,'blue',obrazeniaB);
+				x=3
+				break;
+				case 3:
+				przeciwnicy[i] = new Przeciwnik (window.innerWidth,-100,'blue',obrazeniaB);
+				x=4;
+				break;
+				case 4:
+				przeciwnicy[i] = new Przeciwnik (-100,window.innerHeight,'blue',obrazeniaB);
+				x=1;
+				break;
+			}
+        };
 	},
 	przeciwnicy () {
 		for (i in przeciwnicy){
@@ -314,49 +381,55 @@ var fizyka = {
 			ekran.menu=true;
 			ekran.gra=false;
         } else if (przeciwnicy.length===1){
-			console.log("przeciwnicy dead")
-			statekGracza.doswiadczenie=statekGracza.doswiadczenie+statekGracza.aktualnyPoziom*1000;
-			switch(statekGracza.aktualnyPoziom){
-				case 1:
-					if(statekGracza.odblokowanePoziomy===1){
-						statekGracza.odblokowanePoziomy=2;
-					}
-				break;
-				case 2:
-					if(statekGracza.odblokowanePoziomy===2){
-						statekGracza.odblokowanePoziomy=3;
-					}
-				break;
-				case 2:
-					if(statekGracza.odblokowanePoziomy===2){
-						statekGracza.odblokowanePoziomy=3;
-					}
-				break;
-				case 3:
-					if(statekGracza.odblokowanePoziomy===3){
-						statekGracza.odblokowanePoziomy=4;
-					}
-				break;
-				case 4:
-					if(statekGracza.odblokowanePoziomy===4){
-						statekGracza.odblokowanePoziomy=5;
-					}
-				break;
-				case 5:
-					if(statekGracza.odblokowanePoziomy===5){
-						statekGracza.odblokowanePoziomy=6;
-					}
-				break;
-				case 6:
-					if(statekGracza.odblokowanePoziomy===6){
-						console.log("koniec gry")
-					}
-				break;
+			if(ekran.falaNumer<ekran.liczbaFal){
+				ekran.falaNumer=ekran.falaNumer+1;
+				ekran.liczbaPrzeciwnikow=statekGracza.aktualnyPoziom*ekran.falaNumer;
+				ekran.obrazeniaPrzeciwnikow=ekran.falaNumer/10;
+				fizyka.generujFale(ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow);			
+			}else if (ekran.falaNumer===ekran.liczbaFal){
+				statekGracza.doswiadczenie=statekGracza.doswiadczenie+statekGracza.aktualnyPoziom*1000;
+				switch(statekGracza.aktualnyPoziom){
+					case 1:
+						if(statekGracza.odblokowanePoziomy===1){
+							statekGracza.odblokowanePoziomy=2;
+						}
+					break;
+					case 2:
+						if(statekGracza.odblokowanePoziomy===2){
+							statekGracza.odblokowanePoziomy=3;
+						}
+					break;
+					case 2:
+						if(statekGracza.odblokowanePoziomy===2){
+							statekGracza.odblokowanePoziomy=3;
+						}
+					break;
+					case 3:
+						if(statekGracza.odblokowanePoziomy===3){
+							statekGracza.odblokowanePoziomy=4;
+						}
+					break;
+					case 4:
+						if(statekGracza.odblokowanePoziomy===4){
+							statekGracza.odblokowanePoziomy=5;
+						}
+					break;
+					case 5:
+						if(statekGracza.odblokowanePoziomy===5){
+							statekGracza.odblokowanePoziomy=6;
+						}
+					break;
+					case 6:
+						if(statekGracza.odblokowanePoziomy===6){
+							console.log("koniec gry")
+						}
+					break;
+				}
+				poziomy[statekGracza.odblokowanePoziomy].widocznosc=true;
+				fizyka.szybkoscAnimacji('stop');
+				ekran.menu=true;
+				ekran.gra=false;
 			}
-			poziomy[statekGracza.odblokowanePoziomy].widocznosc=true;
-			fizyka.szybkoscAnimacji('stop');
-			ekran.menu=true;
-			ekran.gra=false;
 		}
 	},
     podajKat: function (obiekt1,obiekt2){
@@ -506,7 +579,7 @@ var statekGracza = {
 	energia: 1000,
 	doswiadczenie: 0,
 	odblokowanePoziomy: 1,
-	aktualnyPoziom: 0,
+	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,
     rysuj : function(){
         this.x=this.x+this.vx;
@@ -591,6 +664,10 @@ var ekran ={
 	budowanie: false,
 	gra: false,
 	menu: true,
+	falaNumer: 1,
+	liczbaPrzeciwnikow: 1,
+	obrazeniaPrzeciwnikow: 1,
+	liczbaFal: 1,
 };
 var menuBudowaniaSpowalniacz ={
 	x: 0,

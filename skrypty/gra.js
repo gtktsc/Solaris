@@ -32,16 +32,7 @@ function gra() {
 		} else if (ekran.numer==0){
 			ekran.numer=1
 		};
-		if(ekran.budowanie){
-			for(i in planety){
-				if(fizyka.klikniecie(mysz,planety[i])){
-					
-					//rysuj menu planety
-				}
-			}
-			
-		}
 	};
 	
 };
-var animacjaGra = setInterval(gra, 33);
+var animacjaGra = setInterval(gra, 40);
