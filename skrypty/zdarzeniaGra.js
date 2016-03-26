@@ -40,7 +40,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
             };
         }
     };
-	if(fizyka.klikniecie(mysz,S)){
+	if(fizyka.klikniecie(mysz,S) && !fizyka.klikniecie(mysz,menuBudowaniaNaziemne)&& !fizyka.klikniecie(mysz,menuBudowaniaSatelita)&& !fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz)){
 		if(!ekran.budowanie){
 			fizyka.szybkoscAnimacji('stop');
 		} else {
@@ -52,15 +52,16 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 		}
 	ekran.budowanie=!ekran.budowanie;
 	}
-	if(ekran.budowanie){
-		if(fizyka.klikniecie(mysz,menuBudowaniaSatelita)){
+	if(ekran.budowanie && menuBudowaniaNaziemne.widocznosc){
+		if(fizyka.klikniecie(mysz,menuBudowaniaSatelita) && ekran.energia>=100){
 			if(satelity.length>1){
 				satelity[satelity.length] = new Satelita(menuBudowaniaSatelita.x,menuBudowaniaSatelita.y,1);
 			} else {
 				satelity[1] = new Satelita(menuBudowaniaSatelita.x,menuBudowaniaSatelita.y,1);
 			};
+			ekran.energia=ekran.energia-100;
 		}
-		if(fizyka.klikniecie(mysz,menuBudowaniaNaziemne)){
+		if(fizyka.klikniecie(mysz,menuBudowaniaNaziemne) && ekran.energia>=70){
 			planety[menuBudowaniaNaziemne.rodzic].obecnaObrona=true;
 			if(naziemni.length>1){
 				naziemni[naziemni.length] = new Naziemne(1,planety[menuBudowaniaNaziemne.rodzic]);
@@ -69,8 +70,9 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 			};
 			naziemni[naziemni.length-1].widocznosc=true;
 			naziemni[naziemni.length-1].rodzicNumer=menuBudowaniaNaziemne.rodzic;
+			ekran.energia=ekran.energia-70;
 		}
-		if(fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz)){
+		if(fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz) && ekran.energia>=80){
 			planety[menuBudowaniaSpowalniacz.rodzic].obecnySpowalniacz=true;
 			if(spowalniacze.length>1){
 				spowalniacze[spowalniacze.length] = new Spowalniacz(1);
@@ -81,8 +83,9 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 			menuBudowaniaSpowalniacz.rusz=true;
 			spowalniacze[spowalniacze.length-1].rusz=true;
 			spowalniacze[spowalniacze.length-1].rodzicNumer=menuBudowaniaSpowalniacz.rodzic;
+			ekran.energia=ekran.energia-80
 		}
-		if(fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec)){
+		if(fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec) && ekran.energia>=120){
 
 			if(wahadlowce.length>1){
 				wahadlowce[wahadlowce.length] = new Wahadlowiec(1,planety[menuBudowaniaWahadlowiec.rodzic]);
@@ -92,6 +95,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 			wahadlowce[wahadlowce.length-1].widocznosc=true;
 			wahadlowce[wahadlowce.length-1].rodzicNumer=menuBudowaniaWahadlowiec.rodzic;
 			console.log(wahadlowce[wahadlowce.length-1])
+			ekran.energia=ekran.energia-120
 		}
 	}
 } else {
