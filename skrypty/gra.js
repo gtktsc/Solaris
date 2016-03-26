@@ -1,6 +1,7 @@
 function gra() {
 	if(ekran.gra){
 		if(ekran.numer==1){
+			//console.log(ekran.energia)
 			if(!ekran.pauza){
 				if(mysz.rusz){
 					fizyka.kierunekDoObiektu1(mysz,statekGracza);
