@@ -163,7 +163,7 @@ var fizyka = {
         };
 		ekran.pauza=false;
 	},
-	generujFale(liczbaR,obrazeniaR,liczbaG,obrazeniaG,liczbaB,obrazeniaB){
+	generujFale(liczbaR,obrazeniaR,zycieR,liczbaG,obrazeniaG,zycieG,liczbaB,obrazeniaB,zycieB){
 		przeciwnicy = [];
         var x=1;
         for(var i =1;i<=liczbaR;i++){
@@ -186,6 +186,7 @@ var fizyka = {
 				x=1;
 				break;
 			}
+			przeciwnicy[i].zycie=zycieR;
         };
 			x=1;
 		for(var i =liczbaR+1;i<=(liczbaR+liczbaG);i++){
@@ -207,6 +208,7 @@ var fizyka = {
 				x=1;
 				break;
 			}
+			przeciwnicy[i].zycie=zycieG
         };
         x=1;
 		for(var i =(liczbaR+liczbaG+1);i<=(liczbaR+liczbaG+liczbaB);i++){
@@ -228,6 +230,7 @@ var fizyka = {
 				x=1;
 				break;
 			}
+			przeciwnicy[i].zycie=zycieB
         };
 	},
 	przeciwnicy () {
@@ -395,7 +398,7 @@ var fizyka = {
 				ekran.falaNumer=ekran.falaNumer+1;
 				ekran.liczbaPrzeciwnikow=statekGracza.aktualnyPoziom*ekran.falaNumer;
 				ekran.obrazeniaPrzeciwnikow=ekran.falaNumer/10;
-				fizyka.generujFale(ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow);			
+				fizyka.generujFale(ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,100+ekran.falaNumer*10,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,100+ekran.falaNumer*10,ekran.liczbaPrzeciwnikow,ekran.obrazeniaPrzeciwnikow,100+ekran.falaNumer*10);			
 			}else if (ekran.falaNumer===ekran.liczbaFal){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie+statekGracza.aktualnyPoziom*1000;
 				switch(statekGracza.aktualnyPoziom){
