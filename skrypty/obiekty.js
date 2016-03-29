@@ -1,4 +1,20 @@
 var fizyka = {
+	statekGracza(){
+		if(statekGracza.zycie<=0){
+			statekGracza.widocznosc=false;
+			statekGracza.zycie=100;
+			statekGracza.x=window.innerWidth/2;
+			statekGracza.y=0;
+			statekGracza.vy=1;
+			statekGracza.vx=0;
+			statekGracza.phi=180*Math.PI/180;
+			statekGracza.odradzanie=true;
+			setTimeout(function(){
+				statekGracza.widocznosc=true;
+				statekGracza.odradzanie=false;
+				}, statekGracza.czasOdrodzenia);
+		}
+	},
 	wahadlowce(){
 		if(!ekran.pauza){
 			for(i in wahadlowce){
@@ -23,11 +39,10 @@ var fizyka = {
 		if(!ekran.pauza){
 			for(i in spowalniacze){
 				for(x in przeciwnicy){
-					if(fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)<80 && 
-					fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)>51){
-						przeciwnicy[x].v=przeciwnicy[x].vOld
-					} else if (fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)<50){
-						przeciwnicy[x].v=0.5;
+					if(fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)<=spowalniacze[i].zasieg+1 && fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)>spowalniacze[i].zasieg){
+						przeciwnicy[x].zasiegSpowalniacza=false;
+					} else if (fizyka.odleglosc(spowalniacze[i].x,spowalniacze[i].y,przeciwnicy[x].x,przeciwnicy[x].y)<=spowalniacze[i].zasieg){
+						przeciwnicy[x].zasiegSpowalniacza=true;
 					}
 				}
 			}		
@@ -85,10 +100,11 @@ var fizyka = {
 		naziemni = [];
 		wahadlowce = [];
 		spowalniacze = [];
-		statekGracza.x=window.innerWidth/2 - 50;
+		statekGracza.x=window.innerWidth/2;
 		statekGracza.y=0;
 		statekGracza.vy=1;
 		statekGracza.vx=0;
+		statekGracza.widosznosc=true;
 		statekGracza.maxLiczbaPociskow=[30,30,30];
 		mysz.rusz=false;
 		mysz.statek=false;
@@ -240,7 +256,13 @@ var fizyka = {
                     fizyka.kierunekDoObiektu1(planety[planety.length-1],przeciwnicy[i]);
 					przeciwnicy[i].cel=planety.length-1;
             } else if(przeciwnicy[i].kolor==='#00FF00') {
-                fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
+				if(statekGracza.widocznosc){
+					fizyka.kierunekDoObiektu1(statekGracza,przeciwnicy[i]);
+				}else{
+					fizyka.kierunekDoObiektu1(planety[planety.length-1],przeciwnicy[i]);
+					przeciwnicy[i].cel=planety.length-1;
+				}
+
             } else if(przeciwnicy[i].kolor==='#0000FF'){
 				if(fizyka.odleglosc(S.x,S.y,przeciwnicy[i].x,przeciwnicy[i].y)>100 && przeciwnicy[i].punktZbiorczy === false){
 				    fizyka.kierunekDoObiektu1(S,przeciwnicy[i]);
@@ -255,6 +277,9 @@ var fizyka = {
                 planety[przeciwnicy[i].cel].zycie=planety[przeciwnicy[i].cel].zycie-przeciwnicy[i].obrazenia;
                 planety[przeciwnicy[i].cel].r = planety[przeciwnicy[i].cel].r*(0.9998);    //trzeba okreslic elegancki sposob na to
             };
+			if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].kolor==='#00FF00'){
+				statekGracza.zycie=statekGracza.zycie-przeciwnicy[i].obrazenia;
+			};
 			if(i>3 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
 				przeciwnicy[i].x=przeciwnicy[i].x+(Math.random()/2);
 				przeciwnicy[i].y=przeciwnicy[i].y+(Math.random()/2);
@@ -277,7 +302,6 @@ var fizyka = {
             if(planety[i].zycie>0){
                 if(fizyka.dwaCiala(statekGracza,planety[i])){
                     statekGracza.zycie=statekGracza.zycie+statekGracza.szybkoscLeczenia;
-                    console.log("statek planeta")
                 };
                 if(ekran.budowanie  && (fizyka.klikniecie(mysz, planety[i]) || fizyka.klikniecie(myszKlik,planety[i]))){
 					orbity[i].widocznosc=true;
@@ -300,7 +324,6 @@ var fizyka = {
             if(pociski[i].widocznosc){
                 if(fizyka.dwaCiala(pociski[i],S) && pociski[i].rodzic==='statekGracza'){
                     pociski[i].widocznosc=false; //wpadanie na slonce
-                    console.log("pocisk slonce")
                 };
                 for(z in przeciwnicy){
                     if(fizyka.dwaCiala(pociski[i],przeciwnicy[z])){
@@ -311,7 +334,6 @@ var fizyka = {
                 for(x in planety){
                     if(fizyka.dwaCiala(pociski[i],planety[x]) && pociski[i].rodzic==="statekGracza"){
                         pociski[i].widocznosc=false;                //wpadanie na planety
-                        console.log("pocisk planeta")
                     };
 					if (pociski[i].kolor==='#0000FF'){
 						planety[x].oddzialywanie(pociski[i]); //jezeli niebieskie to graw ma wplyw
@@ -343,10 +365,13 @@ var fizyka = {
         fizyka.satelity();
         fizyka.wahadlowce();
         fizyka.naziemni();
+		fizyka.statekGracza();
         c.clearRect(0,0,window.innerWidth,window.innerHeight);
 		pasekMenu.rysuj();
         fizyka.brzegOkna(statekGracza);
 		menuBudowaniaSpowalniacz.rysuj()
+		menuBudowaniaSpowalniaczLepiej.rysuj()
+		menuBudowaniaSpowalniaczWiecej.rysuj()
 		menuBudowaniaSatelita.rysuj()
 		menuBudowaniaWahadlowiec.rysuj()
 		menuBudowaniaNaziemne.rysuj()
@@ -389,7 +414,7 @@ var fizyka = {
         };
 	},
     sprawdzWarunkiKonca: function(){
-        if(planety.length===1 || statekGracza.zycie<0){
+        if(planety.length===1){
 			fizyka.szybkoscAnimacji('stop');
 			ekran.menu=true;
 			ekran.gra=false;
@@ -495,7 +520,7 @@ var fizyka = {
 			return odlegloscObiektow;
 	},
     dwaCiala: function(obiekt1,obiekt2){
-        if (!ekran.pauza && obiekt1!==null && obiekt2!==null) {
+        if (!ekran.pauza && obiekt1!==null && obiekt2!==null && typeof(obiekt1)==='object'&& typeof(obiekt2)==='object') {
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
@@ -513,7 +538,7 @@ var fizyka = {
             var dx=obiekt1.x-obiekt2.x;
             var dy=obiekt1.y-obiekt2.y;
             var odleglosc=Math.sqrt(dx * dx + dy * dy);
-            if (odleglosc<(obiekt1.r+obiekt2.r)) {
+            if (odleglosc<(obiekt1.r+obiekt2.r) && obiekt1.widocznosc && obiekt2.widocznosc) {
                 return true;
             } else {
                 return false;
@@ -592,6 +617,8 @@ var statekGracza = {
     x: window.innerWidth/2 - 50,
     y: -5,
     r: 2,
+	czasOdrodzenia: 10000,
+	widocznosc: true,
     zycie: 100,
     maxLiczbaPociskow: [30,30,30],
     vx: 0,
@@ -607,34 +634,44 @@ var statekGracza = {
 	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,
     rysuj : function(){
-        this.x=this.x+this.vx;
-        this.y=this.y+this.vy;
-        if(mysz.statek){
-            c.save();
-            c.translate((this.x),(this.y));
-            c.rotate(-this.phi);
-            c.translate(-(this.x),-(this.y));
-            c.beginPath();
-            c.fillStyle = '#000000';
-            c.moveTo(this.x+0,this.y-5);
-            c.lineTo(this.x+5,this.y+5);
-            c.lineTo(this.x-5,this.y+5);
-            c.lineTo(this.x,this.y-5);
-            c.fill();
-            c.stroke();
-            c.restore();
-        };
-        c.save();
-        c.translate((this.x),(this.y));
-        c.rotate(-this.phi);
-        c.translate(-(this.x),-(this.y));
-        c.beginPath();
-        c.moveTo(this.x+0,this.y-5);
-        c.lineTo(this.x+5,this.y+5);
-        c.lineTo(this.x-5,this.y+5);
-        c.lineTo(this.x,this.y-5);
-        c.stroke();
-        c.restore();
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "18px Arial";
+				c.fillStyle = '#000000';
+				c.fillText(Math.round(this.zycie),this.x+10,this.y);	
+				c.globalAlpha=1;
+			}
+			this.x=this.x+this.vx;
+			this.y=this.y+this.vy;
+			if(mysz.statek){
+				c.save();
+				c.translate((this.x),(this.y));
+				c.rotate(-this.phi);
+				c.translate(-(this.x),-(this.y));
+				c.beginPath();
+				c.fillStyle = '#000000';
+				c.moveTo(this.x+0,this.y-5);
+				c.lineTo(this.x+5,this.y+5);
+				c.lineTo(this.x-5,this.y+5);
+				c.lineTo(this.x,this.y-5);
+				c.fill();
+				c.stroke();
+				c.restore();
+			};
+			c.save();
+			c.translate((this.x),(this.y));
+			c.rotate(-this.phi);
+			c.translate(-(this.x),-(this.y));
+			c.beginPath();
+			c.moveTo(this.x+0,this.y-5);
+			c.lineTo(this.x+5,this.y+5);
+			c.lineTo(this.x-5,this.y+5);
+			c.lineTo(this.x,this.y-5);
+			c.stroke();
+			c.restore();
+		}
+		
     },
     porusz : function(jak) {
         switch (jak) {
@@ -663,6 +700,7 @@ var statekGracza = {
 };
 var mysz ={
     x:100,
+	widocznosc: true,
     y:100,
     r:1,
     planeta: false,
@@ -676,6 +714,7 @@ var myszKlik ={
     y:0,
     r:10,
     planeta: false,
+    widocznosc: true,
     statek: false,
     rusz: false,
     cel: 1,
@@ -698,33 +737,222 @@ var menuBudowaniaSpowalniacz ={
 	x: 0,
 	y: 0,
 	r: 15,
+	rodzic: 0,
 	widocznosc: false,
 	rusz: false,
 	rysuj: function(){
 		if(this.widocznosc){
-			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20 && !planety[this.rodzic].obecnySpowalniacz){
 				c.globalAlpha=0.2;
 				c.font = "20px Arial";
 				c.fillText(80,this.x-12,this.y-18);
 				c.globalAlpha=1;
 			}
-			c.beginPath();
-			c.arc(this.x,this.y,15,0,Math.PI*2,true);
-			c.stroke();
-			c.moveTo(this.x-5,this.y-5);
-			c.lineTo(this.x+5,this.y-5);
-			c.lineTo(this.x+5,this.y+5);
-			c.lineTo(this.x-5,this.y+5);
-			c.lineTo(this.x-5,this.y-5);
-			c.stroke();
+			if(planety[this.rodzic].obecnySpowalniacz){
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.fillStyle = "black";
+				c.moveTo(this.x-5,this.y-5);
+				c.lineTo(this.x+5,this.y-5);
+				c.lineTo(this.x+5,this.y+5);
+				c.lineTo(this.x-5,this.y+5);
+				c.lineTo(this.x-5,this.y-5);
+				c.fill();
+				c.stroke();
+			} else {
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.moveTo(this.x-5,this.y-5);
+				c.lineTo(this.x+5,this.y-5);
+				c.lineTo(this.x+5,this.y+5);
+				c.lineTo(this.x-5,this.y+5);
+				c.lineTo(this.x-5,this.y-5);
+				c.stroke();
+			}
 
 	}
+	},
+};
+var menuBudowaniaSpowalniaczWiecej ={
+	wypelnij: false,
+	x: 0,
+	y: 0,
+	r: 15,
+	rodzic: 0,
+	wybudowano: false,
+	widocznosc: false,
+	pokaz: function(){
+		this.rodzic=menuBudowaniaSpowalniacz.rodzic;
+		if (planety[this.rodzic].obecnySpowalniacz){
+			this.x=menuBudowaniaSpowalniacz.x-35;
+			this.y=menuBudowaniaSpowalniacz.y;
+			this.widocznosc=true;
+		} else {
+			this.widocznosc=false;
+		}
+	},
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				if(planety[this.rodzic].obecnySpowalniaczWiecej===0){
+					c.fillText(300,this.x-18,this.y-18);
+				} else if (planety[this.rodzic].obecnySpowalniaczWiecej===1){
+					c.fillText(400,this.x-18,this.y-18);
+				}
+				c.globalAlpha=1;
+			}
+			if(planety[this.rodzic].obecnySpowalniaczWiecej===1){
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.fillStyle = "black";
+				c.moveTo(this.x-4,this.y);
+				c.lineTo(this.x-1,this.y);
+				c.lineTo(this.x-1,this.y+3);
+				c.lineTo(this.x-4,this.y+3);
+				c.lineTo(this.x-4,this.y);
+				c.fill();
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x+1,this.y);
+				c.lineTo(this.x+4,this.y);
+				c.lineTo(this.x+4,this.y+3);
+				c.lineTo(this.x+1,this.y+2);
+				c.lineTo(this.x+1,this.y);
+				c.fill();
+				c.stroke();
+			} else if(planety[this.rodzic].obecnySpowalniaczWiecej===2){
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.fillStyle = "black";
+				c.moveTo(this.x-4,this.y);
+				c.lineTo(this.x-1,this.y);
+				c.lineTo(this.x-1,this.y+3);
+				c.lineTo(this.x-4,this.y+3);
+				c.lineTo(this.x-4,this.y);
+				c.fill();
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x+1,this.y);
+				c.lineTo(this.x+4,this.y);
+				c.lineTo(this.x+4,this.y+3);
+				c.lineTo(this.x+1,this.y+2);
+				c.lineTo(this.x+1,this.y);
+				c.fill();
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x-1.5,this.y-3);
+				c.lineTo(this.x+1.5,this.y-3);
+				c.lineTo(this.x+1.5,this.y-6);
+				c.lineTo(this.x-1.5,this.y-6);
+				c.lineTo(this.x-1.5,this.y-3);
+				c.fill();
+				c.stroke();
+			} else {
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.moveTo(this.x-4,this.y);
+				c.lineTo(this.x-1,this.y);
+				c.lineTo(this.x-1,this.y+3);
+				c.lineTo(this.x-4,this.y+3);
+				c.lineTo(this.x-4,this.y);
+				c.stroke();
+			}
+		}
+	},
+};
+var menuBudowaniaSpowalniaczLepiej ={
+	wypelnij: false,
+	x: 0,
+	y: 0,
+	r: 15,
+	rodzic: 0,
+	widocznosc: false,
+	pokaz: function(){
+		this.rodzic=menuBudowaniaSpowalniacz.rodzic;
+			if (planety[this.rodzic].obecnySpowalniacz){
+				this.x=menuBudowaniaSpowalniacz.x;
+				this.y=menuBudowaniaSpowalniacz.y-35;
+				this.widocznosc=true;
+			} else {
+				this.widocznosc=false;
+			}
+	},
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				if(planety[this.rodzic].obecnySpowalniaczLepiej===0){
+					c.fillText(200,this.x-18,this.y-18);
+				} else if (planety[this.rodzic].obecnySpowalniaczLepiej===1){
+					c.fillText(250,this.x-18,this.y-18);
+				}
+				c.globalAlpha=1;
+			}
+			if(planety[this.rodzic].obecnySpowalniaczLepiej===1){
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.arc(this.x,this.y,9,0,Math.PI,true);
+				c.stroke();
+				c.beginPath();
+				c.fillStyle = "black";
+				c.moveTo(this.x-2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y-2.5);
+				c.fill();
+				c.stroke();
+			} else if(planety[this.rodzic].obecnySpowalniaczLepiej===2){
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.arc(this.x,this.y,10,0,Math.PI,true);
+				c.stroke();
+				c.beginPath();
+				c.fillStyle = "black";
+				c.moveTo(this.x-2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y-2.5);
+				c.fill();
+				c.stroke();
+			} else {
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.arc(this.x,this.y,8,0,Math.PI,true);
+				c.stroke();
+				c.moveTo(this.x-2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y-2.5);
+				c.lineTo(this.x+2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y+2.5);
+				c.lineTo(this.x-2.5,this.y-2.5);
+				c.stroke();
+			}
+		}
 	},
 };
 var menuBudowaniaSatelita ={
 	x: 0,
 	y: 0,
 	r: 15,
+	rodzic: 0,
 	widocznosc: false,
 	rysuj: function(){
 		if(this.widocznosc){
@@ -734,16 +962,31 @@ var menuBudowaniaSatelita ={
 				c.fillText(100,this.x-18,this.y-18);
 				c.globalAlpha=1;
 			}
-			c.beginPath();
-			c.arc(this.x,this.y,15,0,Math.PI*2,true);
-			c.stroke();
-			c.beginPath();
-			c.moveTo(this.x-5,this.y-5);
-			c.lineTo(this.x+5,this.y-5);
-			c.lineTo(this.x-5,this.y+5);
-			c.lineTo(this.x+5,this.y+5);
-			c.lineTo(this.x-5,this.y-5);
-			c.stroke();
+			if(planety[this.rodzic].obecnaSatelita){
+				c.fillStyle = "black";
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x-5,this.y-5);
+				c.lineTo(this.x+5,this.y-5);
+				c.lineTo(this.x-5,this.y+5);
+				c.lineTo(this.x+5,this.y+5);
+				c.lineTo(this.x-5,this.y-5);
+				c.fill();
+				c.stroke();
+			} else {
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x-5,this.y-5);
+				c.lineTo(this.x+5,this.y-5);
+				c.lineTo(this.x-5,this.y+5);
+				c.lineTo(this.x+5,this.y+5);
+				c.lineTo(this.x-5,this.y-5);
+				c.stroke();
+			}
 	}
 	},
 };
@@ -751,6 +994,7 @@ var menuBudowaniaWahadlowiec ={
 	x: 0,
 	y: 0,
 	r: 15,
+	rodzic: 0,
 	widocznosc: false,
 	rysuj: function(){
 		if(this.widocznosc){
@@ -760,15 +1004,29 @@ var menuBudowaniaWahadlowiec ={
 				c.fillText(120,this.x-18,this.y-18);
 				c.globalAlpha=1;
 			}
-			c.beginPath();
-			c.arc(this.x,this.y,15,0,Math.PI*2,true);
-			c.stroke();
-			c.beginPath();
-			c.moveTo(this.x+0,this.y-3);
-			c.lineTo(this.x+3,this.y+3);
-			c.lineTo(this.x-3,this.y+3);
-			c.lineTo(this.x,this.y-3);
-			c.stroke();
+			if(planety[this.rodzic].obecnyWahadlowiec){
+				c.fillStyle = "black";
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x+0,this.y-3);
+				c.lineTo(this.x+3,this.y+3);
+				c.lineTo(this.x-3,this.y+3);
+				c.lineTo(this.x,this.y-3);
+				c.fill();
+				c.stroke();	
+			} else {
+				c.beginPath();
+				c.arc(this.x,this.y,15,0,Math.PI*2,true);
+				c.stroke();
+				c.beginPath();
+				c.moveTo(this.x+0,this.y-3);
+				c.lineTo(this.x+3,this.y+3);
+				c.lineTo(this.x-3,this.y+3);
+				c.lineTo(this.x,this.y-3);
+				c.stroke();
+			}
 	}
 	},
 };
@@ -790,7 +1048,7 @@ var menuBudowaniaNaziemne ={
 			c.beginPath();
 			c.arc(this.x,this.y,15,0,Math.PI*2,true);
 			c.stroke();
-			if(planety[this.rodzic].obecnaObrona){
+			if(planety[this.rodzic].obecnaNaziemna){
 				c.beginPath();
 				c.fillStyle = "black";
 				c.arc(this.x,this.y,5,0,Math.PI*2,true);
@@ -805,15 +1063,16 @@ var menuBudowaniaNaziemne ={
 	},
 };
 var pasekMenu = {
-	x: -5,
-	y: -5,
+	odradzaniePhi: 0,
+	odradzanieY: 62, //12 na pasku
+	x: -6,
+	y: -6,
 	alpha: 0.075,
 	width: window.innerWidth,
 	height: 30,
 	rysuj: function (){
 		if(mysz.y<50 && mysz.y>0){
 			this.alpha=mysz.y/window.innerHeight;
-			console.log(this.alpha)
 		}else if(mysz.y<0){
 			this.alpha=0;
 		} else {
@@ -832,6 +1091,18 @@ var pasekMenu = {
 				c.fillText("Energia"+"   "+ekran.energia,10,20);
 			} else if(ekran.menu){
 			c.fillText("Doswiadczenie"+"   "+statekGracza.doswiadczenie,10,20);
+			}
+			if(statekGracza.odradzanie){
+				c.beginPath();
+				c.moveTo(window.innerWidth/2+0,this.odradzanieY+5);
+				c.lineTo(window.innerWidth/2+5,this.odradzanieY-5);
+				c.lineTo(window.innerWidth/2-5,this.odradzanieY-5);
+				c.lineTo(window.innerWidth/2,this.odradzanieY+5);
+				c.stroke();
+				c.beginPath();
+				this.odradzaniePhi=this.odradzaniePhi+(Math.PI*2/(statekGracza.czasOdrodzenia)*szybkoscOdswiezania)
+				c.arc(window.innerWidth/2,this.odradzanieY,10,0,this.odradzaniePhi,true);
+				c.stroke();
 			}
 			c.globalAlpha=1;
 		}

@@ -1,7 +1,6 @@
 function gra() {
 	if(ekran.gra){
 		if(ekran.numer==1){
-			//console.log(ekran.energia)
 			if(!ekran.pauza){
 				if(mysz.rusz){
 					fizyka.kierunekDoObiektu1(mysz,statekGracza);
@@ -26,7 +25,6 @@ function gra() {
 				c.font = "30px Arial";
 				c.font = "30px Arial";
 				c.fillText("Budowanie",S.x-70,S.y-35);
-				console.log("aasdasd",i);
 			} else {
 			ekran.mysz="tlo";
 		}
@@ -36,4 +34,4 @@ function gra() {
 	};
 	
 };
-var animacjaGra = setInterval(gra, 40);
+var animacjaGra = setInterval(gra, szybkoscOdswiezania);
