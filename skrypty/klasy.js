@@ -36,8 +36,12 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
 function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGrawitacyjna) {
     this.r = Math.floor(promien+Math.random()*10);
     this.rOld = this.r;
-	this.obecnaObrona = false;
+	this.obecnaNaziemna = false;
 	this.obecnySpowalniacz = false;
+	this.obecnySpowalniaczWiecej = 0;
+	this.obecnySpowalniaczLepiej = 0;
+	this.obecnyWahadlowiec = false;
+	this.obecnaSatelita = false;
     this.R = odlegloscR;
     this.phi = katObrotu*Math.random();
     this.teta = katObiegu*Math.random();
@@ -49,6 +53,18 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     this.zycie=100;
     this.widocznosc=true;
     this.rysuj = function() {
+			if(!ekran.menu && fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				if(this.zycie===100){
+					c.fillText(Math.round(this.zycie),this.x-18,this.y-12);	
+				} else if(this.zycie<=99.5 && this.zycie>=10){
+					c.fillText(Math.round(this.zycie),this.x-11,this.y-12);	
+				} else {
+					c.fillText(Math.round(this.zycie),this.x-4,this.y-12);	
+				}
+				c.globalAlpha=1;
+			}
         this.teta=this.teta+this.v*(Math.PI/180);
         this.x=window.innerWidth/2+this.R*Math.cos(this.teta);
         this.y=window.innerHeight/2+this.R*Math.sin(this.teta);
@@ -89,6 +105,7 @@ function Naziemne(obrazenia,rodzic) {
 function Wahadlowiec(obrazenia,rodzic) {
     this.r = 3;
 	this.cel = 0;
+	this.rodzicNumer = 0;
 	this.maxLiczbaPociskow=[5,5,5];
 	this.odlegloscDoCelu=300;
     this.rRodzic = rodzic.r;
@@ -140,6 +157,12 @@ function Wahadlowiec(obrazenia,rodzic) {
 };
 function Spowalniacz(obrazenia) {
     this.r = 2;
+	this.x = -10;
+	this.y = -10;
+	this.alfa=false;
+    this.zasieg = 50;
+	this.poziomWiecej = 0;
+	this.poziomLepiej = 0;
 	this.rodzicNumer = 0;
     this.obrazenia=obrazenia;
     this.widocznosc=false;
@@ -149,6 +172,13 @@ function Spowalniacz(obrazenia) {
 			if(menuBudowaniaSpowalniacz.rusz && this.rusz && ekran.budowanie){
 				this.x = mysz.x;
 				this.y = mysz.y;
+			}
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.beginPath();
+				c.globalAlpha=0.2;
+				c.arc(this.x,this.y,this.zasieg,0,Math.PI*2,true);
+				c.stroke();
+				c.globalAlpha=1;
 			}
 			c.beginPath();
 			c.fillStyle="black";
@@ -165,6 +195,7 @@ function Spowalniacz(obrazenia) {
 };
 function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
     this.r = 3;
+	this.rodzicNumer = 0;
 	this.x = wspolrzednaX;
     this.y = wspolrzednaY;
     this.R = fizyka.odleglosc(this.x,this.y,S.x,S.y);
@@ -223,6 +254,7 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.width = promien*2;
     this.x = wspolrzednaX;
     this.y = wspolrzednaY;
+	this.widocznosc = true;
     this.g = stalaGrawitacyjna;
     this.rysuj = function() {
         c.beginPath();
@@ -245,6 +277,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.y =wspolrzednaY+Math.random()*100-5;
     this.vx=0;
     this.vy=0;
+	this.zasiegSpowalniacza=false;
     this.v=2 + (Math.random()/10);
     this.vOld=this.v;
     this.vxOld=this.vx;
@@ -265,13 +298,32 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
         this.kolor='#0000FF';
     };
     this.rysuj = function() {
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "18px Arial";
+				c.fillStyle = this.kolor;
+				if(this.zycie>=100){
+					c.fillText(Math.round(this.zycie),this.x-40,this.y);	
+				} else if(this.zycie<=99.5 && this.zycie>=10){
+					c.fillText(Math.round(this.zycie),this.x-30,this.y);	
+				} else {
+					c.fillText(Math.round(this.zycie),this.x-20,this.y);	
+				}
+				c.globalAlpha=1;
+			}
         if (this.widocznosc) {
-            if(!ekran.pauza) {
-                this.vx=-Math.sin(this.phi)*this.v;
-                this.vy=-Math.cos(this.phi)*this.v;
-                this.x = this.x + this.vx;
-                this.y = this.y + this.vy;
-            };
+		if(this.zasiegSpowalniacza){
+			this.v=0.5;
+		} else {
+			this.v=this.vOld
+		}
+		if(!ekran.pauza) {
+			this.vx=-Math.sin(this.phi)*this.v;
+			this.vy=-Math.cos(this.phi)*this.v;
+			this.x = this.x + this.vx;
+			this.y = this.y + this.vy;
+		};
+
         c.beginPath();
         c.fillStyle = this.kolor;
         c.save();
