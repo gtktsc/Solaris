@@ -38,7 +38,8 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     this.rOld = this.r;
 	this.obecnaNaziemna = false;
 	this.obecnySpowalniacz = false;
-	this.obecnySpowalniaczWiecej = 0;
+	this.obecnySpowalniaczWiecej = 0;	
+	this.obecnaSatelitaWiecej = 0;
 	this.obecnySpowalniaczLepiej = 0;
 	this.obecnyWahadlowiec = false;
 	this.obecnaSatelita = false;
@@ -201,6 +202,9 @@ function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
     this.R = fizyka.odleglosc(this.x,this.y,S.x,S.y);
     this.phi = 0;
 	this.cel=1;
+	this.czasOddzialywaniaWiecej=3000;
+	this.zasiegOddzialywaniaWiecej=100;
+	this.poziomWiecej=0;
     this.odlegloscDoCelu=300;
 	this.koszt = 100;
 	this.teta=fizyka.podajKat(S,this);
@@ -213,6 +217,13 @@ function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
 			this.teta=this.teta+this.v*(Math.PI/180);
 			this.x=S.x+this.R*Math.cos(this.teta);
 			this.y=S.y+this.R*Math.sin(this.teta);
+		}
+		if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+			c.beginPath();
+			c.globalAlpha=0.2;
+			c.arc(this.x,this.y,this.zasiegOddzialywaniaWiecej,0,Math.PI*2,true);
+			c.stroke();
+			c.globalAlpha=1;
 		}
         c.beginPath();
 		c.fillStyle = "black";
@@ -278,6 +289,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.vx=0;
     this.vy=0;
 	this.zasiegSpowalniacza=false;
+	this.zasiegSatelityWiecej=false;
     this.v=2 + (Math.random()/10);
     this.vOld=this.v;
     this.vxOld=this.vx;
@@ -323,7 +335,9 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
 			this.x = this.x + this.vx;
 			this.y = this.y + this.vy;
 		};
-
+		if(this.zasiegSatelityWiecej){
+			c.globalAlpha=0.5;
+		}
         c.beginPath();
         c.fillStyle = this.kolor;
         c.save();
@@ -338,6 +352,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
         c.fill();
         c.stroke();
         c.restore();
+		c.globalAlpha=1;
             if(this.x<-200||this.y<-200||this.x>window.innerWidth+200||this.y>window.innerHeight+200){
                 this.widocznosc = false;
             };

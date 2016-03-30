@@ -35,6 +35,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 			menuBudowaniaSatelita.rodzic=i;
 			menuBudowaniaSpowalniaczLepiej.pokaz();
 			menuBudowaniaSpowalniaczWiecej.pokaz();
+			menuBudowaniaSatelitaWiecej.pokaz();
 
             if(!mysz.planeta){
                 mysz.planeta=true;
@@ -43,7 +44,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
             };
         }
     };
-	if(fizyka.klikniecie(mysz,S) && !fizyka.klikniecie(mysz,menuBudowaniaNaziemne)&& !fizyka.klikniecie(mysz,menuBudowaniaSatelita)&& !fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz)){
+	if(fizyka.klikniecie(mysz,S) && fizyka.nieDotykaMenu()){
 		if(!ekran.budowanie){
 			fizyka.szybkoscAnimacji('stop');
 		} else {
@@ -53,6 +54,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
             menuBudowaniaSatelita.widocznosc=false;	
             menuBudowaniaSpowalniacz.widocznosc=false;					
             menuBudowaniaSpowalniaczWiecej.widocznosc=false;					
+            menuBudowaniaSatelitaWiecej.widocznosc=false;					
             menuBudowaniaSpowalniaczLepiej.widocznosc=false;					
 		}
 	ekran.budowanie=!ekran.budowanie;
@@ -69,6 +71,26 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 				satelity[satelity.length-1].widocznosc=true;
 				satelity[satelity.length-1].rodzicNumer=menuBudowaniaSatelita.rodzic;
 				ekran.energia=ekran.energia-100;
+				menuBudowaniaSatelitaWiecej.pokaz();
+			}
+		}
+		if(fizyka.klikniecie(mysz,menuBudowaniaSatelitaWiecej)){
+			for(x in satelity){
+				if(satelity[x].rodzicNumer===menuBudowaniaSatelita.rodzic){
+					if(satelity[x].poziomWiecej===0 && ekran.energia>=300){
+						planety[menuBudowaniaSatelita.rodzic].obecnaSatelitaWiecej=1;
+						satelity[x].poziomWiecej=1;
+						satelity[x].zasiegOddzialywaniaWiecej=satelity[x].zasiegOddzialywaniaWiecej+10;
+						satelity[x].czasOddzialywaniaWiecej=satelity[x].czasOddzialywaniaWiecej+100;
+						ekran.energia=ekran.energia-300;
+					} else if(satelity[x].poziomWiecej===1 && ekran.energia>=400){
+						planety[menuBudowaniaSatelita.rodzic].obecnaSatelitaWiecej=2;
+						satelity[x].poziomWiecej=2;
+						satelity[x].zasiegOddzialywaniaWiecej=satelity[x].zasiegOddzialywaniaWiecej+20;
+						satelity[x].czasOddzialywaniaWiecej=satelity[x].czasOddzialywaniaWiecej+200;
+						ekran.energia=ekran.energia-400;
+					}
+				}
 			}
 		}
 		if(fizyka.klikniecie(mysz,menuBudowaniaNaziemne) && ekran.energia>=70){
