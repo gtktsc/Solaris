@@ -309,7 +309,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     }else {
         this.kolor='#0000FF';
     };
-    this.rysuj = function() {
+	this.rysuj = function() {
 			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
 				c.globalAlpha=0.2;
 				c.font = "18px Arial";

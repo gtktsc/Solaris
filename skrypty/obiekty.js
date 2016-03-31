@@ -1,6 +1,6 @@
 var fizyka = {
 	nieDotykaMenu(){
-		if(!fizyka.klikniecie(mysz,menuBudowaniaNaziemne)&& !fizyka.klikniecie(mysz,menuBudowaniaSatelita)&& !fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniaczWiecej)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniaczLepiej)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz)){
+		if(!fizyka.klikniecie(mysz,menuBudowaniaNaziemne)&& !fizyka.klikniecie(mysz,menuBudowaniaSatelita)&& !fizyka.klikniecie(mysz,menuBudowaniaWahadlowiec)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniaczWiecej)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniaczLepiej)&& !fizyka.klikniecie(mysz,menuBudowaniaSpowalniacz)&& !fizyka.klikniecie(mysz,menuBudowaniaSatelitaWiecej)){
 			return true;
 		}else{
 			return false;
@@ -85,20 +85,17 @@ var fizyka = {
 					satelity[i].maxLiczbaPociskow[0]=satelity[i].maxLiczbaPociskow[0]-1;
 					}
 				}
-				if(satelity[i].odlegloscDoCelu<satelity[i].zasiegOddzialywaniaWiecej && satelity[i].poziomWiecej>0){
-					przeciwnicy[satelity[i].cel].zasiegSatelityWiecej=true;
-				}else if (przeciwnicy[satelity[i].cel].zasiegSatelityWiecej && satelity[i].odlegloscDoCelu>=satelity[i].zasiegOddzialywaniaWiecej && satelity[i].odlegloscDoCelu<satelity[i].zasiegOddzialywaniaWiecej+10){
-					fizyka.pozaZasiegiemSatelity(satelity[i].cel,satelity[i].czasOddzialywaniaWiecej)
+				if(satelity[i].poziomWiecej>0){
+					for (n in przeciwnicy){	
+						if(fizyka.odleglosc(przeciwnicy[n].x,przeciwnicy[n].y,satelity[i].x,satelity[i].y)<satelity[i].zasiegOddzialywaniaWiecej){
+							przeciwnicy[n].zasiegSatelityWiecej=true;
+						} else {	
+						przeciwnicy[n].zasiegSatelityWiecej=false;
+						}
+					}
 				}
 			}
 		}
-	},
-	pozaZasiegiemSatelity(kto,czas){
-		var ktoWewnatrz=kto;
-		var czasWewnatrz=czas;
-		setTimeout(function(){if(typeof(przeciwnicy[ktoWewnatrz])==='object'){
-			przeciwnicy[ktoWewnatrz].zasiegSatelityWiecej=false;
-		}}, czasWewnatrz);
 	},
 	najblizszyCel(Cele,Atakujacy){
 		if(Array.isArray(Cele) && typeof(Atakujacy)==='object'){
