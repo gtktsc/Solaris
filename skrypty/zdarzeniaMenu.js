@@ -7,10 +7,10 @@ window.addEventListener('click', function(){
 				ekran.falaNumer=1;
 				switch(Number(i)){
 					case 1:
-						fizyka.generujPlansze(7,1,0.1,1,0.1,1,0.1);
+						fizyka.generujPlansze(7,1,1,1,1,1,1);
 						statekGracza.aktualnyPoziom=1;
 						ekran.liczbaFal=5;
-						ekran.energia=30000;
+						ekran.energia=10000;
 					break;
 					case 2:
 						fizyka.generujPlansze(7,4,0.1,0,0.1,0,1);
