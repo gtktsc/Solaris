@@ -2,12 +2,15 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
 	this.rodzic = "who";
 	this.rodzicNumer = 1;
     this.r = promien;
+	this.cel=1;
+	this.phi=0;
     this.x = wspolrzednaX-this.r;
     this.y = wspolrzednaY-this.r;
     this.vx=predkoscX;
     this.vy=predkoscY;
     this.vxOld=predkoscX;
     this.vyOld=predkoscY;
+	this.predkoscSamoNapro=5;
     this.kolor=kolor;
     this.obrazenia=10;
     this.widocznosc = false;
@@ -15,13 +18,20 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
         this.kolor='#FF0000';
     } else if (this.kolor==='green') {
         this.kolor='#00FF00';
-    } else {
+    } else if (this.kolor==='grey'){
+		this.kolor='#BDBDBD';
+	} else {
         this.kolor='#0000FF';
     };
     this.rysuj = function() {
         if (this.widocznosc) {
-            this.x = this.x+ this.vx;
-            this.y = this.y +this.vy;
+			if((this.kolor==='#BDBDBD' || this.kolor==='grey')&&!ekran.pauza){
+                fizyka.kierunekDoObiektu1(przeciwnicy[this.cel],this);
+				this.vx=-Math.sin(this.phi)*this.predkoscSamoNapro;
+				this.vy=-Math.cos(this.phi)*this.predkoscSamoNapro;
+			}
+			this.x = this.x + this.vx;
+			this.y = this.y + this.vy;
             c.beginPath();
             c.fillStyle = this.kolor;
             c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
@@ -37,12 +47,17 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     this.r = Math.floor(promien+Math.random()*10);
     this.rOld = this.r;
 	this.obecnaNaziemna = false;
+	this.obecnaNaziemnaWiecej = 0;
+	this.obecnaNaziemnaLepiej = 0;
 	this.obecnySpowalniacz = false;
 	this.obecnySpowalniaczWiecej = 0;	
-	this.obecnaSatelitaWiecej = 0;
 	this.obecnySpowalniaczLepiej = 0;
-	this.obecnyWahadlowiec = false;
 	this.obecnaSatelita = false;
+	this.obecnaSatelitaWiecej = 0;
+	this.obecnaSatelitaLepiej = 0;
+	this.obecnyWahadlowiec = false;
+	this.obecnyWahadlowiecWiecej = 0;	
+	this.obecnyWahadlowiecLepiej = 0;
     this.R = odlegloscR;
     this.phi = katObrotu*Math.random();
     this.teta = katObiegu*Math.random();
@@ -86,6 +101,8 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
 function Naziemne(obrazenia,rodzic) {
     this.r = 3;
 	this.rodzicNumer = 0;
+	this.poziomWiecej = 0;
+	this.poziomLepiej = 0;
 	this.R = rodzic.R;
     this.x = rodzic.x;
     this.y = rodzic.y;
@@ -93,11 +110,16 @@ function Naziemne(obrazenia,rodzic) {
     this.widocznosc=false;
     this.rysuj = function() {
 		if(this.widocznosc && typeof(rodzic)==='object' && rodzic.widocznosc===true){
+			if(this.poziomLepiej>0 && fizyka.klikniecie(mysz,this)){
+				c.beginPath();
+				c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+				c.stroke();
+			}
 			this.x = rodzic.x;
 			this.y = rodzic.y;
 			c.beginPath();
 			c.fillStyle="black";
-			c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+			c.arc(this.x,this.y,3,0,Math.PI*2,true);
 			c.fill();
 			c.stroke();
 		}
@@ -107,11 +129,13 @@ function Wahadlowiec(obrazenia,rodzic) {
     this.r = 3;
 	this.cel = 0;
 	this.rodzicNumer = 0;
-	this.maxLiczbaPociskow=[5,5,5];
+	this.maxLiczbaPociskow=[2,2,2,0];
 	this.odlegloscDoCelu=300;
     this.rRodzic = rodzic.r;
 	this.tetaRodzic=rodzic.teta;
 	this.rodzicNumer = 0;
+	this.poziomWiecej = 0;
+	this.poziomLepiej = 0;
 	this.R = 40;
 	this.RduzeRodzic = rodzic.R;
     this.x = rodzic.x-30;
@@ -120,6 +144,7 @@ function Wahadlowiec(obrazenia,rodzic) {
     this.yRodzic = rodzic.y;
 	this.vRodzic=rodzic.vOld;
 	this.v=2;
+	this.predkoscPocisku=5;
 	this.teta = 145*Math.PI/180;
 	this.phi = 0;
     this.obrazenia=obrazenia;
@@ -127,8 +152,9 @@ function Wahadlowiec(obrazenia,rodzic) {
 	this.wystrzel = function(pocisk){
         pocisk.x=this.x;
         pocisk.y=this.y;
-        pocisk.vx=-Math.sin(this.phi)*5;
-        pocisk.vy=-Math.cos(this.phi)*5;
+		pocisk.obrazenia=this.obrazenia;
+        pocisk.vx=-Math.sin(this.phi)*this.predkoscPocisku;
+        pocisk.vy=-Math.cos(this.phi)*this.predkoscPocisku;
     }
     this.rysuj = function() {
 		if(this.widocznosc){
@@ -205,13 +231,16 @@ function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
 	this.czasOddzialywaniaWiecej=3000;
 	this.zasiegOddzialywaniaWiecej=100;
 	this.poziomWiecej=0;
+	this.poziomLepiej=0;
     this.odlegloscDoCelu=300;
 	this.koszt = 100;
 	this.teta=fizyka.podajKat(S,this);
     this.v=predkoscObiegu*Math.random();
     this.vOld=this.v;
-    this.maxLiczbaPociskow=[5,5,5];
+    this.maxLiczbaPociskow=[2,2,2];
     this.widocznosc=true;
+	this.obrazenia=10;
+	this.predkoscPocisku=5;
     this.rysuj = function() {
 		if(!ekran.pauza){
 			this.teta=this.teta+this.v*(Math.PI/180);
@@ -238,8 +267,9 @@ function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
     this.wystrzel = function(pocisk){
         pocisk.x=this.x;
         pocisk.y=this.y;
-        pocisk.vx=-Math.sin(this.phi)*5;
-        pocisk.vy=-Math.cos(this.phi)*5;
+		pocisk.obrazenia=this.obrazenia;
+        pocisk.vx=-Math.sin(this.phi)*this.predkoscPocisku;
+        pocisk.vy=-Math.cos(this.phi)*this.predkoscPocisku;
     }
 };
 function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu) {
@@ -253,9 +283,11 @@ function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu
     this.widocznosc=false;
     this.rysuj = function() {
         if (this.widocznosc) {
+			c.globalAlpha=0.2;
             c.beginPath();
             c.arc(window.innerWidth/2,window.innerHeight/2,this.R,0,Math.PI*2,true);
             c.stroke();
+			c.globalAlpha=1;
         };
     };
 };
@@ -309,7 +341,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     }else {
         this.kolor='#0000FF';
     };
-    this.rysuj = function() {
+	this.rysuj = function() {
 			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
 				c.globalAlpha=0.2;
 				c.font = "18px Arial";

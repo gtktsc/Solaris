@@ -19,12 +19,23 @@ function gra() {
 				};
 			};
 			fizyka.odswiezEkranGry();
-			if(fizyka.klikniecie(mysz,S) && (ekran.mysz=="tlo" ||ekran.mysz=="budowanie"  )){
-				ekran.mysz="budowanie";
-				c.fillStyle = "black";
-				c.font = "30px Arial";
-				c.font = "30px Arial";
-				c.fillText("Budowanie",S.x-70,S.y-35);
+			if(fizyka.klikniecie(mysz,S) && (ekran.mysz=="tlo" ||ekran.mysz=="budowanie") && fizyka.nieDotykaMenu()){
+				if(!ekran.pauza){
+					ekran.mysz="budowanie";
+					c.fillStyle = "black";
+					c.font = "30px Arial";
+					c.globalAlpha=0.4;
+					c.fillText("Budowanie",S.x-70,S.y-35);
+					c.globalAlpha=1;
+				}else {
+					ekran.mysz="budowanie";
+					c.fillStyle = "black";
+					c.font = "30px Arial";
+					c.globalAlpha=0.4;
+					c.fillText("Gra",S.x-25,S.y-35);
+					c.globalAlpha=1;
+				}
+
 			} else {
 			ekran.mysz="tlo";
 		}
@@ -35,3 +46,5 @@ function gra() {
 	
 };
 var animacjaGra = setInterval(gra, szybkoscOdswiezania);
+var przeladowanieStatekGracza = setInterval(function(){statekGracza.przeladowanie=false}, statekGracza.przeladowanieCzas);
+var trybAutoStatekGracza = setInterval(function(){statekGracza.trybAuto=true}, statekGracza.trybAutoCzas);
