@@ -68,10 +68,10 @@ var fizyka = {
 								pociski[1] = new Pocisk(10,10,2,2,2,'red');
 							};
 							pociski[pociski.length-1].widocznosc=true;
-							if(statekGracza.naPlanecie!==0){
-							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
-						}
 							statekGracza.wystrzel(pociski[pociski.length-1]);
+							if(statekGracza.naPlanecie!==0){
+								pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
+							}
 							statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]-1;
 						};
 						statekGracza.przeladowanie=true;
@@ -88,10 +88,10 @@ var fizyka = {
 								pociski[1] = new Pocisk(10,10,2,2,2,'red');
 							};
 							pociski[pociski.length-1].widocznosc=true;
-							if(statekGracza.naPlanecie!==0){
-							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
-						}
 							statekGracza.wystrzel(pociski[pociski.length-1]);
+							if(statekGracza.naPlanecie!==0){
+								pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
+							}
 							statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]-1;
 							statekGracza.przeladowanie=true;
 							if(!mysz.ciagly){
