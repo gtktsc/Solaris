@@ -91,7 +91,6 @@ var fizyka = {
 							statekGracza.przeladowanie=true;
 							if(!mysz.ciagly){
 								mysz.atakuj=false;
-								//mysz.pojedynczy=false;
 							}
 
 						}
@@ -881,6 +880,8 @@ var myszKlik ={
 var ekran ={
 	mysz: "tlo",
     numer:0,
+    przesuniecieX:0,
+    przesuniecieY:0,
     pauza: false,
 	poziom: 1,
 	budowanie: false,
