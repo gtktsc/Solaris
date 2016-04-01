@@ -1781,7 +1781,7 @@ var pasekMenu = {
 			} else if(ekran.menu){
 			c.fillText("Doswiadczenie"+"   "+statekGracza.doswiadczenie,10,20);
 			}
-			if(statekGracza.odradzanie && ekran.gra){
+			if(statekGracza.odradzanie && ekran.gra && !ekran.pauza){
 				c.beginPath();
 				c.moveTo(window.innerWidth/2+0,this.odradzanieY+5);
 				c.lineTo(window.innerWidth/2+5,this.odradzanieY-5);
