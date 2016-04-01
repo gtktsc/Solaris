@@ -4,12 +4,10 @@ window.addEventListener('mousemove',function(event) {
 },false);
 window.addEventListener('click', function(){
 if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
-    if(!ekran.pauza ){
-		for(i in przeciwnicy){
-			if(fizyka.odleglosc(mysz.x,mysz.y,przeciwnicy[i].x,przeciwnicy[i].y)<10){
-				statekGracza.cel=Number(i);
-				mysz.atakuj=true;
-			}
+    if(!ekran.pauza){
+		if(!mysz.statek){
+			fizyka.atakPoKliknieciu();
+			mysz.pojedynczy=true;
 		}
         if(mysz.statek && !mysz.atakuj){
 			mysz.rusz=true;
@@ -18,7 +16,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
             mysz.statek=true;
         };
     };
-	
+
     for (i in planety) {
         if(fizyka.klikniecie(mysz,planety[i]) && ekran.budowanie){
 			if(Number(i)===mysz.planetaNumer && ekran.pauza){
@@ -28,29 +26,29 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 				menuBudowaniaSpowalniacz.pokaz(i);
 				menuBudowaniaSpowalniaczLepiej.pokaz();
 				menuBudowaniaSpowalniaczWiecej.pokaz();
-				menuBudowaniaSatelita.pokaz(i);	
+				menuBudowaniaSatelita.pokaz(i);
 				menuBudowaniaSatelitaWiecej.pokaz();
 				menuBudowaniaSatelitaLepiej.pokaz();
 				menuBudowaniaWahadlowiec.pokaz(i);
 				menuBudowaniaWahadlowiecWiecej.pokaz();
-				menuBudowaniaWahadlowiecLepiej.pokaz();			
+				menuBudowaniaWahadlowiecLepiej.pokaz();
 				menuBudowaniaNaziemne.pokaz(i);
 				menuBudowaniaNaziemneWiecej.pokaz();
-				menuBudowaniaNaziemneLepiej.pokaz();			
+				menuBudowaniaNaziemneLepiej.pokaz();
 				if(!mysz.planeta){
 					mysz.planeta=true;
 				} else {
 					mysz.planeta=false;
 				};
 			}
-			
+
         }
     };
 	if(fizyka.klikniecie(mysz,S) && fizyka.nieDotykaMenu()){
 		if(!ekran.budowanie){
 			fizyka.szybkoscAnimacji('stop');
 		} else {
-			fizyka.szybkoscAnimacji('start');		
+			fizyka.szybkoscAnimacji('start');
 		}
 	ekran.budowanie=!ekran.budowanie;
 	}
@@ -88,7 +86,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 					}
 				}
 			}
-		}		
+		}
 		if(fizyka.klikniecie(mysz,menuBudowaniaSatelitaLepiej)){
 			for(x in satelity){
 				if(satelity[x].rodzicNumer===menuBudowaniaSatelita.rodzic){
@@ -122,7 +120,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 				menuBudowaniaNaziemneWiecej.pokaz();
 				menuBudowaniaNaziemneLepiej.pokaz();
 			}
-			
+
 		}
 		if(fizyka.klikniecie(mysz,menuBudowaniaNaziemneWiecej)){
 			for(x in naziemni){
@@ -138,7 +136,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 					}
 				}
 			}
-		}		
+		}
 		if(fizyka.klikniecie(mysz,menuBudowaniaNaziemneLepiej)){
 			for(x in naziemni){
 				if(naziemni[x].rodzicNumer===menuBudowaniaNaziemne.rodzic){
@@ -255,7 +253,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 					}
 				}
 			}
-		}		
+		}
 		if(fizyka.klikniecie(mysz,menuBudowaniaWahadlowiecLepiej)){
 			for(x in wahadlowce){
 				if(wahadlowce[x].rodzicNumer===menuBudowaniaWahadlowiec.rodzic){
@@ -266,7 +264,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 						wahadlowce[x].maxLiczbaPociskow=[4,4,4,wahadlowce[x].poziomWiecej];
 						wahadlowce[x].obrazenia=wahadlowce[x].obrazenia+1;
 						wahadlowce[x].predkoscPocisku=wahadlowce[x].predkoscPocisku+1;
-						
+
 					} else if(wahadlowce[x].poziomLepiej===1 && ekran.energia>=cenyGra.menuBudowaniaWahadlowiecLepiej2){
 						planety[menuBudowaniaWahadlowiec.rodzic].obecnyWahadlowiecLepiej=2;
 						wahadlowce[x].poziomLepiej=2;
@@ -287,6 +285,18 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 
 }
 }, false);
+window.addEventListener('mousedown',function(event){
+	fizyka.atakPoKliknieciu();
+	if(!ekran.pauza && ekran.gra && !mysz.statek){
+		mysz.ciagly=true;
+	}
+
+});
+window.addEventListener('mouseup',function(event){
+    mysz.atakuj=false;
+    mysz.ciagly=false;
+    mysz.pojedynczy=false;
+})
 window.addEventListener('keydown', function(event) {
 	if(ekran.gra){
 	    if(!ekran.pauza){
@@ -346,6 +356,6 @@ window.addEventListener('keydown', function(event) {
 					statekGracza.porusz("hamuj");
 				break;
 			};
-		};	
+		};
 	}
 });
