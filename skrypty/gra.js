@@ -3,6 +3,7 @@ function gra() {
 		if(ekran.numer==1){
 			if(!ekran.pauza){
 				if(mysz.rusz){
+					
 					fizyka.kierunekDoObiektu1(mysz,statekGracza);
 					myszKlik.x=mysz.x;
 					myszKlik.y=mysz.y;
@@ -16,6 +17,14 @@ function gra() {
 					statekGracza.vx=0;
 					statekGracza.vy=0;
 					myszKlik.rusz=false;
+					for(z in planety){
+						if(fizyka.dwaCiala(statekGracza,planety[z])){
+							planety[z].statekNaPlanecie=true;
+							statekGracza.naPlanecie=Number(z);
+						}else if (planety[z]!==null){
+							planety[z].statekNaPlanecie=false;
+						}
+					}
 				};
 			};
 			fizyka.odswiezEkranGry();

@@ -13,6 +13,7 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 			mysz.rusz=true;
         };
         if(fizyka.dwaCiala(mysz,statekGracza) && !mysz.atakuj){
+			statekGracza.naPlanecie=0;
             mysz.statek=true;
         };
     };
@@ -309,8 +310,10 @@ window.addEventListener('keydown', function(event) {
 							pociski[1] = new Pocisk(10,10,2,2,2,'red');
 						};
 						pociski[pociski.length-1].widocznosc=true;
-						pociski[pociski.length-1].rodzic="statekGracza";
 						statekGracza.wystrzel(pociski[pociski.length-1]);
+						if(statekGracza.naPlanecie!==0){
+							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
+						}
 						statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]-1;
 					};
 				break;
@@ -323,7 +326,9 @@ window.addEventListener('keydown', function(event) {
 						};
 						pociski[pociski.length-1].widocznosc=true;
 						statekGracza.wystrzel(pociski[pociski.length-1]);
-						pociski[pociski.length-1].rodzic="statekGracza";
+						if(statekGracza.naPlanecie!==0){
+							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
+						}
 						statekGracza.maxLiczbaPociskow[1]=statekGracza.maxLiczbaPociskow[1]-1;
 				};
 				break;
@@ -336,18 +341,22 @@ window.addEventListener('keydown', function(event) {
 						};
 						pociski[pociski.length-1].widocznosc=true;
 						statekGracza.wystrzel(pociski[pociski.length-1]);
-						pociski[pociski.length-1].rodzic="statekGracza";
+						if(statekGracza.naPlanecie!==0){
+							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
+						}
 						statekGracza.maxLiczbaPociskow[2]=statekGracza.maxLiczbaPociskow[2]-1;
 					};
 				break;
 				case 52 : // 4
 					mysz.statek=true;
+					statekGracza.naPlanecie=0;
 				break;
 				case 87: // W
 					statekGracza.porusz("doPrzodu");
 				break;
 				case 68: // D
 					statekGracza.porusz("obrocwPrawo");
+
 				break;
 				case 65: // A
 					statekGracza.porusz("obrocwLewo");

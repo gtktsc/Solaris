@@ -59,6 +59,7 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
 	this.obecnyWahadlowiecWiecej = 0;	
 	this.obecnyWahadlowiecLepiej = 0;
     this.R = odlegloscR;
+	this.statekNaPlanecie=false;
     this.phi = katObrotu*Math.random();
     this.teta = katObiegu*Math.random();
     this.v=predkoscObiegu*Math.random();
