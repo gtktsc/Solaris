@@ -43,7 +43,7 @@ function gra() {
 			ekran.numer=1
 		};
 	};
-	
+
 };
 var animacjaGra = setInterval(gra, szybkoscOdswiezania);
 var przeladowanieStatekGracza = setInterval(function(){statekGracza.przeladowanie=false}, statekGracza.przeladowanieCzas);
