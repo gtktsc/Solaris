@@ -39,7 +39,7 @@ var fizyka = {
 		if(statekGracza.zycie<=0){
 			statekGracza.statekNaPlanecie=0;
 			statekGracza.widocznosc=false;
-			statekGracza.zycie=100;
+			statekGracza.zycie=statekGracza.maxZycie;
 			statekGracza.x=window.innerWidth/2;
 			statekGracza.y=0;
 			statekGracza.vy=1;
@@ -218,10 +218,10 @@ var fizyka = {
 		statekGracza.y=0;
 		statekGracza.vy=1;
 		statekGracza.vx=0;
-		statekGracza.zycie=100;
+		statekGracza.zycie=statekGracza.maxZycie;
 		statekGracza.widocznosc=true;
 		statekGracza.przeladowanie=false;
-		statekGracza.maxLiczbaPociskow=[30,30,30];
+		statekGracza.maxLiczbaPociskow=[statekGracza.maxLiczbaPociskow[0],statekGracza.maxLiczbaPociskow[1],statekGracza.maxLiczbaPociskow[2]];
 		mysz.rusz=false;
 		mysz.statek=false;
 		mysz.atakuj=false;
@@ -231,6 +231,7 @@ var fizyka = {
 		for(var i =1;i<liczbaPlanet+1;i++){
             planety[i]= new Planeta(2,i*(((window.innerHeight-50)/2)/liczbaPlanet),30,30,0.1,0.01);
             orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
+			planety[i].numerOrbity=Number(i);
         };
         var x=1;
         for(var i =1;i<=liczbaR;i++){
@@ -420,8 +421,8 @@ var fizyka = {
     planety () {
         for (i in planety) {
 			if(planety[i].statekNaPlanecie && statekGracza.naPlanecie!==0){
-				planety[i].zycie=planety[i].zycie+0.05;
-				statekGracza.zycie=statekGracza.zycie+0.05;
+				planety[i].zycie=planety[i].zycie+statekGracza.szybkoscLeczenia;
+				statekGracza.zycie=statekGracza.zycie+statekGracza.szybkoscLeczenia;
 				statekGracza.x=planety[i].x;
 				statekGracza.y=planety[i].y;
 			}
@@ -437,9 +438,9 @@ var fizyka = {
                     statekGracza.zycie=statekGracza.zycie+statekGracza.szybkoscLeczenia;
                 };
                 if(ekran.budowanie  && fizyka.odleglosc(mysz.x,mysz.y,planety[i].x,planety[i].y)<10){
-					orbity[i].widocznosc=true;
+					orbity[planety[i].numerOrbity].widocznosc=true;
 			    } else {
-					orbity[i].widocznosc=false;
+					orbity[planety[i].numerOrbity].widocznosc=false;
 				}
             } else {
 				for(z in naziemni){
@@ -537,6 +538,18 @@ var fizyka = {
 		pasekMenu.rysuj();
         fizyka.rysuj(S);
         fizyka.rysuj(poziomy);
+    },
+	odswiezEkranUlepszenia(){
+        c.clearRect(0,0,window.innerWidth,window.innerHeight);
+		pasekMenu.rysuj();
+        fizyka.rysuj(S);
+		ulepszenieBron.rysuj();
+		ulepszenieCzas.rysuj();
+		ulepszenieKoszt.rysuj();
+		ulepszenieKule.rysuj();
+		ulepszeniePredkosc.rysuj();
+		ulepszenieZasieg.rysuj();
+		ulepszenieZycie.rysuj();
     },
     pokazPunkt(x,y){
         c.beginPath();
@@ -774,14 +787,22 @@ var statekGracza = {
     x: window.innerWidth/2 - 50,
     y: -5,
     r: 2,
+	poziomUlepszenieBron: 1,
+	poziomUlepszenieCzas: 1,
+	poziomUlepszenieKoszt: 1,
+	poziomUlepszenieKule: 1,
+	poziomUlepszeniePredkosc: 1,
+	poziomUlepszenieZasieg: 1,
+	poziomUlepszenieZycie: 1,
 	przesuniecieX:0,
     przesuniecieY:0,
 	naPlanecie: 0,
 	czasOdrodzenia: 10000,
 	widocznosc: true,
     zycie: 100,
-    maxLiczbaPociskow: [30,30,30],
-    zasieg: 200,
+    maxZycie: 100,
+    maxLiczbaPociskow: [0,0,15],
+    zasieg: 50,
 	trybAuto: false,
 	trybAutoCzas: 10000,
     przeladowanie: false,
@@ -794,7 +815,7 @@ var statekGracza = {
     cel: 1,
 	szybkoscLeczenia: 0.01,
 	energia: 1000,
-	doswiadczenie: 0,
+	doswiadczenie: 1000,
 	odblokowanePoziomy: 1,
 	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,
@@ -905,6 +926,8 @@ var ekran ={
 	budowanie: false,
 	gra: false,
 	menu: true,
+	przejdzDoOkna: false,
+	ulepszenie: false,
 	falaNumer: 1,
 	liczbaPrzeciwnikow: 1,
 	obrazeniaPrzeciwnikow: 1,
@@ -1730,26 +1753,50 @@ var menuBudowaniaNaziemneLepiej ={
 	},
 };
 var cenyGra = {
-	menuBudowaniaNaziemne: 150,
+	menuBudowaniaNaziemne: 350,
 	menuBudowaniaNaziemneWiecej1: 150,
 	menuBudowaniaNaziemneWiecej2: 250,
     menuBudowaniaNaziemneLepiej1: 100,
     menuBudowaniaNaziemneLepiej2: 200,
-	menuBudowaniaWahadlowiec: 200,
+	menuBudowaniaWahadlowiec: 300,
 	menuBudowaniaWahadlowiecWiecej1: 250,
 	menuBudowaniaWahadlowiecWiecej2: 350,
 	menuBudowaniaWahadlowiecLepiej1: 300,
 	menuBudowaniaWahadlowiecLepiej2: 250,
-	menuBudowaniaSpowalniacz: 100,
+	menuBudowaniaSpowalniacz: 250,
 	menuBudowaniaSpowalniaczWiecej1: 250,
 	menuBudowaniaSpowalniaczWiecej2: 200,
 	menuBudowaniaSpowalniaczLepiej1: 150,
 	menuBudowaniaSpowalniaczLepiej2: 350,
-	menuBudowaniaSatelita: 150,
+	menuBudowaniaSatelita: 250,
 	menuBudowaniaSatelitaWiecej1: 350,
 	menuBudowaniaSatelitaWiecej2: 300,
 	menuBudowaniaSatelitaLepiej1: 200,
 	menuBudowaniaSatelitaLepiej2: 300,
+	ulepszenieBron1: 1000,
+	ulepszenieBron2: 1500,
+	ulepszenieCzas1: 500,
+	ulepszenieCzas2: 750,
+	ulepszenieCzas3: 1000,
+	ulepszenieKoszt1: 1000,
+	ulepszenieKoszt2: 2000,
+	ulepszenieKoszt3: 3000,
+	ulepszenieKoszt4: 4000,
+	ulepszenieKule1: 1000,
+	ulepszenieKule2: 1500,
+	ulepszenieKule3: 2000,
+	ulepszenieKule4: 2000,
+	ulepszenieKule5: 3000,
+	ulepszeniePredkosc1: 1000,
+	ulepszeniePredkosc2: 1250,
+	ulepszeniePredkosc3: 1500,
+	ulepszenieZasieg1: 1000,
+	ulepszenieZasieg2: 1500,
+	ulepszenieZasieg3: 2000,
+	ulepszenieZasieg4: 2000,
+	ulepszenieZycie1: 1000,
+	ulepszenieZycie2: 1500,
+	ulepszenieZycie3: 1250,
 }
 var pasekMenu = {
 	odradzaniePhi: 0,
@@ -1778,10 +1825,10 @@ var pasekMenu = {
 			c.globalAlpha=this.alpha*2;
 			if(ekran.gra){
 				c.fillText("Energia"+"   "+ekran.energia,10,20);
-			} else if(ekran.menu){
+			} else if(ekran.menu || ekran.ulepszenie){
 			c.fillText("Doswiadczenie"+"   "+statekGracza.doswiadczenie,10,20);
 			}
-			if(statekGracza.odradzanie && ekran.gra){
+			if(statekGracza.odradzanie && ekran.gra && !ekran.pauza){
 				c.beginPath();
 				c.moveTo(window.innerWidth/2+0,this.odradzanieY+5);
 				c.lineTo(window.innerWidth/2+5,this.odradzanieY-5);
@@ -1797,3 +1844,275 @@ var pasekMenu = {
 		}
 	}
 };
+var ulepszenieBron = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 100,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("NOWA BRON",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieBron===1){
+					c.fillText(cenyGra.ulepszenieBron1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieBron===2){
+					c.fillText(cenyGra.ulepszenieBron2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieBron===3){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieBron===1){
+				this.obr.src = 'grafiki/ulepszenia/bron1.png'
+			} else if(statekGracza.poziomUlepszenieBron===2){
+				this.obr.src = 'grafiki/ulepszenia/bron2.png'
+			} else if(statekGracza.poziomUlepszenieBron===3){
+				this.obr.src = 'grafiki/ulepszenia/bron3.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszenieCzas = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 150,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("KROTSZY CZAS ODRADZANIA",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieCzas===1){
+					c.fillText(cenyGra.ulepszenieCzas1,this.x-8,this.y-10);
+				} else if(statekGracza.poziomUlepszenieCzas===2){
+					c.fillText(cenyGra.ulepszenieCzas2,this.x-8,this.y-10);
+				} else if(statekGracza.poziomUlepszenieCzas===3){
+					c.fillText(cenyGra.ulepszenieCzas3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieCzas===4){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieCzas===1){
+				this.obr.src = 'grafiki/ulepszenia/czas3.png'
+			} else if(statekGracza.poziomUlepszenieCzas===2){
+				this.obr.src = 'grafiki/ulepszenia/czas6.png'
+			} else if(statekGracza.poziomUlepszenieCzas===3){
+				this.obr.src = 'grafiki/ulepszenia/czas9.png'
+			} else if(statekGracza.poziomUlepszenieCzas===4){
+				this.obr.src = 'grafiki/ulepszenia/czas12.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszenieKoszt = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 200,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("NIZSZY KOSZT ZAKUPU JEDNOSTEK",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieKoszt===1){
+					c.fillText(cenyGra.ulepszenieKoszt1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKoszt===2){
+					c.fillText(cenyGra.ulepszenieKoszt2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKoszt===3){
+					c.fillText(cenyGra.ulepszenieKoszt3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKoszt===4){
+					c.fillText(cenyGra.ulepszenieKoszt4,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKoszt===5){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieKoszt===1){
+				this.obr.src = 'grafiki/ulepszenia/koszt1.png'
+			} else if(statekGracza.poziomUlepszenieKoszt===2){
+				this.obr.src = 'grafiki/ulepszenia/koszt2.png'
+			} else if(statekGracza.poziomUlepszenieKoszt===3){
+				this.obr.src = 'grafiki/ulepszenia/koszt3.png'
+			} else if(statekGracza.poziomUlepszenieKoszt===4){
+				this.obr.src = 'grafiki/ulepszenia/koszt4.png'
+			} else if(statekGracza.poziomUlepszenieKoszt===5){
+				this.obr.src = 'grafiki/ulepszenia/koszt5.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszenieKule = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 250,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("WIECEJ AMUNICJI",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieKule===1){
+					c.fillText(cenyGra.ulepszenieKule1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKule===2){
+					c.fillText(cenyGra.ulepszenieKule2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKule===3){
+					c.fillText(cenyGra.ulepszenieKule3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKule===4){
+					c.fillText(cenyGra.ulepszenieKule4,this.x-15,this.y-10); 
+				} else if(statekGracza.poziomUlepszenieKule===5){
+					c.fillText(cenyGra.ulepszenieKule5,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieKule===6){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieKule===1){
+				this.obr.src = 'grafiki/ulepszenia/kule1.png'
+			} else if(statekGracza.poziomUlepszenieKule===2){
+				this.obr.src = 'grafiki/ulepszenia/kule2.png'
+			} else if(statekGracza.poziomUlepszenieKule===3){
+				this.obr.src = 'grafiki/ulepszenia/kule3.png'
+			} else if(statekGracza.poziomUlepszenieKule===4){
+				this.obr.src = 'grafiki/ulepszenia/kule4.png'
+			} else if(statekGracza.poziomUlepszenieKule===5){
+				this.obr.src = 'grafiki/ulepszenia/kule5.png'
+			} else if(statekGracza.poziomUlepszenieKule===6){
+				this.obr.src = 'grafiki/ulepszenia/kule6.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszeniePredkosc = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 300,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("KROTSZY CZAS PRZELADOWANIA I TRYB AUTO",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszeniePredkosc===1){
+					c.fillText(cenyGra.ulepszeniePredkosc1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszeniePredkosc===2){
+					c.fillText(cenyGra.ulepszeniePredkosc2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszeniePredkosc===3){
+					c.fillText(cenyGra.ulepszeniePredkosc3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszeniePredkosc===4){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszeniePredkosc===1){
+				this.obr.src = 'grafiki/ulepszenia/predkosc1.png'
+			} else if(statekGracza.poziomUlepszeniePredkosc===2){
+				this.obr.src = 'grafiki/ulepszenia/predkosc2.png'
+			} else if(statekGracza.poziomUlepszeniePredkosc===3){
+				this.obr.src = 'grafiki/ulepszenia/predkosc3.png'
+			} else if(statekGracza.poziomUlepszeniePredkosc===4){
+				this.obr.src = 'grafiki/ulepszenia/predkosc4.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszenieZasieg = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 350,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("WIEKSZY ZASIEG STATKU GRACZA",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieZasieg===1){
+					c.fillText(cenyGra.ulepszenieZasieg1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZasieg===2){
+					c.fillText(cenyGra.ulepszenieZasieg2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZasieg===3){
+					c.fillText(cenyGra.ulepszenieZasieg3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZasieg===4){
+					c.fillText(cenyGra.ulepszenieZasieg4,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZasieg===5){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieZasieg===1){
+				this.obr.src = 'grafiki/ulepszenia/zasieg1.png'
+			} else if(statekGracza.poziomUlepszenieZasieg===2){
+				this.obr.src = 'grafiki/ulepszenia/zasieg2.png'
+			} else if(statekGracza.poziomUlepszenieZasieg===3){
+				this.obr.src = 'grafiki/ulepszenia/zasieg3.png'
+			} else if(statekGracza.poziomUlepszenieZasieg===4){
+				this.obr.src = 'grafiki/ulepszenia/zasieg4.png'
+			} else if(statekGracza.poziomUlepszenieZasieg===5){
+				this.obr.src = 'grafiki/ulepszenia/zasieg5.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+var ulepszenieZycie = {
+	r: 10,
+	widocznosc: true,
+	r: 20,
+	x: 100,
+	y: 400,
+	obr:  new Image(20,20),
+	rysuj: function(){
+		if(this.widocznosc){
+			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
+				c.globalAlpha=0.2;
+				c.font = "20px Arial";
+				c.fillText("WIECEJ ZYCIA I SZYBSZE LECZENIE",this.x+25,this.y+17.5);
+				if(statekGracza.poziomUlepszenieZycie===1){
+					c.fillText(cenyGra.ulepszenieZycie1,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZycie===2){
+					c.fillText(cenyGra.ulepszenieZycie2,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZycie===3){
+					c.fillText(cenyGra.ulepszenieZycie3,this.x-15,this.y-10);
+				} else if(statekGracza.poziomUlepszenieZycie===4){
+					c.fillText("MAX",this.x-12,this.y-10);
+				}
+				c.globalAlpha=1;
+			}
+			if(statekGracza.poziomUlepszenieZycie===1){
+				this.obr.src = 'grafiki/ulepszenia/zycie1.png'
+			} else if(statekGracza.poziomUlepszenieZycie===2){
+				this.obr.src = 'grafiki/ulepszenia/zycie2.png'
+			} else if(statekGracza.poziomUlepszenieZycie===3){
+				this.obr.src = 'grafiki/ulepszenia/zycie3.png'
+			} else if(statekGracza.poziomUlepszenieZycie===4){
+				this.obr.src = 'grafiki/ulepszenia/zycie4.png'
+			}
+			c.drawImage(this.obr, this.x, this.y);
+		}
+	}
+}
+

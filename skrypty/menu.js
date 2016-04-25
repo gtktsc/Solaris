@@ -43,3 +43,10 @@ function menu() {
 	};
 };
 var animacjaMenu = setInterval(menu, szybkoscOdswiezania);
+var zmienOkno = setInterval(function(){
+	if(ekran.przejdzDoOkna){
+		ekran.ulepszenie=!ekran.ulepszenie;
+		ekran.menu=!ekran.menu;
+					ekran.przejdzDoOkna=false;
+	}
+	}, 66);

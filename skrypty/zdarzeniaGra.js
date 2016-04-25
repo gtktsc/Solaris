@@ -287,16 +287,19 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 }
 }, false);
 window.addEventListener('mousedown',function(event){
+if(ekran.gra){
 	fizyka.atakPoKliknieciu();
 	if(!ekran.pauza && ekran.gra && !mysz.statek){
 		mysz.ciagly=true;
 	}
-
+}
 });
 window.addEventListener('mouseup',function(event){
+if(ekran.gra){
     mysz.atakuj=false;
     mysz.ciagly=false;
     mysz.pojedynczy=false;
+}
 })
 window.addEventListener('keydown', function(event) {
 	if(ekran.gra){

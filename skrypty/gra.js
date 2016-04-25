@@ -1,5 +1,6 @@
 function gra() {
 	if(ekran.gra){
+	
 		if(ekran.numer==1){
 			if(!ekran.pauza){
 				if(mysz.rusz){

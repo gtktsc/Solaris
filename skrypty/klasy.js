@@ -4,6 +4,7 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
     this.r = promien;
 	this.cel=1;
 	this.phi=0;
+	this.predkoscMnoznik=1;
     this.x = wspolrzednaX-this.r;
     this.y = wspolrzednaY-this.r;
     this.vx=predkoscX;
@@ -27,11 +28,11 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
         if (this.widocznosc) {
 			if((this.kolor==='#BDBDBD' || this.kolor==='grey')&&!ekran.pauza){
                 fizyka.kierunekDoObiektu1(przeciwnicy[this.cel],this);
-				this.vx=-Math.sin(this.phi)*this.predkoscSamoNapro;
-				this.vy=-Math.cos(this.phi)*this.predkoscSamoNapro;
+				this.vx=-Math.sin(this.phi)*this.predkoscSamoNapro*this.predkoscMnoznik;
+				this.vy=-Math.cos(this.phi)*this.predkoscSamoNapro*this.predkoscMnoznik;
 			}
-			this.x = this.x + this.vx;
-			this.y = this.y + this.vy;
+			this.x = (this.x + this.vx)*this.predkoscMnoznik;
+			this.y = (this.y + this.vy)*this.predkoscMnoznik;
             c.beginPath();
             c.fillStyle = this.kolor;
             c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
@@ -46,6 +47,7 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
 function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGrawitacyjna) {
     this.r = Math.floor(promien+Math.random()*10);
     this.rOld = this.r;
+    this.numerOrbity = 0;
 	this.obecnaNaziemna = false;
 	this.obecnaNaziemnaWiecej = 0;
 	this.obecnaNaziemnaLepiej = 0;
