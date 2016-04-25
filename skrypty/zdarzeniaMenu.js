@@ -1,5 +1,8 @@
 window.addEventListener('click', function(){
 	if(ekran.menu){
+		if(fizyka.klikniecie(mysz,S)){
+			ekran.przejdzDoOkna=true;
+		};
 		for (i in poziomy) {
 			if(fizyka.klikniecie(mysz,poziomy[i])){
 				myszKlik.x=mysz.x;
