@@ -811,6 +811,7 @@ var statekGracza = {
     vy: 1,
     vxOld: 0,
     vyOld: 1,
+    obrazenia: [10,8,5],
     odlegloscDoCelu: 300,
     cel: 1,
 	szybkoscLeczenia: 0.01,
@@ -885,6 +886,15 @@ var statekGracza = {
         };
     },
     wystrzel : function(pocisk){
+		if (pocisk.kolor==='red' || pocisk.kolor === '#FF0000') {
+			pocisk.obrazenia=this.obrazenia[0];
+		} else if (pocisk.kolor==='green' || pocisk.kolor === '#00FF00') {
+			pocisk.obrazenia=this.obrazenia[1];
+		} else if (pocisk.kolor==='blue' || pocisk.kolor === '#0000FF'){
+			pocisk.obrazenia=this.obrazenia[2];
+		} else {
+			pocisk.obrazenia=this.obrazenia[1];
+		};
         pocisk.x=this.x;
         pocisk.y=this.y;
         pocisk.vx=this.vx-Math.sin(this.phi)*3;
@@ -1967,7 +1977,7 @@ var ulepszenieKule = {
 			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
 				c.globalAlpha=0.2;
 				c.font = "20px Arial";
-				c.fillText("WIECEJ AMUNICJI",this.x+25,this.y+17.5);
+				c.fillText("WIECEJ AMUNICJI I WIEKSZE OBRAZENIA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieKule===1){
 					c.fillText(cenyGra.ulepszenieKule1,this.x-15,this.y-10);
 				} else if(statekGracza.poziomUlepszenieKule===2){

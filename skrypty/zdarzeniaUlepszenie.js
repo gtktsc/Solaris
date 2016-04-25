@@ -70,6 +70,7 @@ window.addEventListener('click', function(){
 			if(statekGracza.poziomUlepszenieKule===1 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule1){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule1
 				statekGracza.poziomUlepszenieKule=2;
+				statekGracza.obrazenia=[12,10,8];
 				if(statekGracza.poziomUlepszenieBron==1){
 					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 				} else if(statekGracza.poziomUlepszenieBron==2){
@@ -80,6 +81,7 @@ window.addEventListener('click', function(){
 			} else if(statekGracza.poziomUlepszenieKule===2 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule2){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule2
 				statekGracza.poziomUlepszenieKule=3;
+				statekGracza.obrazenia=[15,12,10];
 				if(statekGracza.poziomUlepszenieBron==1){
 					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 				} else if(statekGracza.poziomUlepszenieBron==2){
@@ -90,6 +92,7 @@ window.addEventListener('click', function(){
 			} else if(statekGracza.poziomUlepszenieKule===3 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule3){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule3
 				statekGracza.poziomUlepszenieKule=4;
+								statekGracza.obrazenia=[17,12,10];
 				if(statekGracza.poziomUlepszenieBron==1){
 					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 				} else if(statekGracza.poziomUlepszenieBron==2){
@@ -100,6 +103,7 @@ window.addEventListener('click', function(){
 			} else if(statekGracza.poziomUlepszenieKule===4 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule4){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule4
 				statekGracza.poziomUlepszenieKule=5;
+								statekGracza.obrazenia=[20,15,12];
 				if(statekGracza.poziomUlepszenieBron==1){
 					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 				} else if(statekGracza.poziomUlepszenieBron==2){
@@ -110,6 +114,7 @@ window.addEventListener('click', function(){
 			}else if(statekGracza.poziomUlepszenieKule===5 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule5){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule5
 				statekGracza.poziomUlepszenieKule=6;
+								statekGracza.obrazenia=[30,20,15];
 				if(statekGracza.poziomUlepszenieBron==1){
 					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 				} else if(statekGracza.poziomUlepszenieBron==2){
