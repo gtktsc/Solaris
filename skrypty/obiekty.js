@@ -221,7 +221,13 @@ var fizyka = {
 		statekGracza.zycie=statekGracza.maxZycie;
 		statekGracza.widocznosc=true;
 		statekGracza.przeladowanie=false;
-		statekGracza.maxLiczbaPociskow=[statekGracza.maxLiczbaPociskow[0],statekGracza.maxLiczbaPociskow[1],statekGracza.maxLiczbaPociskow[2]];
+		if(statekGracza.poziomUlepszenieBron==1){
+			statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
+		} else if(statekGracza.poziomUlepszenieBron==2){
+			statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
+		} else if(statekGracza.poziomUlepszenieBron==3){
+			statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
+		}
 		mysz.rusz=false;
 		mysz.statek=false;
 		mysz.atakuj=false;
@@ -741,10 +747,14 @@ var fizyka = {
                         przeciwnicy[i].vx=0;
                         przeciwnicy[i].vy=0;
                     };
-                    statekGracza.vxOld=statekGracza.vx;
-                    statekGracza.vyOld=statekGracza.vy;
-                    statekGracza.vx=0;
-                    statekGracza.vy=0;
+					
+
+						statekGracza.vxOld=statekGracza.vx;
+						statekGracza.vyOld=statekGracza.vy;
+						statekGracza.vx=0;
+						statekGracza.vy=0;
+
+
                 };
                 ekran.pauza=true;
             break;
@@ -756,7 +766,17 @@ var fizyka = {
                 };
                 for(i in planety){
                     planety[i].v=planety[i].vOld;
+					if(fizyka.dwaCiala(statekGracza,planety[i])){
+						planety[i].statekNaPlanecie=true;
+						statekGracza.naPlanecie=Number(i);
+					}else if (planety[i]!==null){
+						planety[i].statekNaPlanecie=false;
+					}
                 };
+				if(statekGracza.naPlanecie===0){
+					statekGracza.vx=statekGracza.vxOld;
+					statekGracza.vy=statekGracza.vyOld;
+				}
                 for(i in satelity){
                     satelity[i].v=satelity[i].vOld;
                 };
@@ -764,8 +784,7 @@ var fizyka = {
                     przeciwnicy[i].vx=przeciwnicy[i].vxOld;
                     przeciwnicy[i].vy=przeciwnicy[i].vyOld;
                 };
-                statekGracza.vx=statekGracza.vxOld;
-                statekGracza.vy=statekGracza.vyOld;
+
 				mysz.planetaNumer=0;
 				menuBudowaniaNaziemne.widocznosc=false;
 				menuBudowaniaNaziemneWiecej.widocznosc=false;
@@ -816,7 +835,7 @@ var statekGracza = {
     cel: 1,
 	szybkoscLeczenia: 0.01,
 	energia: 1000,
-	doswiadczenie: 1000,
+	doswiadczenie: 10000,
 	odblokowanePoziomy: 1,
 	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,

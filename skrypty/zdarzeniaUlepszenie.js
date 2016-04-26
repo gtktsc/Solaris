@@ -1,22 +1,20 @@
 window.addEventListener('click', function(){
 	if(ekran.ulepszenie){
+		console.log(statekGracza.maxLiczbaPociskow)
 		if(fizyka.klikniecie(mysz,S)){
 			ekran.przejdzDoOkna=true;	
 		}
 		if(fizyka.klikniecie(mysz,ulepszenieBron)){
-			console.log(statekGracza.maxLiczbaPociskow)
+
 			if(statekGracza.poziomUlepszenieBron===1 && statekGracza.doswiadczenie>=cenyGra.ulepszenieBron1){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieBron1
 				statekGracza.poziomUlepszenieBron=2;
-				statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
 			} else if (statekGracza.poziomUlepszenieBron===2 && statekGracza.doswiadczenie>=cenyGra.ulepszenieBron2){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieBron2	
 				statekGracza.poziomUlepszenieBron=3;
-				statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
 			}
 		};
 		if(fizyka.klikniecie(mysz,ulepszenieCzas)){
-			console.log(statekGracza.czasOdrodzenia,statekGracza.przeladowanieCzas,statekGracza.trybAutoCzas)
 			if(statekGracza.poziomUlepszenieCzas===1 && statekGracza.doswiadczenie>=cenyGra.ulepszenieCzas1){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieCzas1
 				statekGracza.poziomUlepszenieCzas=2;
@@ -34,7 +32,6 @@ window.addEventListener('click', function(){
 			}
 		};
 		if(fizyka.klikniecie(mysz,ulepszenieKoszt)){
-			console.log(cenyGra.menuBudowaniaNaziemne,cenyGra.menuBudowaniaWahadlowiec,cenyGra.menuBudowaniaSpowalniacz,cenyGra.menuBudowaniaSatelita)
 			if(statekGracza.poziomUlepszenieKoszt===1 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKoszt1){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKoszt1
 				statekGracza.poziomUlepszenieKoszt=2;
@@ -71,57 +68,22 @@ window.addEventListener('click', function(){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule1
 				statekGracza.poziomUlepszenieKule=2;
 				statekGracza.obrazenia=[12,10,8];
-				if(statekGracza.poziomUlepszenieBron==1){
-					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==2){
-					statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==3){
-					statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				}
 			} else if(statekGracza.poziomUlepszenieKule===2 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule2){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule2
 				statekGracza.poziomUlepszenieKule=3;
 				statekGracza.obrazenia=[15,12,10];
-				if(statekGracza.poziomUlepszenieBron==1){
-					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==2){
-					statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==3){
-					statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				}
 			} else if(statekGracza.poziomUlepszenieKule===3 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule3){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule3
 				statekGracza.poziomUlepszenieKule=4;
-								statekGracza.obrazenia=[17,12,10];
-				if(statekGracza.poziomUlepszenieBron==1){
-					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==2){
-					statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==3){
-					statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				}
+				statekGracza.obrazenia=[17,12,10];
 			} else if(statekGracza.poziomUlepszenieKule===4 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule4){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule4
 				statekGracza.poziomUlepszenieKule=5;
-								statekGracza.obrazenia=[20,15,12];
-				if(statekGracza.poziomUlepszenieBron==1){
-					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==2){
-					statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==3){
-					statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				}
+				statekGracza.obrazenia=[20,15,12];
 			}else if(statekGracza.poziomUlepszenieKule===5 && statekGracza.doswiadczenie>=cenyGra.ulepszenieKule5){
 				statekGracza.doswiadczenie=statekGracza.doswiadczenie-cenyGra.ulepszenieKule5
 				statekGracza.poziomUlepszenieKule=6;
-								statekGracza.obrazenia=[30,20,15];
-				if(statekGracza.poziomUlepszenieBron==1){
-					statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==2){
-					statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				} else if(statekGracza.poziomUlepszenieBron==3){
-					statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
-				}				
+				statekGracza.obrazenia=[30,20,15];
 			}
 		}
 		if(fizyka.klikniecie(mysz,ulepszeniePredkosc)){
