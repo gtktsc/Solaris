@@ -4,7 +4,7 @@ window.addEventListener('mousemove',function(event) {
 },false);
 window.addEventListener('click', function(){
 if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
-    if(!ekran.pauza){
+    if(!ekran.pauza && !statekGracza.odradzanie){
 		if(!mysz.statek){
 			fizyka.atakPoKliknieciu();
 			mysz.pojedynczy=true;
@@ -46,6 +46,9 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
         }
     };
 	if(fizyka.klikniecie(mysz,S) && fizyka.nieDotykaMenu()){
+		myszKlik.rusz=false;
+		mysz.rusz=false;
+		mysz.statek=false;
 		if(!ekran.budowanie){
 			fizyka.szybkoscAnimacji('stop');
 		} else {
@@ -303,10 +306,10 @@ if(ekran.gra){
 })
 window.addEventListener('keydown', function(event) {
 	if(ekran.gra){
-	    if(!ekran.pauza){
+	    if(!ekran.pauza && !statekGracza.odradzanie){
 			switch (event.keyCode) {
 				case 49 : // 1
-					if(statekGracza.maxLiczbaPociskow[0]>0){
+					if(statekGracza.maxLiczbaPociskow[0]>0 && !statekGracza.przeladowanie){
 						if(pociski.length>1){
 							pociski[pociski.length] = new Pocisk(10,10,2,2,2,'red');
 						} else {
@@ -318,10 +321,11 @@ window.addEventListener('keydown', function(event) {
 							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
 						}
 						statekGracza.maxLiczbaPociskow[0]=statekGracza.maxLiczbaPociskow[0]-1;
+						statekGracza.przeladowanie=true;
 					};
 				break;
 				case 50 : // 2
-				if(statekGracza.maxLiczbaPociskow[1]>0){
+				if(statekGracza.maxLiczbaPociskow[1]>0 && !statekGracza.przeladowanie){
 						if(pociski.length>1){
 							pociski[pociski.length] = new Pocisk(10,10,2,2,2,'green');
 						} else {
@@ -333,10 +337,11 @@ window.addEventListener('keydown', function(event) {
 							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
 						}
 						statekGracza.maxLiczbaPociskow[1]=statekGracza.maxLiczbaPociskow[1]-1;
+						statekGracza.przeladowanie=true;
 				};
 				break;
 				case 51 : // 3
-					if(statekGracza.maxLiczbaPociskow[2]>0){
+					if(statekGracza.maxLiczbaPociskow[2]>0 && !statekGracza.przeladowanie){
 						if(pociski.length>1){
 							pociski[pociski.length] = new Pocisk(10,10,2,2,2,'blue');
 						} else {
@@ -348,6 +353,7 @@ window.addEventListener('keydown', function(event) {
 							pociski[pociski.length-1].rodzic="statekGraczaNaPlanecie";	
 						}
 						statekGracza.maxLiczbaPociskow[2]=statekGracza.maxLiczbaPociskow[2]-1;
+						statekGracza.przeladowanie=true;
 					};
 				break;
 				case 52 : // 4

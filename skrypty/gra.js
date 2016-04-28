@@ -4,7 +4,6 @@ function gra() {
 		if(ekran.numer==1){
 			if(!ekran.pauza){
 				if(mysz.rusz){
-					
 					fizyka.kierunekDoObiektu1(mysz,statekGracza);
 					myszKlik.x=mysz.x;
 					myszKlik.y=mysz.y;

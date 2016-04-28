@@ -37,8 +37,10 @@ var fizyka = {
 	},
 	statekGracza(){
 		if(statekGracza.zycie<=0){
-			statekGracza.statekNaPlanecie=0;
 			statekGracza.widocznosc=false;
+			fizyka.sprawdzWarunkiKonca();
+			statekGracza.statekNaPlanecie=0;
+			pasekMenu.odradzaniePhi=0;
 			statekGracza.zycie=statekGracza.maxZycie;
 			statekGracza.x=window.innerWidth/2;
 			statekGracza.y=0;
@@ -221,6 +223,7 @@ var fizyka = {
 		statekGracza.zycie=statekGracza.maxZycie;
 		statekGracza.widocznosc=true;
 		statekGracza.przeladowanie=false;
+		statekGracza.odradzanie=false;
 		if(statekGracza.poziomUlepszenieBron==1){
 			statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 		} else if(statekGracza.poziomUlepszenieBron==2){
@@ -578,10 +581,17 @@ var fizyka = {
 	},
     sprawdzWarunkiKonca: function(){
         if(planety.length===1){
-			fizyka.szybkoscAnimacji('stop');
-			ekran.menu=true;
-			ekran.gra=false;
-        } else if (przeciwnicy.length===1){
+			if(!statekGracza.widocznosc){
+				fizyka.szybkoscAnimacji('stop');
+				ekran.menu=true;
+				ekran.gra=false;
+			} else {
+				for (i in przeciwnicy){
+					przeciwnicy[i].kolor='#00FF00';	
+				}
+			}
+        }
+		if (przeciwnicy.length===1){
 			if(ekran.falaNumer<ekran.liczbaFal){
 				ekran.falaNumer=ekran.falaNumer+1;
 				ekran.liczbaPrzeciwnikow=statekGracza.aktualnyPoziom*ekran.falaNumer;
@@ -661,20 +671,31 @@ var fizyka = {
         };
     },
     brzegOkna : function(obiekt) {
+		if(!statekGracza.odradzanie){
         if (obiekt.x>window.innerWidth && obiekt.y>window.innerHeight) {
+			obiekt.widocznosc=false;
             obiekt.x=-10;
             obiekt.y=-10;
         } else if (obiekt.x<-10&&obiekt.y<-10) {
+			obiekt.widocznosc=false;
             obiekt.x=window.innerWidth-10;
             obiekt.y=window.innerHeight-10;
         } else if (obiekt.x>window.innerWidth) {
+			obiekt.widocznosc=false;
             obiekt.x=-10;
         } else if (obiekt.y>window.innerHeight) {
+			obiekt.widocznosc=false;
             obiekt.y=-10;
         } else if (obiekt.x<-10){
+			obiekt.widocznosc=false;
             obiekt.x=window.innerWidth-10;
         } else if (obiekt.y<-10){
-            obiekt.y=window.innerHeight-10;};
+			obiekt.widocznosc=false;
+            obiekt.y=window.innerHeight-10;
+		};
+		fizyka.sprawdzWarunkiKonca();
+		obiekt.widocznosc=true;
+		}
     },
 	odleglosc: function (x1,y1,x2,y2){
             var dx=x1-x2;
@@ -887,6 +908,9 @@ var statekGracza = {
     },
     porusz : function(jak) {
 		statekGracza.naPlanecie=0;
+		myszKlik.rusz=false;
+		mysz.rusz=false;
+		mysz.statek=false;
         switch (jak) {
             case "doPrzodu" :
                 this.vx=this.vx-Math.sin(this.phi);
@@ -1865,7 +1889,9 @@ var pasekMenu = {
 				c.lineTo(window.innerWidth/2,this.odradzanieY+5);
 				c.stroke();
 				c.beginPath();
-				this.odradzaniePhi=this.odradzaniePhi+(Math.PI*2/(statekGracza.czasOdrodzenia)*szybkoscOdswiezania)
+				if(this.odradzaniePhi<(Math.PI*2-0.3)){
+					this.odradzaniePhi=this.odradzaniePhi+(Math.PI*2/(statekGracza.czasOdrodzenia)*szybkoscOdswiezania)
+				}
 				c.arc(window.innerWidth/2,this.odradzanieY,10,0,this.odradzaniePhi,true);
 				c.stroke();
 			}
@@ -1878,7 +1904,7 @@ var ulepszenieBron = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 100,
+	y: window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1911,7 +1937,7 @@ var ulepszenieCzas = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 150,
+	y: ulepszenieBron.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1948,7 +1974,7 @@ var ulepszenieKoszt = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 200,
+	y: ulepszenieCzas.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1989,7 +2015,7 @@ var ulepszenieKule = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 250,
+	y: ulepszenieKoszt.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2034,7 +2060,7 @@ var ulepszeniePredkosc = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 300,
+	y: ulepszenieKule.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2071,7 +2097,7 @@ var ulepszenieZasieg = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 350,
+	y: ulepszeniePredkosc.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2112,7 +2138,7 @@ var ulepszenieZycie = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 400,
+	y: ulepszenieZasieg.y+window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2144,4 +2170,3 @@ var ulepszenieZycie = {
 		}
 	}
 }
-
