@@ -1937,7 +1937,7 @@ var ulepszenieCzas = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszenieBron.y+window.innerHeight/7,
+	y: ulepszenieBron.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1974,7 +1974,7 @@ var ulepszenieKoszt = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszenieCzas.y+window.innerHeight/7,
+	y: ulepszenieCzas.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2015,7 +2015,7 @@ var ulepszenieKule = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszenieKoszt.y+window.innerHeight/7,
+	y: ulepszenieKoszt.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2060,7 +2060,7 @@ var ulepszeniePredkosc = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszenieKule.y+window.innerHeight/7,
+	y: ulepszenieKule.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2097,7 +2097,7 @@ var ulepszenieZasieg = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszeniePredkosc.y+window.innerHeight/7,
+	y: ulepszeniePredkosc.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2138,7 +2138,7 @@ var ulepszenieZycie = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: ulepszenieZasieg.y+window.innerHeight/7,
+	y: ulepszenieZasieg.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
