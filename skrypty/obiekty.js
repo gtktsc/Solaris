@@ -856,7 +856,7 @@ var statekGracza = {
     cel: 1,
 	szybkoscLeczenia: 0.01,
 	energia: 1000,
-	doswiadczenie: 10000,
+	doswiadczenie: 1000000,
 	odblokowanePoziomy: 1,
 	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,
@@ -1913,11 +1913,11 @@ var ulepszenieBron = {
 				c.font = "20px Arial";
 				c.fillText("NOWA BRON",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieBron===1){
-					c.fillText(cenyGra.ulepszenieBron1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieBron1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieBron===2){
-					c.fillText(cenyGra.ulepszenieBron2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieBron2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieBron===3){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -1946,13 +1946,13 @@ var ulepszenieCzas = {
 				c.font = "20px Arial";
 				c.fillText("KROTSZY CZAS ODRADZANIA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieCzas===1){
-					c.fillText(cenyGra.ulepszenieCzas1,this.x-8,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===2){
-					c.fillText(cenyGra.ulepszenieCzas2,this.x-8,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===3){
-					c.fillText(cenyGra.ulepszenieCzas3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -1983,15 +1983,15 @@ var ulepszenieKoszt = {
 				c.font = "20px Arial";
 				c.fillText("NIZSZY KOSZT ZAKUPU JEDNOSTEK",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieKoszt===1){
-					c.fillText(cenyGra.ulepszenieKoszt1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===2){
-					c.fillText(cenyGra.ulepszenieKoszt2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===3){
-					c.fillText(cenyGra.ulepszenieKoszt3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===4){
-					c.fillText(cenyGra.ulepszenieKoszt4,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt4,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===5){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2024,17 +2024,17 @@ var ulepszenieKule = {
 				c.font = "20px Arial";
 				c.fillText("WIECEJ AMUNICJI I WIEKSZE OBRAZENIA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieKule===1){
-					c.fillText(cenyGra.ulepszenieKule1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===2){
-					c.fillText(cenyGra.ulepszenieKule2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===3){
-					c.fillText(cenyGra.ulepszenieKule3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===4){
-					c.fillText(cenyGra.ulepszenieKule4,this.x-15,this.y-10); 
+					c.fillText(cenyGra.ulepszenieKule4,this.x-50,this.y+17.5); 
 				} else if(statekGracza.poziomUlepszenieKule===5){
-					c.fillText(cenyGra.ulepszenieKule5,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule5,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===6){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2069,13 +2069,13 @@ var ulepszeniePredkosc = {
 				c.font = "20px Arial";
 				c.fillText("KROTSZY CZAS PRZELADOWANIA I TRYB AUTO",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszeniePredkosc===1){
-					c.fillText(cenyGra.ulepszeniePredkosc1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===2){
-					c.fillText(cenyGra.ulepszeniePredkosc2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===3){
-					c.fillText(cenyGra.ulepszeniePredkosc3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2106,15 +2106,15 @@ var ulepszenieZasieg = {
 				c.font = "20px Arial";
 				c.fillText("WIEKSZY ZASIEG STATKU GRACZA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieZasieg===1){
-					c.fillText(cenyGra.ulepszenieZasieg1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===2){
-					c.fillText(cenyGra.ulepszenieZasieg2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===3){
-					c.fillText(cenyGra.ulepszenieZasieg3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===4){
-					c.fillText(cenyGra.ulepszenieZasieg4,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg4,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===5){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2147,13 +2147,13 @@ var ulepszenieZycie = {
 				c.font = "20px Arial";
 				c.fillText("WIECEJ ZYCIA I SZYBSZE LECZENIE",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieZycie===1){
-					c.fillText(cenyGra.ulepszenieZycie1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===2){
-					c.fillText(cenyGra.ulepszenieZycie2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===3){
-					c.fillText(cenyGra.ulepszenieZycie3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
