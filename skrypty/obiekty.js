@@ -37,8 +37,10 @@ var fizyka = {
 	},
 	statekGracza(){
 		if(statekGracza.zycie<=0){
-			statekGracza.statekNaPlanecie=0;
 			statekGracza.widocznosc=false;
+			fizyka.sprawdzWarunkiKonca();
+			statekGracza.statekNaPlanecie=0;
+			pasekMenu.odradzaniePhi=0;
 			statekGracza.zycie=statekGracza.maxZycie;
 			statekGracza.x=window.innerWidth/2;
 			statekGracza.y=0;
@@ -221,7 +223,14 @@ var fizyka = {
 		statekGracza.zycie=statekGracza.maxZycie;
 		statekGracza.widocznosc=true;
 		statekGracza.przeladowanie=false;
-		statekGracza.maxLiczbaPociskow=[statekGracza.maxLiczbaPociskow[0],statekGracza.maxLiczbaPociskow[1],statekGracza.maxLiczbaPociskow[2]];
+		statekGracza.odradzanie=false;
+		if(statekGracza.poziomUlepszenieBron==1){
+			statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
+		} else if(statekGracza.poziomUlepszenieBron==2){
+			statekGracza.maxLiczbaPociskow=[0,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
+		} else if(statekGracza.poziomUlepszenieBron==3){
+			statekGracza.maxLiczbaPociskow=[statekGracza.poziomUlepszenieKule*5,statekGracza.poziomUlepszenieKule*10,statekGracza.poziomUlepszenieKule*15]
+		}
 		mysz.rusz=false;
 		mysz.statek=false;
 		mysz.atakuj=false;
@@ -572,10 +581,17 @@ var fizyka = {
 	},
     sprawdzWarunkiKonca: function(){
         if(planety.length===1){
-			fizyka.szybkoscAnimacji('stop');
-			ekran.menu=true;
-			ekran.gra=false;
-        } else if (przeciwnicy.length===1){
+			if(!statekGracza.widocznosc){
+				fizyka.szybkoscAnimacji('stop');
+				ekran.menu=true;
+				ekran.gra=false;
+			} else {
+				for (i in przeciwnicy){
+					przeciwnicy[i].kolor='#00FF00';	
+				}
+			}
+        }
+		if (przeciwnicy.length===1){
 			if(ekran.falaNumer<ekran.liczbaFal){
 				ekran.falaNumer=ekran.falaNumer+1;
 				ekran.liczbaPrzeciwnikow=statekGracza.aktualnyPoziom*ekran.falaNumer;
@@ -655,20 +671,31 @@ var fizyka = {
         };
     },
     brzegOkna : function(obiekt) {
+		if(!statekGracza.odradzanie){
         if (obiekt.x>window.innerWidth && obiekt.y>window.innerHeight) {
+			obiekt.widocznosc=false;
             obiekt.x=-10;
             obiekt.y=-10;
         } else if (obiekt.x<-10&&obiekt.y<-10) {
+			obiekt.widocznosc=false;
             obiekt.x=window.innerWidth-10;
             obiekt.y=window.innerHeight-10;
         } else if (obiekt.x>window.innerWidth) {
+			obiekt.widocznosc=false;
             obiekt.x=-10;
         } else if (obiekt.y>window.innerHeight) {
+			obiekt.widocznosc=false;
             obiekt.y=-10;
         } else if (obiekt.x<-10){
+			obiekt.widocznosc=false;
             obiekt.x=window.innerWidth-10;
         } else if (obiekt.y<-10){
-            obiekt.y=window.innerHeight-10;};
+			obiekt.widocznosc=false;
+            obiekt.y=window.innerHeight-10;
+		};
+		fizyka.sprawdzWarunkiKonca();
+		obiekt.widocznosc=true;
+		}
     },
 	odleglosc: function (x1,y1,x2,y2){
             var dx=x1-x2;
@@ -741,10 +768,14 @@ var fizyka = {
                         przeciwnicy[i].vx=0;
                         przeciwnicy[i].vy=0;
                     };
-                    statekGracza.vxOld=statekGracza.vx;
-                    statekGracza.vyOld=statekGracza.vy;
-                    statekGracza.vx=0;
-                    statekGracza.vy=0;
+					
+
+						statekGracza.vxOld=statekGracza.vx;
+						statekGracza.vyOld=statekGracza.vy;
+						statekGracza.vx=0;
+						statekGracza.vy=0;
+
+
                 };
                 ekran.pauza=true;
             break;
@@ -756,7 +787,17 @@ var fizyka = {
                 };
                 for(i in planety){
                     planety[i].v=planety[i].vOld;
+					if(fizyka.dwaCiala(statekGracza,planety[i])){
+						planety[i].statekNaPlanecie=true;
+						statekGracza.naPlanecie=Number(i);
+					}else if (planety[i]!==null){
+						planety[i].statekNaPlanecie=false;
+					}
                 };
+				if(statekGracza.naPlanecie===0){
+					statekGracza.vx=statekGracza.vxOld;
+					statekGracza.vy=statekGracza.vyOld;
+				}
                 for(i in satelity){
                     satelity[i].v=satelity[i].vOld;
                 };
@@ -764,8 +805,7 @@ var fizyka = {
                     przeciwnicy[i].vx=przeciwnicy[i].vxOld;
                     przeciwnicy[i].vy=przeciwnicy[i].vyOld;
                 };
-                statekGracza.vx=statekGracza.vxOld;
-                statekGracza.vy=statekGracza.vyOld;
+
 				mysz.planetaNumer=0;
 				menuBudowaniaNaziemne.widocznosc=false;
 				menuBudowaniaNaziemneWiecej.widocznosc=false;
@@ -816,7 +856,7 @@ var statekGracza = {
     cel: 1,
 	szybkoscLeczenia: 0.01,
 	energia: 1000,
-	doswiadczenie: 1000,
+	doswiadczenie: 1000000,
 	odblokowanePoziomy: 1,
 	aktualnyPoziom: 1,
     phi: 180*Math.PI/180,
@@ -868,6 +908,9 @@ var statekGracza = {
     },
     porusz : function(jak) {
 		statekGracza.naPlanecie=0;
+		myszKlik.rusz=false;
+		mysz.rusz=false;
+		mysz.statek=false;
         switch (jak) {
             case "doPrzodu" :
                 this.vx=this.vx-Math.sin(this.phi);
@@ -1846,7 +1889,9 @@ var pasekMenu = {
 				c.lineTo(window.innerWidth/2,this.odradzanieY+5);
 				c.stroke();
 				c.beginPath();
-				this.odradzaniePhi=this.odradzaniePhi+(Math.PI*2/(statekGracza.czasOdrodzenia)*szybkoscOdswiezania)
+				if(this.odradzaniePhi<(Math.PI*2-0.3)){
+					this.odradzaniePhi=this.odradzaniePhi+(Math.PI*2/(statekGracza.czasOdrodzenia)*szybkoscOdswiezania)
+				}
 				c.arc(window.innerWidth/2,this.odradzanieY,10,0,this.odradzaniePhi,true);
 				c.stroke();
 			}
@@ -1859,7 +1904,7 @@ var ulepszenieBron = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 100,
+	y: window.innerHeight/7,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1868,11 +1913,11 @@ var ulepszenieBron = {
 				c.font = "20px Arial";
 				c.fillText("NOWA BRON",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieBron===1){
-					c.fillText(cenyGra.ulepszenieBron1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieBron1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieBron===2){
-					c.fillText(cenyGra.ulepszenieBron2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieBron2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieBron===3){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -1892,7 +1937,7 @@ var ulepszenieCzas = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 150,
+	y: ulepszenieBron.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1901,13 +1946,13 @@ var ulepszenieCzas = {
 				c.font = "20px Arial";
 				c.fillText("KROTSZY CZAS ODRADZANIA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieCzas===1){
-					c.fillText(cenyGra.ulepszenieCzas1,this.x-8,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===2){
-					c.fillText(cenyGra.ulepszenieCzas2,this.x-8,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===3){
-					c.fillText(cenyGra.ulepszenieCzas3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieCzas3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieCzas===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -1929,7 +1974,7 @@ var ulepszenieKoszt = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 200,
+	y: ulepszenieCzas.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1938,15 +1983,15 @@ var ulepszenieKoszt = {
 				c.font = "20px Arial";
 				c.fillText("NIZSZY KOSZT ZAKUPU JEDNOSTEK",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieKoszt===1){
-					c.fillText(cenyGra.ulepszenieKoszt1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===2){
-					c.fillText(cenyGra.ulepszenieKoszt2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===3){
-					c.fillText(cenyGra.ulepszenieKoszt3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===4){
-					c.fillText(cenyGra.ulepszenieKoszt4,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKoszt4,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKoszt===5){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -1970,7 +2015,7 @@ var ulepszenieKule = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 250,
+	y: ulepszenieKoszt.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -1979,17 +2024,17 @@ var ulepszenieKule = {
 				c.font = "20px Arial";
 				c.fillText("WIECEJ AMUNICJI I WIEKSZE OBRAZENIA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieKule===1){
-					c.fillText(cenyGra.ulepszenieKule1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===2){
-					c.fillText(cenyGra.ulepszenieKule2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===3){
-					c.fillText(cenyGra.ulepszenieKule3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===4){
-					c.fillText(cenyGra.ulepszenieKule4,this.x-15,this.y-10); 
+					c.fillText(cenyGra.ulepszenieKule4,this.x-50,this.y+17.5); 
 				} else if(statekGracza.poziomUlepszenieKule===5){
-					c.fillText(cenyGra.ulepszenieKule5,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieKule5,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieKule===6){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2015,7 +2060,7 @@ var ulepszeniePredkosc = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 300,
+	y: ulepszenieKule.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2024,13 +2069,13 @@ var ulepszeniePredkosc = {
 				c.font = "20px Arial";
 				c.fillText("KROTSZY CZAS PRZELADOWANIA I TRYB AUTO",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszeniePredkosc===1){
-					c.fillText(cenyGra.ulepszeniePredkosc1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===2){
-					c.fillText(cenyGra.ulepszeniePredkosc2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===3){
-					c.fillText(cenyGra.ulepszeniePredkosc3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszeniePredkosc3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszeniePredkosc===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2052,7 +2097,7 @@ var ulepszenieZasieg = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 350,
+	y: ulepszeniePredkosc.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2061,15 +2106,15 @@ var ulepszenieZasieg = {
 				c.font = "20px Arial";
 				c.fillText("WIEKSZY ZASIEG STATKU GRACZA",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieZasieg===1){
-					c.fillText(cenyGra.ulepszenieZasieg1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===2){
-					c.fillText(cenyGra.ulepszenieZasieg2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===3){
-					c.fillText(cenyGra.ulepszenieZasieg3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===4){
-					c.fillText(cenyGra.ulepszenieZasieg4,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZasieg4,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZasieg===5){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2093,7 +2138,7 @@ var ulepszenieZycie = {
 	widocznosc: true,
 	r: 20,
 	x: 100,
-	y: 400,
+	y: ulepszenieZasieg.y+window.innerHeight/9,
 	obr:  new Image(20,20),
 	rysuj: function(){
 		if(this.widocznosc){
@@ -2102,13 +2147,13 @@ var ulepszenieZycie = {
 				c.font = "20px Arial";
 				c.fillText("WIECEJ ZYCIA I SZYBSZE LECZENIE",this.x+25,this.y+17.5);
 				if(statekGracza.poziomUlepszenieZycie===1){
-					c.fillText(cenyGra.ulepszenieZycie1,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie1,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===2){
-					c.fillText(cenyGra.ulepszenieZycie2,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie2,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===3){
-					c.fillText(cenyGra.ulepszenieZycie3,this.x-15,this.y-10);
+					c.fillText(cenyGra.ulepszenieZycie3,this.x-50,this.y+17.5);
 				} else if(statekGracza.poziomUlepszenieZycie===4){
-					c.fillText("MAX",this.x-12,this.y-10);
+					c.fillText("MAX",this.x-50,this.y+17.5);
 				}
 				c.globalAlpha=1;
 			}
@@ -2125,4 +2170,3 @@ var ulepszenieZycie = {
 		}
 	}
 }
-
