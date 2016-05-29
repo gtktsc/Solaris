@@ -16,6 +16,57 @@ var fizyka = {
 		}
 
 	},
+	zaznaczenie(){
+		if(!mysz.statek){
+			if(!ekran.pauza && ekran.gra && ekran.zaznaczenieGracza){
+				c.beginPath();
+				c.moveTo(ekran.zaznaczenieGraczaX1,ekran.zaznaczenieGraczaY1);
+				c.lineTo(ekran.zaznaczenieGraczaX1,ekran.zaznaczenieGraczaY2);
+				c.lineTo(ekran.zaznaczenieGraczaX2,ekran.zaznaczenieGraczaY2);
+				c.lineTo(ekran.zaznaczenieGraczaX2,ekran.zaznaczenieGraczaY1);
+				c.lineTo(ekran.zaznaczenieGraczaX1,ekran.zaznaczenieGraczaY1);
+				c.stroke();
+				if(ekran.zaznaczenieGraczaSprawdz){
+							console.log("sprawdzam")
+					ekran.zaznaczenieGraczaSprawdz=false;
+					ekran.zaznaczenieGracza=false;
+					if(ekran.zaznaczenieGraczaX1<ekran.zaznaczenieGraczaX2){
+						if(ekran.zaznaczenieGraczaY1<ekran.zaznaczenieGraczaY2){
+							if(statekGracza.x>ekran.zaznaczenieGraczaX1 &&
+							   statekGracza.x<ekran.zaznaczenieGraczaX2 &&
+							   statekGracza.y>ekran.zaznaczenieGraczaY1 &&
+							   statekGracza.y<ekran.zaznaczenieGraczaY2  ){
+								   mysz.statek=true
+							   }
+						}else{
+							if(statekGracza.x>ekran.zaznaczenieGraczaX1 &&
+							   statekGracza.x<ekran.zaznaczenieGraczaX2 &&
+							   statekGracza.y>ekran.zaznaczenieGraczaY2 &&
+							   statekGracza.y<ekran.zaznaczenieGraczaY1  ){
+								   mysz.statek=true
+							   }
+						}
+					}else{
+						if(ekran.zaznaczenieGraczaY1<ekran.zaznaczenieGraczaY2){
+							if(statekGracza.x<ekran.zaznaczenieGraczaX1 &&
+							   statekGracza.x>ekran.zaznaczenieGraczaX2 &&
+							   statekGracza.y>ekran.zaznaczenieGraczaY1 &&
+							   statekGracza.y<ekran.zaznaczenieGraczaY2  ){
+								   mysz.statek=true
+							   }
+						}else{
+							if(statekGracza.x<ekran.zaznaczenieGraczaX1 &&
+							   statekGracza.x>ekran.zaznaczenieGraczaX2 &&
+							   statekGracza.y>ekran.zaznaczenieGraczaY2 &&
+							   statekGracza.y<ekran.zaznaczenieGraczaY1  ){
+								   mysz.statek=true
+							   }
+						}
+					}
+				}
+			};
+		};
+	},
 	nieDotykaMenu(){
 		if(!fizyka.klikniecie(mysz,menuBudowaniaNaziemne)&&
 		!fizyka.klikniecie(mysz,menuBudowaniaNaziemneWiecej)&&
@@ -515,6 +566,7 @@ var fizyka = {
         fizyka.naziemni();
 		fizyka.statekGracza();
         c.clearRect(0,0,window.innerWidth,window.innerHeight);
+
 		pasekMenu.rysuj();
         fizyka.brzegOkna(statekGracza);
 		menuBudowaniaSpowalniacz.rysuj()
@@ -540,7 +592,7 @@ var fizyka = {
         fizyka.rysuj(przeciwnicy);
 		fizyka.spowalniacze();
 		fizyka.rysuj(satelity);
-
+		fizyka.zaznaczenie();
     },
 	odswiezEkranMenu(){
         c.clearRect(0,0,window.innerWidth,window.innerHeight);
@@ -979,12 +1031,18 @@ var ekran ={
 	budowanie: false,
 	gra: false,
 	menu: true,
+	zaznaczenieGracza: false,
+	zaznaczenieGraczaSprawdz: false,
 	przejdzDoOkna: false,
 	ulepszenie: false,
 	falaNumer: 1,
 	liczbaPrzeciwnikow: 1,
 	obrazeniaPrzeciwnikow: 1,
 	liczbaFal: 1,
+	zaznaczenieGraczaX1: -100,
+	zaznaczenieGraczaY1: -100,
+	zaznaczenieGraczaX2: -100,
+	zaznaczenieGraczaY2: -100,
 };
 var menuBudowaniaSpowalniacz ={
 	x: 0,

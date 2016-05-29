@@ -1,6 +1,11 @@
 window.addEventListener('mousemove',function(event) {
         mysz.x=event.clientX-6;
         mysz.y=event.clientY-6;
+	if(ekran.zaznaczenieGracza){
+		ekran.zaznaczenieGraczaX2=mysz.x;
+		ekran.zaznaczenieGraczaY2=mysz.y;
+	}
+
 },false);
 window.addEventListener('click', function(){
 if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
@@ -290,18 +295,33 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 }
 }, false);
 window.addEventListener('mousedown',function(event){
+	ekran.zaznaczenieGraczaSprawdz=false;
 if(ekran.gra){
+
 	fizyka.atakPoKliknieciu();
 	if(!ekran.pauza && ekran.gra && !mysz.statek){
 		mysz.ciagly=true;
+
+	}
+	if(!ekran.pauza && ekran.gra &&!mysz.atakuj){
+		ekran.zaznaczenieGraczaX1=mysz.x;
+		ekran.zaznaczenieGraczaY1=mysz.y;
+		ekran.zaznaczenieGraczaX2=mysz.x;
+		ekran.zaznaczenieGraczaY2=mysz.y;
+		ekran.zaznaczenieGracza=true;
 	}
 }
 });
 window.addEventListener('mouseup',function(event){
 if(ekran.gra){
+
     mysz.atakuj=false;
     mysz.ciagly=false;
     mysz.pojedynczy=false;
+	if(ekran.zaznaczenieGracza){
+		ekran.zaznaczenieGraczaSprawdz=true;
+	}
+
 }
 })
 window.addEventListener('keydown', function(event) {
