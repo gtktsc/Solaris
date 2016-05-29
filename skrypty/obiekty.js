@@ -63,6 +63,9 @@ var fizyka = {
 							   }
 						}
 					}
+					if(mysz.statek){
+						statekGracza.naPlanecie=0;
+					}
 				}
 			};
 		};
