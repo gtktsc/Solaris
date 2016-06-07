@@ -18,7 +18,7 @@ function menu() {
 			ekran.mysz="budowanie";
 			c.font = "30px Arial";
 			c.globalAlpha=0.4;
-			c.fillText("Ulepszenie",S.x-70,S.y-35);
+			c.fillText("Ulepszenie",S.x-70,S.y-S.r);
 			c.globalAlpha=1;
 		} else {
 			ekran.mysz="tlo";

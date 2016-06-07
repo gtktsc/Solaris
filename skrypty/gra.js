@@ -34,14 +34,14 @@ function gra() {
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Budowanie",S.x-70,S.y-35);
+					c.fillText("Budowanie",S.x-70,S.y-S.r);
 					c.globalAlpha=1;
 				}else {
 					ekran.mysz="budowanie";
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Gra",S.x-25,S.y-35);
+					c.fillText("Gra",S.x-25,S.y-S.r);
 					c.globalAlpha=1;
 				}
 

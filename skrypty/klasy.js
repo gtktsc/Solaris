@@ -13,20 +13,25 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
     this.vyOld=predkoscY;
 	this.predkoscSamoNapro=5;
     this.kolor=kolor;
+    this.rodzaj=kolor;
     this.obrazenia=10;
     this.widocznosc = false;
     if (this.kolor==='red') {
-        this.kolor='#FF0000';
-    } else if (this.kolor==='green') {
-        this.kolor='#00FF00';
+        this.kolor='#ec008c';
+        this.rodzaj="prosty"
+    } else if (this.kolor==='green') { //teraz bedzie zolty
+        this.kolor='#fff200';
+        this.rodzaj="slonce"
     } else if (this.kolor==='grey'){
-		this.kolor='#BDBDBD';
+		this.kolor='#231f20';
+		this.rodzaj="naprowadzanie"
 	} else {
-        this.kolor='#0000FF';
+        this.kolor='#00aeef';
+        this.rodzaj='planety';
     };
     this.rysuj = function() {
         if (this.widocznosc) {
-			if((this.kolor==='#BDBDBD' || this.kolor==='grey')&&!ekran.pauza){
+			if((this.rodzaj==='naprowadzanie')&&!ekran.pauza){
                 fizyka.kierunekDoObiektu1(przeciwnicy[this.cel],this);
 				this.vx=-Math.sin(this.phi)*this.predkoscSamoNapro*this.predkoscMnoznik;
 				this.vy=-Math.cos(this.phi)*this.predkoscSamoNapro*this.predkoscMnoznik;
@@ -37,7 +42,7 @@ function Pocisk(wspolrzednaX,wspolrzednaY,promien,predkoscX,predkoscY,kolor) {
             c.fillStyle = this.kolor;
             c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
             c.fill();
-            c.stroke();
+            //c.stroke();
             if (this.x<-5 || this.y<-5 || this.x>window.innerWidth || this.y>window.innerHeight) {
                 this.widocznosc = false;
             };
@@ -60,6 +65,7 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
 	this.obecnyWahadlowiec = false;
 	this.obecnyWahadlowiecWiecej = 0;	
 	this.obecnyWahadlowiecLepiej = 0;
+    this.kolor=Math.random();
     this.R = odlegloscR;
 	this.statekNaPlanecie=false;
     this.phi = katObrotu*Math.random();
@@ -85,11 +91,18 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
 				c.globalAlpha=1;
 			}
         this.teta=this.teta+this.v*(Math.PI/180);
-        this.x=window.innerWidth/2+this.R*Math.cos(this.teta);
-        this.y=window.innerHeight/2+this.R*Math.sin(this.teta);
+        this.x=S.x+this.R*Math.cos(this.teta);
+        this.y=S.y+this.R*Math.sin(this.teta);
         c.beginPath();
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
-        c.stroke();
+        if(this.kolor>=0.5){
+            c.fillStyle="#0099ff";
+        }else{
+            c.fillStyle="#ec008c";
+        };
+        c.fill();
+        c.fillStyle="black";
+        //c.stroke();
     };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
@@ -129,6 +142,10 @@ function Naziemne(obrazenia,rodzic) {
     };
 };
 function Wahadlowiec(obrazenia,rodzic) {
+    this.srodekX=S.x;
+    this.srodekY=S.y;
+    this.przesuniecieX=0;
+    this.przesuniecieY=0;
     this.r = 3;
 	this.cel = 0;
 	this.rodzicNumer = 0;
@@ -160,11 +177,19 @@ function Wahadlowiec(obrazenia,rodzic) {
         pocisk.vy=-Math.cos(this.phi)*this.predkoscPocisku;
     }
     this.rysuj = function() {
+        if(this.srodekX!=S.x){
+            this.przesuniecieX=this.srodekX-S.x;
+            this.x=this.x-this.przesuniecieX;
+        };
+        if(this.srodekY!=S.y){
+            this.przesuniecieY=this.srodekY-S.y;
+            this.y=this.y-this.przesuniecieY;
+        };
 		if(this.widocznosc){
 			if (!ekran.pauza){	
 				this.tetaRodzic=this.tetaRodzic+this.vRodzic*(Math.PI/180);
-				this.xRodzic=window.innerWidth/2+this.RduzeRodzic*Math.cos(this.tetaRodzic);
-				this.yRodzic=window.innerHeight/2+this.RduzeRodzic*Math.sin(this.tetaRodzic);
+				this.xRodzic=S.x+this.RduzeRodzic*Math.cos(this.tetaRodzic);
+				this.yRodzic=S.y+this.RduzeRodzic*Math.sin(this.tetaRodzic);
 				this.teta=this.teta+this.v*(Math.PI/180);
 				this.x=this.xRodzic+this.R*Math.cos(this.teta);
 				this.y=this.yRodzic+this.R*Math.sin(this.teta);
@@ -186,6 +211,10 @@ function Wahadlowiec(obrazenia,rodzic) {
     };
 };
 function Spowalniacz(obrazenia) {
+    this.srodekX=S.x;
+    this.srodekY=S.y;
+    this.przesuniecieX=0;
+    this.przesuniecieY=0;
     this.r = 2;
 	this.x = -10;
 	this.y = -10;
@@ -198,6 +227,16 @@ function Spowalniacz(obrazenia) {
     this.widocznosc=false;
     this.rusz=false;
     this.rysuj = function() {
+        if(this.srodekX!=S.x){
+            this.przesuniecieX=this.srodekX-S.x;
+            this.x=this.x-this.przesuniecieX;
+        };
+        if(this.srodekY!=S.y){
+            this.przesuniecieY=this.srodekY-S.y;
+            this.y=this.y-this.przesuniecieY;
+        };
+        this.srodekX=S.x;
+        this.srodekY=S.y;
 		if(this.widocznosc){
 			if(menuBudowaniaSpowalniacz.rusz && this.rusz && ekran.budowanie){
 				this.x = mysz.x;
@@ -224,6 +263,10 @@ function Spowalniacz(obrazenia) {
     };
 };
 function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
+    this.srodekX=S.x;
+    this.srodekY=S.y;
+    this.przesuniecieX=0;
+    this.przesuniecieY=0;
     this.r = 3;
 	this.rodzicNumer = 0;
 	this.x = wspolrzednaX;
@@ -245,6 +288,14 @@ function Satelita(wspolrzednaX,wspolrzednaY,predkoscObiegu) {
 	this.obrazenia=10;
 	this.predkoscPocisku=5;
     this.rysuj = function() {
+        if(this.srodekX!=S.x){
+            this.przesuniecieX=this.srodekX-S.x;
+            this.x=this.x-this.przesuniecieX;
+        };
+        if(this.srodekY!=S.y){
+            this.przesuniecieY=this.srodekY-S.y;
+            this.y=this.y-this.przesuniecieY;
+        };
 		if(!ekran.pauza){
 			this.teta=this.teta+this.v*(Math.PI/180);
 			this.x=S.x+this.R*Math.cos(this.teta);
@@ -288,7 +339,7 @@ function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu
         if (this.widocznosc) {
 			c.globalAlpha=0.2;
             c.beginPath();
-            c.arc(window.innerWidth/2,window.innerHeight/2,this.R,0,Math.PI*2,true);
+            c.arc(S.x,S.y,this.R,0,Math.PI*2,true);
             c.stroke();
 			c.globalAlpha=1;
         };
@@ -298,14 +349,38 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.r = promien;
     this.height = promien*2;
     this.width = promien*2;
-    this.x = wspolrzednaX;
-    this.y = wspolrzednaY;
+    this.x = wspolrzednaX+15;
+    this.y = wspolrzednaY+20;
 	this.widocznosc = true;
     this.g = stalaGrawitacyjna;
     this.rysuj = function() {
+        if(ekran.gra){
+            if(mysz.x<50){
+                this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100+100;
+                this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100;
+            } else if(mysz.x>window.innerWidth-50){
+                this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100-100;
+                this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100;
+            } else if(mysz.y>window.innerHeight-50){
+                this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100;
+                this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100-100;
+            } else if(mysz.y<50){
+                this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100;
+                this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100+100;
+            } else {
+                this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100;
+                this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100;
+            };
+        } else {
+            this.x = Math.floor((window.innerWidth/2+S.r*2)/100)*100;
+            this.y = Math.floor((window.innerHeight/2+S.r*2)/100)*100;
+        };
         c.beginPath();
-        c.arc(window.innerWidth/2,window.innerHeight/2,this.r,0,Math.PI*2,true);
-        c.stroke();
+        c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+        c.fillStyle="#fff200";
+        c.fill();
+        c.fillStyle="black";
+        //c.stroke();
     };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
@@ -318,6 +393,10 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     };
 };
 function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
+    this.srodekX=S.x;
+    this.srodekY=S.y;
+    this.przesuniecieX=0;
+    this.przesuniecieY=0;
     this.r = 2;
     this.x =wspolrzednaX+Math.random()*100-5;
     this.y =wspolrzednaY+Math.random()*100-5;
@@ -330,6 +409,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.vxOld=this.vx;
     this.vyOld=this.vy;
     this.kolor=kolor;
+    this.rodzaj=kolor;
     this.zycie = 100;
     this.obrazenia = obrazenia*Math.random();
     this.widocznosc = true;
@@ -338,13 +418,26 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.cel=1;
     this.odlegloscDoCelu=300;
     if (this.kolor==='red') {
-        this.kolor='#FF0000';
+        this.kolor='#ec008c';
+        this.rodzaj="planety";
     }else if (this.kolor==='green') {
-        this.kolor='#00FF00';
+        this.kolor='#fff200';
+        this.rodzaj="gracz";
     }else {
-        this.kolor='#0000FF';
+        this.kolor='#00aeef';
+        this.rodzaj="punkt";
     };
 	this.rysuj = function() {
+        if(this.srodekX!=S.x){
+            this.przesuniecieX=this.srodekX-S.x;
+            this.x=this.x-this.przesuniecieX;
+        };
+        if(this.srodekY!=S.y){
+            this.przesuniecieY=this.srodekY-S.y;
+            this.y=this.y-this.przesuniecieY;
+        };
+        this.srodekX=S.x;
+        this.srodekY=S.y;
 			if(fizyka.odleglosc(mysz.x,mysz.y,this.x,this.y)<20){
 				c.globalAlpha=0.2;
 				c.font = "18px Arial";
@@ -385,11 +478,12 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
         c.lineTo(this.x-5,this.y+5);
         c.lineTo(this.x,this.y-5);
         c.fill();
-        c.stroke();
+        //c.stroke();
         c.restore();
 		c.globalAlpha=1;
             if(this.x<-200||this.y<-200||this.x>window.innerWidth+200||this.y>window.innerHeight+200){
                 this.widocznosc = false;
+                this.zycie = -10;
             };
         };
     };
