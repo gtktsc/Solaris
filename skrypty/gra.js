@@ -13,6 +13,20 @@ function gra() {
 					mysz.rusz=false;
 					mysz.statek=false;
 				};
+				if(myszKlik.rusz){
+					if(myszKlik.srodekX!=S.x){
+						myszKlik.przesuniecieX=myszKlik.srodekX-S.x;
+						myszKlik.x=myszKlik.x-myszKlik.przesuniecieX;
+					};
+					if(myszKlik.srodekY!=S.y){
+						myszKlik.przesuniecieY=myszKlik.srodekY-S.y;
+						myszKlik.y=myszKlik.y-myszKlik.przesuniecieY;
+					};
+						myszKlik.srodekX=S.x;
+					myszKlik.srodekY=S.y;
+					myszKlik.przesuniecieX=0;
+					myszKlik.przesuniecieY=0;
+				};
 				if(myszKlik.rusz===true && fizyka.klikniecie(myszKlik,statekGracza)){
 					statekGracza.vx=0;
 					statekGracza.vy=0;
