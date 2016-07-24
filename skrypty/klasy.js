@@ -208,13 +208,12 @@ function Naziemne(obrazenia,rodzic) {
 				c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 				c.stroke();
 			}
-            c.globalAlpha=0.2;
+            c.globalAlpha=0.1;
 			this.x = rodzic.x;
 			this.y = rodzic.y;
 			c.beginPath();
             c.strokeStyle='#0288ba';
 			c.fillStyle='#00aeef';
-			c.fillStyle="black";
 			c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 			c.fill();
 			c.stroke();
@@ -279,6 +278,8 @@ function Wahadlowiec(obrazenia,rodzic) {
 				this.x=this.xRodzic+this.R*Math.cos(this.teta);
 				this.y=this.yRodzic+this.R*Math.sin(this.teta);
 			}
+                        c.strokeStyle='#0288ba';
+			c.fillStyle='#00aeef';
 			c.save();
             c.translate((this.x),(this.y));
             c.rotate(-this.phi);
@@ -292,6 +293,8 @@ function Wahadlowiec(obrazenia,rodzic) {
             c.fill();
             c.stroke();
             c.restore();
+                        c.strokeStyle='black';
+			c.fillStyle='black';
 		}
     };
 };
@@ -334,6 +337,7 @@ function Spowalniacz(obrazenia) {
 				c.stroke();
 				c.globalAlpha=1;
 			}
+                                    c.strokeStyle='#0288ba';
 			c.beginPath();
 			c.fillStyle="black";
 			c.moveTo(this.x-5,this.y-5);
@@ -343,6 +347,8 @@ function Spowalniacz(obrazenia) {
 			c.lineTo(this.x-5,this.y-5);
 			c.fill();
 			c.stroke();
+                                    c.strokeStyle='black';
+			c.fillStyle='black';
 			
 		}
     };
@@ -595,7 +601,10 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
 			c.globalAlpha=0.5;
 		}
         if(this.atakuje){
-
+            c.beginPath();
+			c.fillStyle='#cc0033';
+			c.arc(this.x,this.y,this.r*4+Math.random()*4,0,Math.PI*2,true); ///tutaj efekt wymysl   
+			c.fill();
         	this.v=0.5;
 		} else {
 			this.v=this.vOld

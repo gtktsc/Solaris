@@ -504,6 +504,7 @@ var fizyka = {
 					planety[przeciwnicy[i].cel].r = planety[przeciwnicy[i].cel].r*(0.9998);    //trzeba okreslic elegancki sposob na to
 				}else if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].rodzaj==='gracz'){
 					statekGracza.zycie=statekGracza.zycie-przeciwnicy[i].obrazenia;
+					przeciwnicy[i].atakuje=true;
 				} else {
 					przeciwnicy[i].atakuje=false;
 				}
