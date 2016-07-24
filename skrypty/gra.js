@@ -13,6 +13,20 @@ function gra() {
 					mysz.rusz=false;
 					mysz.statek=false;
 				};
+				if(myszKlik.rusz){
+					if(myszKlik.srodekX!=S.x){
+						myszKlik.przesuniecieX=myszKlik.srodekX-S.x;
+						myszKlik.x=myszKlik.x-myszKlik.przesuniecieX;
+					};
+					if(myszKlik.srodekY!=S.y){
+						myszKlik.przesuniecieY=myszKlik.srodekY-S.y;
+						myszKlik.y=myszKlik.y-myszKlik.przesuniecieY;
+					};
+						myszKlik.srodekX=S.x;
+					myszKlik.srodekY=S.y;
+					myszKlik.przesuniecieX=0;
+					myszKlik.przesuniecieY=0;
+				};
 				if(myszKlik.rusz===true && fizyka.klikniecie(myszKlik,statekGracza)){
 					statekGracza.vx=0;
 					statekGracza.vy=0;
@@ -28,20 +42,21 @@ function gra() {
 				};
 			};
 			fizyka.odswiezEkranGry();
+
 			if(fizyka.klikniecie(mysz,S) && (ekran.mysz=="tlo" ||ekran.mysz=="budowanie") && fizyka.nieDotykaMenu()){
 				if(!ekran.pauza){
 					ekran.mysz="budowanie";
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Budowanie",S.x-70,S.y-S.r);
+					c.fillText("Budowanie",S.x-70,S.y-S.r-10);
 					c.globalAlpha=1;
 				}else {
 					ekran.mysz="budowanie";
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Gra",S.x-25,S.y-S.r);
+					c.fillText("Gra",S.x-25,S.y-S.r-10);
 					c.globalAlpha=1;
 				}
 

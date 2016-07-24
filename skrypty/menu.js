@@ -18,7 +18,7 @@ function menu() {
 			ekran.mysz="budowanie";
 			c.font = "30px Arial";
 			c.globalAlpha=0.4;
-			c.fillText("Ulepszenie",S.x-70,S.y-S.r);
+			c.fillText("Ulepszenie",S.x-70,S.y-S.r-10);
 			c.globalAlpha=1;
 		} else {
 			ekran.mysz="tlo";
@@ -32,7 +32,7 @@ function menu() {
 					} else if(fizyka.klikniecie(mysz,poziomy[i]) && poziomy[i].r===30){
 						c.font = "30px Arial";
 						c.globalAlpha=0.4;
-						c.fillText("Poziom"+" "+i,poziomy[i].x-60,poziomy[i].y-35);
+						c.fillText("Poziom"+" "+i,poziomy[i].x-60,poziomy[i].y-35-10);
 						c.globalAlpha=1;
 					}
 				}

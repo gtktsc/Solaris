@@ -8,6 +8,21 @@ window.addEventListener('mousemove',function(event) {
 
 },false);
 window.addEventListener('click', function(){
+if(fizyka.klikniecieProstokat(mysz,mapa) && fizyka.nieDotykaMenu()){
+	S.x=(mapa.x-mysz.x)/mapa.stosunekX+window.innerWidth*1.4;
+	S.y=(mapa.y-mysz.y)/mapa.stosunekY+window.innerHeight*2;
+
+
+
+
+
+
+
+
+
+
+
+};
 if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
     if(!ekran.pauza && !statekGracza.odradzanie){
 		if(!mysz.statek){
