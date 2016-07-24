@@ -2221,6 +2221,7 @@ var pasekMenu = {
 			c.globalAlpha=this.alpha*2;
 			if(ekran.gra){
 				c.fillText("Energia"+"   "+ekran.energia+"   "+Math.floor(statekGracza.zycie),10,20);
+				c.fillText("Poziom"+"   "+ekran.falaNumer+" /  "+ekran.liczbaFal,900,20);
 			for(i in planety){
 				c.fillText("   "+Math.floor(planety[i].zycie)+"%",200+i*80,20);
 			};
@@ -2529,8 +2530,7 @@ var mapa = {
 		if(ekran.gra){
 			this.szerokoscObszaru= this.szerokosc/5;
 			this.wysokoscObszaru= this.wysokosc/5;
-//			this.stosunekX=this.szerokosc/(2000+window.innerWidth/2);
-//			this.stosunekY=this.wysokosc/(2000+window.innerHeight/2);
+
 			this.stosunekX=this.szerokosc/(2000);
 			this.stosunekY=this.wysokosc/(2000);
 			this.stosunekObszarX=this.szerokoscObszaru/window.innerWidth;
