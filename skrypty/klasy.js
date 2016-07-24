@@ -192,7 +192,7 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     };
 };
 function Naziemne(obrazenia,rodzic) {
-    this.r = 3;
+    this.r = 10;
 	this.rodzicNumer = 0;
 	this.poziomWiecej = 0;
 	this.poziomLepiej = 0;
@@ -208,13 +208,17 @@ function Naziemne(obrazenia,rodzic) {
 				c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 				c.stroke();
 			}
+            c.globalAlpha=0.2;
 			this.x = rodzic.x;
 			this.y = rodzic.y;
 			c.beginPath();
+            c.strokeStyle='#0288ba';
+			c.fillStyle='#00aeef';
 			c.fillStyle="black";
-			c.arc(this.x,this.y,3,0,Math.PI*2,true);
+			c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 			c.fill();
 			c.stroke();
+            c.globalAlpha=1;
 		}
     };
 };
@@ -526,6 +530,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.vx=0;
     this.vy=0;
 	this.zasiegSpowalniacza=false;
+	this.atakuje=false;
 	this.zasiegSatelityWiecej=false;
     this.v=2 + (Math.random()/10);
     this.vOld=this.v;
@@ -588,6 +593,12 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
 		};
 		if(this.zasiegSatelityWiecej){
 			c.globalAlpha=0.5;
+		}
+        if(this.atakuje){
+
+        	this.v=0.5;
+		} else {
+			this.v=this.vOld
 		}
         c.beginPath();
         c.fillStyle = this.kolor;

@@ -9,6 +9,7 @@ window.addEventListener('mousemove',function(event) {
 },false);
 window.addEventListener('click', function(){
 if(fizyka.klikniecieProstokat(mysz,mapa) && fizyka.nieDotykaMenu()){
+
 	S.x=(mapa.x+mapa.szerokosc/2-mysz.x)/mapa.stosunekX+window.innerWidth/2;
 	S.y=(mapa.y+mapa.wysokosc/2-mysz.y)/mapa.stosunekY+window.innerHeight/2;
 };
@@ -158,13 +159,13 @@ if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
 						planety[menuBudowaniaNaziemne.rodzic].obecnaNaziemnaLepiej=1;
 						naziemni[x].poziomLepiej=1;
 						naziemni[x].obrazenia=naziemni[x].obrazenia+0.5;
-						naziemni[x].r=naziemni[x].r+15;
+						naziemni[x].r=naziemni[x].r+25;
 						ekran.energia=ekran.energia-cenyGra.menuBudowaniaNaziemneLepiej1;
 					} else if(naziemni[x].poziomLepiej===1 && ekran.energia>=cenyGra.menuBudowaniaNaziemneLepiej2){
 						planety[menuBudowaniaNaziemne.rodzic].obecnaNaziemnaLepiej=2;
 						naziemni[x].poziomLepiej=2;
 						naziemni[x].obrazenia=naziemni[x].obrazenia+0.5;
-						naziemni[x].r=naziemni[x].r+15;
+						naziemni[x].r=naziemni[x].r+25;
 						ekran.energia=ekran.energia-cenyGra.menuBudowaniaNaziemneLepiej2;
 					}
 				}

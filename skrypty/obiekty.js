@@ -499,12 +499,14 @@ var fizyka = {
 					}
 				};
 				if(fizyka.dwaCiala(przeciwnicy[i],planety[przeciwnicy[i].cel])){
+					przeciwnicy[i].atakuje=true;
 					planety[przeciwnicy[i].cel].zycie=planety[przeciwnicy[i].cel].zycie-przeciwnicy[i].obrazenia;
 					planety[przeciwnicy[i].cel].r = planety[przeciwnicy[i].cel].r*(0.9998);    //trzeba okreslic elegancki sposob na to
-				};
-				if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].rodzaj==='gracz'){
+				}else if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].rodzaj==='gracz'){
 					statekGracza.zycie=statekGracza.zycie-przeciwnicy[i].obrazenia;
-				};
+				} else {
+					przeciwnicy[i].atakuje=false;
+				}
 				if(i>3 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
 					przeciwnicy[i].x=przeciwnicy[i].x+(Math.random()/2);
 					przeciwnicy[i].y=przeciwnicy[i].y+(Math.random()/2);
@@ -701,8 +703,8 @@ var fizyka = {
 				fizyka.szybkoscAnimacji('stop');
 				ekran.menu=true;
 				ekran.gra=false;
-				S.szerokoscMapy=window.innerWidth/2;
-				S.wysokoscMapy=window.innerHeight/2;
+				S.szerokoscMapy=window.innerWidth;
+				S.wysokoscMapy=window.innerHeight;
 				S.x=S.xSrodek;
 				S.y=S.ySrodek;
 			} else {
@@ -761,8 +763,8 @@ var fizyka = {
 				fizyka.szybkoscAnimacji('stop');
 				ekran.menu=true;
 				ekran.gra=false;
-				S.szerokoscMapy=window.innerWidth/2;
-				S.wysokoscMapy=window.innerHeight/2;
+				S.szerokoscMapy=window.innerWidth;
+				S.wysokoscMapy=window.innerHeight;
 				S.x=S.xSrodek;
 				S.y=S.ySrodek;
 			}
@@ -1032,11 +1034,16 @@ var statekGracza = {
 				c.arc(this.x,this.y,20,0,Math.PI*2,true);
 				c.stroke();
 				c.fill();
-				//c.fillStyle='#ec008c';
-				//c.beginPath();
-				//c.arc(this.x,this.y,15,0,Math.PI*2,true);
-				//c.stroke();
-				//c.fill();
+				c.globalAlpha=1;
+			};
+			if(statekGracza.naPlanecie!=0){
+				c.globalAlpha=0.2;
+				c.strokeStyle='#0288ba';
+				c.fillStyle='#00aeef';
+				c.beginPath();
+				c.arc(this.x,this.y,planety[statekGracza.naPlanecie].r+10,0,Math.PI*2,true);
+				c.stroke();
+				c.fill();
 				c.globalAlpha=1;
 			};
 			c.save();
