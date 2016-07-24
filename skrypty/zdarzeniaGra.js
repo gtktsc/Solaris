@@ -9,8 +9,8 @@ window.addEventListener('mousemove',function(event) {
 },false);
 window.addEventListener('click', function(){
 if(fizyka.klikniecieProstokat(mysz,mapa) && fizyka.nieDotykaMenu()){
-	S.x=(mapa.x-mysz.x)/mapa.stosunekX+window.innerWidth*1.5;
-	S.y=(mapa.y-mysz.y)/mapa.stosunekY+window.innerHeight*2;
+	S.x=(mapa.x+mapa.szerokosc/2-mysz.x)/mapa.stosunekX+window.innerWidth/2;
+	S.y=(mapa.y+mapa.wysokosc/2-mysz.y)/mapa.stosunekY+window.innerHeight/2;
 };
 if(ekran.gra && menuBudowaniaSpowalniacz.rusz===false){
     if(!ekran.pauza && !statekGracza.odradzanie){

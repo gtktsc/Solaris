@@ -178,6 +178,8 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
             c.lineWidth = 3;
             c.stroke();
         }
+        c.strokeStyle = 'black';
+        c.lineWidth = 1,5;
     };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
