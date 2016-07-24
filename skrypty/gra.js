@@ -42,20 +42,21 @@ function gra() {
 				};
 			};
 			fizyka.odswiezEkranGry();
+
 			if(fizyka.klikniecie(mysz,S) && (ekran.mysz=="tlo" ||ekran.mysz=="budowanie") && fizyka.nieDotykaMenu()){
 				if(!ekran.pauza){
 					ekran.mysz="budowanie";
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Budowanie",S.x-70,S.y-S.r);
+					c.fillText("Budowanie",S.x-70,S.y-S.r-10);
 					c.globalAlpha=1;
 				}else {
 					ekran.mysz="budowanie";
 					c.fillStyle = "black";
 					c.font = "30px Arial";
 					c.globalAlpha=0.4;
-					c.fillText("Gra",S.x-25,S.y-S.r);
+					c.fillText("Gra",S.x-25,S.y-S.r-10);
 					c.globalAlpha=1;
 				}
 

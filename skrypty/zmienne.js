@@ -5,6 +5,7 @@ var szybkoscOdswiezania = 40;
 var tloKafelek=new Image(100,100);
 tloKafelek.src = 'grafiki/tlo/tloKafelek3.png';
 var S = new Gwiazda(window.innerWidth / 2, window.innerHeight / 2, 20, 0.05);
+S.bazaGracza=true;
 var przeciwnicy = [];
 var pociski = [];
 var planety = [];
