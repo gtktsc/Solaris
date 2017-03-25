@@ -301,6 +301,8 @@ var fizyka = {
 	generujPlansze (liczbaPlanet,liczbaR,obrazeniaR,liczbaG,obrazeniaG,liczbaB,obrazeniaB) {
 		przeciwnicy = [];
 		planety = [];
+		planetyG = [];
+		planetyG2 = [];
 		pociski = [];
 		satelity = [];
 		naziemni = [];
@@ -317,8 +319,16 @@ var fizyka = {
 		statekGracza.odradzanie=false;
 		ekran.zaznaczenieGraczaSprawdz=false;
 		ekran.zaznaczenieGracza=false;
-		S.szerokoscMapy=1000;
+		S.szerokoscMapy=2000;
 		S.wysokoscMapy=1000;
+		G1.odlegloscOdSx=1500;
+		G1.odlegloscOdSy=0;
+		G1.x=S.x+G1.odlegloscOdSx;
+		G1.y=S.y+G1.odlegloscOdSy;
+		G2.odlegloscOdSx=1500;
+		G2.odlegloscOdSy=0;
+		G2.x=S.x-G1.odlegloscOdSx;
+		G2.y=S.y-G1.odlegloscOdSy;
 		if(statekGracza.poziomUlepszenieBron==1){
 			statekGracza.maxLiczbaPociskow=[0,0,statekGracza.poziomUlepszenieKule*15]
 		} else if(statekGracza.poziomUlepszenieBron==2){
@@ -336,6 +346,11 @@ var fizyka = {
             planety[i]= new Planeta(2,i*(((window.innerHeight-50)/2)/liczbaPlanet),30,30,0.1,0.01);
             orbity[i]= new Orbita(planety[i].x,planety[i].y,planety[i].r,planety[i].R,planety[i].phi,planety[i].teta,planety[i].v);
 			planety[i].numerOrbity=Number(i);
+			planety[i].rodzic='slonce'
+			planetyG[i]= new Planeta(2,i*(((window.innerHeight-50)/2)/liczbaPlanet),30,30,0.1,0.01);
+			planetyG[i].rodzic='G1';
+			planetyG2[i]= new Planeta(2,i*(((window.innerHeight-50)/2)/liczbaPlanet),30,30,0.1,0.01);
+			planetyG2[i].rodzic='G2';
         };
         var x=1;
         for(var i =1;i<=liczbaR;i++){
@@ -499,12 +514,15 @@ var fizyka = {
 					}
 				};
 				if(fizyka.dwaCiala(przeciwnicy[i],planety[przeciwnicy[i].cel])){
+					przeciwnicy[i].atakuje=true;
 					planety[przeciwnicy[i].cel].zycie=planety[przeciwnicy[i].cel].zycie-przeciwnicy[i].obrazenia;
 					planety[przeciwnicy[i].cel].r = planety[przeciwnicy[i].cel].r*(0.9998);    //trzeba okreslic elegancki sposob na to
-				};
-				if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].rodzaj==='gracz'){
+				}else if(fizyka.dwaCiala(przeciwnicy[i],statekGracza) && przeciwnicy[i].rodzaj==='gracz'){
 					statekGracza.zycie=statekGracza.zycie-przeciwnicy[i].obrazenia;
-				};
+					przeciwnicy[i].atakuje=true;
+				} else {
+					przeciwnicy[i].atakuje=false;
+				}
 				if(i>3 && Math.floor(przeciwnicy[i].x)===Math.floor(przeciwnicy[i-1].x)){
 					przeciwnicy[i].x=przeciwnicy[i].x+(Math.random()/2);
 					przeciwnicy[i].y=przeciwnicy[i].y+(Math.random()/2);
@@ -557,6 +575,30 @@ var fizyka = {
 			};
         };
     },
+    planetyG () {
+        for (i in planetyG) {
+            if(planetyG[i].zycie>0){
+            } else {
+			planetyG.splice(i,1);
+			if(planetyG2.length===1&&planetyG1.length===1){
+				ekran.falaNumer=ekran.liczbaFal;
+			};
+			fizyka.sprawdzWarunkiKonca();
+			};
+        };
+    },
+    planetyG2 () {
+        for (i in planetyG2) {
+            if(planetyG2[i].zycie>0){
+            } else {
+			planetyG2.splice(i,1);
+			if(planetyG2.length===1&&planetyG1.length===1){
+				ekran.falaNumer=ekran.liczbaFal;
+			};
+			fizyka.sprawdzWarunkiKonca();
+			};
+        };
+    },
 	pociski () {
 		for (i in pociski) {
             if(pociski[i].widocznosc){
@@ -577,8 +619,38 @@ var fizyka = {
 						planety[x].oddzialywanie(pociski[i]); //jezeli niebieskie to graw ma wplyw
 					}
                 };
+                for(x in planetyG){
+					if (pociski[i].rodzaj==="planety"){
+						planetyG[x].oddzialywanie(pociski[i]); //jezeli niebieskie to graw ma wplyw
+					}
+                    if(fizyka.dwaCiala(pociski[i],planetyG[x]) && pociski[i].rodzic==="statekGracza"){
+                        pociski[i].widocznosc=false;                //wpadanie na planety
+						planetyG[x].zycie=planetyG[x].zycie-pociski[i].obrazenia;
+                    };
+                };
+                for(x in planetyG2){
+					if (pociski[i].rodzaj==="planety"){
+						planetyG2[x].oddzialywanie(pociski[i]); //jezeli niebieskie to graw ma wplyw
+					}
+                    if(fizyka.dwaCiala(pociski[i],planetyG2[x]) && pociski[i].rodzic==="statekGracza"){
+                        pociski[i].widocznosc=false;                //wpadanie na planety
+						planetyG2[x].zycie=planetyG2[x].zycie-pociski[i].obrazenia;
+                    };
+                };
                 if(pociski[i].rodzaj==="planety" || pociski[i].rodzaj==="slonce"){
+					if(fizyka.odleglosc(pociski[i].x,pociski[i].y,S.x,S.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,G1.x,G1.y)&&fizyka.odleglosc(pociski[i].x,pociski[i].y,S.x,S.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,G2.x,G2.y)){
                     S.oddzialywanie(pociski[i]);                //na ruch zielonych pociskow ma wplyw tylko slonce
+            		}else if(fizyka.odleglosc(pociski[i].x,pociski[i].y,G1.x,G2.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,S.x,S.y)&&fizyka.odleglosc(pociski[i].x,pociski[i].y,G1.x,G1.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,G2.x,G2.y)){
+                    G1.oddzialywanie(pociski[i]);                //na ruch zielonych pociskow ma wplyw tylko slonce2
+					}else if(fizyka.odleglosc(pociski[i].x,pociski[i].y,G2.x,G2.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,S.x,S.y)&&fizyka.odleglosc(pociski[i].x,pociski[i].y,G2.x,G2.y)<
+					fizyka.odleglosc(pociski[i].x,pociski[i].y,G1.x,G1.y)){
+						G2.oddzialywanie(pociski[i]); 
+					}
                 };
             } else {
                 if(pociski[i].rodzaj==="prosty" && (pociski[i].rodzic==="statekGracza" || pociski[i].rodzic==="statekGraczaNaPlanecie")){
@@ -605,6 +677,8 @@ var fizyka = {
 		c.canvas.width = window.innerWidth - 18;
 		c.canvas.height = window.innerHeight - 18;
         fizyka.planety();
+        fizyka.planetyG();
+        fizyka.planetyG2();
         fizyka.pociski();
         fizyka.przeciwnicy();
         fizyka.satelity();
@@ -621,11 +695,15 @@ var fizyka = {
 		pasekMenu.rysuj();
         //	fizyka.brzegOkna(statekGracza);
 		fizyka.rysuj(S);
+		fizyka.rysuj(G1);
+		fizyka.rysuj(G2);
         fizyka.rysuj(statekGracza);
 		fizyka.rysuj(naziemni);
 		fizyka.rysuj(spowalniacze);
         fizyka.rysuj(orbity);
         fizyka.rysuj(planety);
+        fizyka.rysuj(planetyG);
+        fizyka.rysuj(planetyG2);
         fizyka.rysuj(wahadlowce);
         fizyka.rysuj(pociski);
         fizyka.rysuj(przeciwnicy);
@@ -701,8 +779,8 @@ var fizyka = {
 				fizyka.szybkoscAnimacji('stop');
 				ekran.menu=true;
 				ekran.gra=false;
-				S.szerokoscMapy=window.innerWidth/2;
-				S.wysokoscMapy=window.innerHeight/2;
+				S.szerokoscMapy=window.innerWidth;
+				S.wysokoscMapy=window.innerHeight;
 				S.x=S.xSrodek;
 				S.y=S.ySrodek;
 			} else {
@@ -712,7 +790,7 @@ var fizyka = {
 				}
 			}
         }
-		if (przeciwnicy.length===1){
+		if (przeciwnicy.length===1||(planetyG.length===1&&planetyG2.length===1)){
 			if(ekran.falaNumer<ekran.liczbaFal){
 				ekran.falaNumer=ekran.falaNumer+1;
 				ekran.liczbaPrzeciwnikow=statekGracza.aktualnyPoziom*ekran.falaNumer;
@@ -761,8 +839,8 @@ var fizyka = {
 				fizyka.szybkoscAnimacji('stop');
 				ekran.menu=true;
 				ekran.gra=false;
-				S.szerokoscMapy=window.innerWidth/2;
-				S.wysokoscMapy=window.innerHeight/2;
+				S.szerokoscMapy=window.innerWidth;
+				S.wysokoscMapy=window.innerHeight;
 				S.x=S.xSrodek;
 				S.y=S.ySrodek;
 			}
@@ -1032,11 +1110,16 @@ var statekGracza = {
 				c.arc(this.x,this.y,20,0,Math.PI*2,true);
 				c.stroke();
 				c.fill();
-				//c.fillStyle='#ec008c';
-				//c.beginPath();
-				//c.arc(this.x,this.y,15,0,Math.PI*2,true);
-				//c.stroke();
-				//c.fill();
+				c.globalAlpha=1;
+			};
+			if(statekGracza.naPlanecie!=0){
+				c.globalAlpha=0.2;
+				c.strokeStyle='#0288ba';
+				c.fillStyle='#00aeef';
+				c.beginPath();
+				c.arc(this.x,this.y,planety[statekGracza.naPlanecie].r+10,0,Math.PI*2,true);
+				c.stroke();
+				c.fill();
 				c.globalAlpha=1;
 			};
 			c.save();
@@ -2515,8 +2598,8 @@ var ulepszenieZycie = {
 var mapa = {
 	widocznosc: true,
 	x: 5,
-	szerokosc: 200,
-	width: 200,
+	szerokosc: 400,
+	width: 400,
 	y: window.innerHeight-175,
 	height: 150,
 	wysokosc: 150,
@@ -2530,8 +2613,7 @@ var mapa = {
 		if(ekran.gra){
 			this.szerokoscObszaru= this.szerokosc/5;
 			this.wysokoscObszaru= this.wysokosc/5;
-
-			this.stosunekX=this.szerokosc/(2000);
+			this.stosunekX=this.szerokosc/(4000);
 			this.stosunekY=this.wysokosc/(2000);
 			this.stosunekObszarX=this.szerokoscObszaru/window.innerWidth;
 			this.stosunekObszarY=this.wysokoscObszaru/window.innerHeight;
@@ -2544,6 +2626,20 @@ var mapa = {
         	c.beginPath();
         	c.arc(this.x+this.szerokosc/2,this.y+this.wysokosc/2,S.r*this.stosunekObszarY,Math.PI/2,Math.PI*3/2,true);
         	c.fillStyle="#ffcc66";
+        	c.beginPath();
+			c.arc(G1.r+S.r/2+this.x+this.szerokosc/2+G1.odlegloscOdSx*this.stosunekObszarX,
+			this.y+this.wysokosc/2+G1.odlegloscOdSy*this.stosunekObszarY,
+			G1.r*this.stosunekObszarX,
+			0,Math.PI*2,true);
+        	c.fillStyle="#ffcc66";
+			c.fill();
+        	c.beginPath();
+			c.arc(this.x+G2.odlegloscOdSx*this.stosunekObszarX-G2.r*this.stosunekObszarX-this.szerokoscObszaru/2,
+			this.y+this.wysokosc/2+G2.odlegloscOdSy*this.stosunekObszarY,
+			G2.r*this.stosunekObszarX,
+			0,Math.PI*2,true);
+        	c.fillStyle="#ffcc66";
+			c.fill();
 			for(x in planety){
 				c.beginPath();
 				c.arc(this.x+this.szerokosc/2+(planety[x].R*Math.cos(planety[x].teta))*this.stosunekObszarX,
@@ -2591,12 +2687,108 @@ var mapa = {
 				};
 				c.fill();
 			}
+			//kurwa zrob to ladnie ja jebe
+			for(x in planetyG){
+				c.beginPath();
+				c.arc(G1.r+S.r/2+this.x+this.szerokosc/2+G1.odlegloscOdSx*this.stosunekObszarX+(planetyG[x].R*Math.cos(planetyG[x].teta))*this.stosunekObszarX,
+				this.y+this.wysokosc/2+G1.odlegloscOdSy*this.stosunekObszarY+planetyG[x].R*this.stosunekObszarY*Math.sin(planetyG[x].teta),
+				planetyG[x].r*this.stosunekObszarX,
+				0,Math.PI*2,true);
+				if(planetyG[x].kolor<=0.125){
+					c.fillStyle="#cc9966";
+				}else if(planetyG[x].kolor<=0.125*2){
+					c.fillStyle="#cc6600";
+				}else if(planetyG[x].kolor<=0.125*3){
+					c.fillStyle="#336699";
+				}else if(planetyG[x].kolor<=0.125*4){
+					c.fillStyle="#996600";
+				}else if(planetyG[x].kolor<=0.125*5){
+					c.fillStyle="#cc9966";
+				}else if(planetyG[x].kolor<=0.125*6){
+					c.fillStyle="#ffffcc";
+				}else if(planetyG[x].kolor<=0.125*7){
+					c.fillStyle="#6699cc";
+				}else if(planetyG[x].kolor<=0.125*8){
+					c.fillStyle="#6666cc";
+				};
+				c.fill();
+				c.beginPath();
+				c.arc(G1.r+S.r/2+this.x+this.szerokosc/2+G1.odlegloscOdSx*this.stosunekObszarX+planetyG[x].R*this.stosunekObszarX*Math.cos(planetyG[x].teta),
+				this.y+this.wysokosc/2+G1.odlegloscOdSy*this.stosunekObszarY+planetyG[x].R*this.stosunekObszarY*Math.sin(planetyG[x].teta),
+				planetyG[x].r*this.stosunekObszarX,Math.PI/2,Math.PI*3/2,true);
+				if(planetyG[x].kolor<=0.125){
+					c.fillStyle="#996666";
+				}else if(planetyG[x].kolor<=0.125*2){
+					c.fillStyle="#996600";
+				}else if(planetyG[x].kolor<=0.125*3){
+					c.fillStyle="#003399";
+				}else if(planetyG[x].kolor<=0.125*4){
+					c.fillStyle="#cc3300";
+				}else if(planetyG[x].kolor<=0.125*5){
+					c.fillStyle="#999966";
+				}else if(planetyG[x].kolor<=0.125*6){
+					c.fillStyle="#ffcccc";
+				}else if(planetyG[x].kolor<=0.125*7){
+					c.fillStyle="#3399cc";
+				}else if(planetyG[x].kolor<=0.125*8){
+					c.fillStyle="#336699";
+				};
+				c.fill();
+			}
+			for(x in planetyG2){
+				c.beginPath();
+				c.arc(this.x-G2.r*this.stosunekObszarX-this.szerokoscObszaru/2+G2.odlegloscOdSx*this.stosunekObszarX+(planetyG2[x].R*Math.cos(planetyG2[x].teta))*this.stosunekObszarX,
+				this.y+this.wysokosc/2+G2.odlegloscOdSy*this.stosunekObszarY+planetyG2[x].R*this.stosunekObszarY*Math.sin(planetyG2[x].teta),
+				planetyG2[x].r*this.stosunekObszarX,
+				0,Math.PI*2,true);
+				if(planetyG2[x].kolor<=0.125){
+					c.fillStyle="#cc9966";
+				}else if(planetyG2[x].kolor<=0.125*2){
+					c.fillStyle="#cc6600";
+				}else if(planetyG2[x].kolor<=0.125*3){
+					c.fillStyle="#336699";
+				}else if(planetyG2[x].kolor<=0.125*4){
+					c.fillStyle="#996600";
+				}else if(planetyG2[x].kolor<=0.125*5){
+					c.fillStyle="#cc9966";
+				}else if(planetyG2[x].kolor<=0.125*6){
+					c.fillStyle="#ffffcc";
+				}else if(planetyG2[x].kolor<=0.125*7){
+					c.fillStyle="#6699cc";
+				}else if(planetyG2[x].kolor<=0.125*8){
+					c.fillStyle="#6666cc";
+				};
+				c.fill();
+				c.beginPath();
+				c.arc(this.x-G2.r*this.stosunekObszarX-this.szerokoscObszaru/2+G2.odlegloscOdSx*this.stosunekObszarX+(planetyG2[x].R*Math.cos(planetyG2[x].teta))*this.stosunekObszarX,
+				this.y+this.wysokosc/2+G2.odlegloscOdSy*this.stosunekObszarY+planetyG2[x].R*this.stosunekObszarY*Math.sin(planetyG2[x].teta),
+				planetyG2[x].r*this.stosunekObszarX,
+				Math.PI/2,Math.PI*3/2,true);
+				if(planetyG[x].kolor<=0.125){
+					c.fillStyle="#996666";
+				}else if(planetyG2[x].kolor<=0.125*2){
+					c.fillStyle="#996600";
+				}else if(planetyG2[x].kolor<=0.125*3){
+					c.fillStyle="#003399";
+				}else if(planetyG2[x].kolor<=0.125*4){
+					c.fillStyle="#cc3300";
+				}else if(planetyG2[x].kolor<=0.125*5){
+					c.fillStyle="#999966";
+				}else if(planetyG2[x].kolor<=0.125*6){
+					c.fillStyle="#ffcccc";
+				}else if(planetyG2[x].kolor<=0.125*7){
+					c.fillStyle="#3399cc";
+				}else if(planetyG2[x].kolor<=0.125*8){
+					c.fillStyle="#336699";
+				};
+				c.fill();
+			}
 
 
 
 			c.beginPath();
 			c.globalAlpha=0.1;
-			c.rect(this.x,this.y,this.szerokosc,this.wysokosc);
+			c.rect(this.x,this.y-this.wysokoscObszaru/2,this.szerokosc+this.szerokoscObszaru/2,this.wysokosc+this.wysokoscObszaru/2);
 			c.fillStyle = "black";
 			c.fill();
 			c.beginPath();

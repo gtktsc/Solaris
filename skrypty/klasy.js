@@ -71,6 +71,8 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     this.rOld = this.r;
     this.obecnePierscienie=Math.random();
     this.numerOrbity = 0;
+    this.rodzicS =true;
+    this.rodzic ="slonce";
 	this.obecnaNaziemna = false;
 	this.obecnaNaziemnaWiecej = 0;
 	this.obecnaNaziemnaLepiej = 0;
@@ -109,9 +111,16 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
 				c.globalAlpha=1;
 			}
         this.teta=this.teta+this.v*(Math.PI/180);
-        this.x=S.x+this.R*Math.cos(this.teta);
-        this.y=S.y+this.R*Math.sin(this.teta);
-        
+        if(this.rodzic=='slonce'){
+            this.x=S.x+this.R*Math.cos(this.teta);
+            this.y=S.y+this.R*Math.sin(this.teta);
+        }else if (this.rodzic=='G1'){
+            this.x=G1.x+this.R*Math.cos(this.teta);
+            this.y=G1.y+this.R*Math.sin(this.teta);
+        }else if (this.rodzic=='G2'){
+            this.x=G2.x+this.R*Math.cos(this.teta);
+            this.y=G2.y+this.R*Math.sin(this.teta);
+        }
         c.beginPath();
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
         if(this.kolor<=0.125){
@@ -178,6 +187,8 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
             c.lineWidth = 3;
             c.stroke();
         }
+        c.strokeStyle = 'black';
+        c.lineWidth = 1,5;
     };
     this.oddzialywanie = function(obiekt) {
         if (!ekran.pauza) {
@@ -190,7 +201,7 @@ function Planeta(promien,odlegloscR,katObrotu,katObiegu,predkoscObiegu,stalaGraw
     };
 };
 function Naziemne(obrazenia,rodzic) {
-    this.r = 3;
+    this.r = 10;
 	this.rodzicNumer = 0;
 	this.poziomWiecej = 0;
 	this.poziomLepiej = 0;
@@ -206,13 +217,16 @@ function Naziemne(obrazenia,rodzic) {
 				c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 				c.stroke();
 			}
+            c.globalAlpha=0.1;
 			this.x = rodzic.x;
 			this.y = rodzic.y;
 			c.beginPath();
-			c.fillStyle="black";
-			c.arc(this.x,this.y,3,0,Math.PI*2,true);
+            c.strokeStyle='#0288ba';
+			c.fillStyle='#00aeef';
+			c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
 			c.fill();
 			c.stroke();
+            c.globalAlpha=1;
 		}
     };
 };
@@ -273,6 +287,8 @@ function Wahadlowiec(obrazenia,rodzic) {
 				this.x=this.xRodzic+this.R*Math.cos(this.teta);
 				this.y=this.yRodzic+this.R*Math.sin(this.teta);
 			}
+                        c.strokeStyle='#0288ba';
+			c.fillStyle='#00aeef';
 			c.save();
             c.translate((this.x),(this.y));
             c.rotate(-this.phi);
@@ -286,6 +302,8 @@ function Wahadlowiec(obrazenia,rodzic) {
             c.fill();
             c.stroke();
             c.restore();
+                        c.strokeStyle='black';
+			c.fillStyle='black';
 		}
     };
 };
@@ -328,6 +346,7 @@ function Spowalniacz(obrazenia) {
 				c.stroke();
 				c.globalAlpha=1;
 			}
+                                    c.strokeStyle='#0288ba';
 			c.beginPath();
 			c.fillStyle="black";
 			c.moveTo(this.x-5,this.y-5);
@@ -337,6 +356,8 @@ function Spowalniacz(obrazenia) {
 			c.lineTo(this.x-5,this.y-5);
 			c.fill();
 			c.stroke();
+                                    c.strokeStyle='black';
+			c.fillStyle='black';
 			
 		}
     };
@@ -431,6 +452,8 @@ function Orbita(wspolrzednaX,wspolrzednaY,promien,odlegloscR,katObrotu,katObiegu
 function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.bazaGracza=false;
     this.r = promien*2;
+    this.odlegloscOdSx = 0;
+    this.odlegloscOdSy = 0;
     this.przesuniecieX = 0;
     this.przesuniecieY = 0;
     this.szerokoscMapy = window.innerWidth;
@@ -444,6 +467,10 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
     this.ySrodek = this.y;
 	this.widocznosc = true;
     this.g = stalaGrawitacyjna;
+    this.srodekX=window.innerWidth / 2;
+    this.srodekY=window.innerHeight / 2;
+    this.przesuniecieX=0;
+    this.przesuniecieY=0;
     this.rysuj = function() {
         if(this.bazaGracza){
             if(ekran.menu){
@@ -491,6 +518,17 @@ function Gwiazda(wspolrzednaX,wspolrzednaY,promien,stalaGrawitacyjna) {
             }
             this.przesuniecieX=this.xSrodek-this.x;
             this.przesuniecieY=this.ySrodek-this.y;
+        }else {
+        if(this.srodekX!=S.x){
+            this.przesuniecieX=this.srodekX-S.x;
+            this.x=this.x-this.przesuniecieX;
+        };
+        if(this.srodekY!=S.y){
+            this.przesuniecieY=this.srodekY-S.y;
+            this.y=this.y-this.przesuniecieY;
+        };
+        this.srodekX=S.x;
+        this.srodekY=S.y;
         }
         c.beginPath();
         c.arc(this.x,this.y,this.r,0,Math.PI*2,true);
@@ -524,6 +562,7 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
     this.vx=0;
     this.vy=0;
 	this.zasiegSpowalniacza=false;
+	this.atakuje=false;
 	this.zasiegSatelityWiecej=false;
     this.v=2 + (Math.random()/10);
     this.vOld=this.v;
@@ -586,6 +625,15 @@ function Przeciwnik(wspolrzednaX,wspolrzednaY,kolor,obrazenia) {
 		};
 		if(this.zasiegSatelityWiecej){
 			c.globalAlpha=0.5;
+		}
+        if(this.atakuje){
+            c.beginPath();
+			c.fillStyle='#cc0033';
+			c.arc(this.x,this.y,this.r*4+Math.random()*4,0,Math.PI*2,true); ///tutaj efekt wymysl   
+			c.fill();
+        	this.v=0.5;
+		} else {
+			this.v=this.vOld
 		}
         c.beginPath();
         c.fillStyle = this.kolor;
