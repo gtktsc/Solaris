@@ -22,9 +22,3 @@ D - obroc statek w prawo.
 Klikniecie przeciwnika to oddanie do niego strzalu.
 
 Jest to mój pierwszy wiekszy projekt w JavaScript, nie oczekuj wiele. Jest to moj pierwszy projekt w Git Hubie - nie oczekuj wiele. Jest to moj pierwszy DUZY projekt programistyczny - nie oczekuj wiele.
-
-ONLINE :
-
-http://gtktsc.esy.es/
-
-Dzieki!
